@@ -8,11 +8,7 @@ COPY package.json package-lock.json* ./
 
 # Install dependencies with BuildKit cache mount for npm cache
 RUN --mount=type=cache,target=/root/.npm \
-    if [ -f package-lock.json ]; then \
-      npm ci --prefer-offline --no-audit --no-fund; \
-    else \
-      npm install --prefer-offline --no-audit --no-fund; \
-    fi
+    npm install --prefer-offline --no-audit --no-fund
 
 # Stage 2: Builder
 FROM node:alpine AS builder
