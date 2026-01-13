@@ -1,0 +1,18 @@
+apiVersion: v2
+name: tessera
+description: A Helm chart for Tessera - Secure Secret Sharing
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - tessera
+  - secret
+  - one-time
+  - cloud-drove
+  - redis
+maintainers:
+  - name: CloudDrove Team
+home: https://github.com/clouddrove/tessera
+sources:
+  - https://github.com/clouddrove/tessera
+

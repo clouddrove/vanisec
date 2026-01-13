@@ -1,0 +1,98 @@
+{{- if .Values.redis.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tessera.fullname" . }}-redis
+  labels:
+    {{- include "tessera.labels" . | nindent 4 }}
+    app.kubernetes.io/component: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "tessera.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: redis
+  template:
+    metadata:
+      labels:
+        {{- include "tessera.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: redis
+    spec:
+      containers:
+      - name: redis
+        image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
+        ports:
+        - name: redis
+          containerPort: 6379
+          protocol: TCP
+        command:
+        - redis-server
+        - --appendonly
+        - "yes"
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        resources:
+          {{- toYaml .Values.redis.resources | nindent 12 }}
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      {{- if .Values.redis.persistence.enabled }}
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: {{ include "tessera.fullname" . }}-redis
+      {{- else }}
+      - name: redis-data
+        emptyDir: {}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "tessera.fullname" . }}-redis
+  labels:
+    {{- include "tessera.labels" . | nindent 4 }}
+    app.kubernetes.io/component: redis
+spec:
+  type: {{ .Values.redis.service.type }}
+  ports:
+    - port: {{ .Values.redis.service.port }}
+      targetPort: redis
+      protocol: TCP
+      name: redis
+  selector:
+    {{- include "tessera.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: redis
+---
+{{- if .Values.redis.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "tessera.fullname" . }}-redis
+  labels:
+    {{- include "tessera.labels" . | nindent 4 }}
+    app.kubernetes.io/component: redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.redis.persistence.size }}
+  {{- if .Values.redis.persistence.storageClass }}
+  storageClassName: {{ .Values.redis.persistence.storageClass }}
+  {{- end }}
+{{- end }}
+{{- end }}
+

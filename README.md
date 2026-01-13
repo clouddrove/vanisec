@@ -4,6 +4,9 @@
 
 A secure, one-time secret sharing application built with Next.js, featuring the CloudDrove brand design.
 
+[![CI](https://github.com/clouddrove/tessera/actions/workflows/ci.yml/badge.svg)](https://github.com/clouddrove/tessera/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 ## Features
 
 - **One-Time View**: Secrets can only be viewed once and are automatically deleted after viewing
@@ -66,7 +69,7 @@ redis-server
 Create a `.env.local` file:
 
 ```env
-REDIS_URL=redis://localhost:6379
+REDIS_URL=redis://localhost:6379/3
 ```
 
 #### Run Development Server
@@ -116,6 +119,7 @@ npm start
 - `REDIS_URL` - Redis connection URL with database number (default: `redis://localhost:6379/3`)
   - The application uses Redis database 3
   - Format: `redis://host:port/db` or `redis://host:port` (database 3 is set in code)
+- `NEXT_PUBLIC_BASE_URL` - Base URL for the application (optional, for sitemap generation)
 
 ## Production Deployment
 
@@ -169,23 +173,19 @@ The application includes a Helm chart for easy Kubernetes deployment.
 ### Installation
 
 ```bash
-# Add the chart (if using a chart repository)
-helm repo add ots https://charts.example.com
-helm repo update
-
 # Install with default values
-helm install ots ./helm/ots
+helm install tessera ./helm/tessera
 
 # Or install with custom values
-helm install ots ./helm/ots -f my-values.yaml
+helm install tessera ./helm/tessera -f my-values.yaml
 
 # Upgrade existing installation
-helm upgrade ots ./helm/ots
+helm upgrade tessera ./helm/tessera
 ```
 
 ### Configuration
 
-Edit `helm/ots/values.yaml` to customize:
+Edit `helm/tessera/values.yaml` to customize:
 
 - Replica count
 - Image repository and tag
@@ -200,14 +200,14 @@ Edit `helm/ots/values.yaml` to customize:
 replicaCount: 3
 
 image:
-  repository: ghcr.io/cloudwizz/ots
+  repository: ghcr.io/clouddrove/tessera
   tag: "v1.0.0"
 
 ingress:
   enabled: true
   className: "nginx"
   hosts:
-    - host: ots.example.com
+    - host: tessera.example.com
       paths:
         - path: /
           pathType: Prefix
@@ -259,3 +259,45 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Setup
+
+1. Fork the repository
+2. Clone your fork: `git clone https://github.com/your-username/tessera.git`
+3. Create a branch: `git checkout -b feature/your-feature`
+4. Make your changes
+5. Run tests: `npm run lint && npm run build`
+6. Commit your changes: `git commit -m 'Add some feature'`
+7. Push to the branch: `git push origin feature/your-feature`
+8. Submit a pull request
+
+### Code Style
+
+- Follow TypeScript best practices
+- Use Prettier for code formatting
+- Run `npm run lint` before committing
+
+## Security
+
+If you discover a security vulnerability, please send an email to security@clouddrove.com. We take security seriously and will respond promptly.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Built with [Next.js](https://nextjs.org/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- Powered by [Redis](https://redis.io/)
+
+## Support
+
+For support, please open an issue in the [GitHub repository](https://github.com/clouddrove/tessera/issues).
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
