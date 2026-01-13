@@ -1,5 +1,5 @@
 # Stage 1: Dependencies
-FROM node:25-alpine AS deps
+FROM node:alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -8,15 +8,14 @@ COPY package.json package-lock.json* ./
 
 # Install dependencies with BuildKit cache mount for npm cache
 RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=cache,target=/app/node_modules/.cache \
     if [ -f package-lock.json ]; then \
-      npm ci --prefer-offline --no-audit --no-fund --silent; \
+      npm ci --prefer-offline --no-audit --no-fund; \
     else \
-      npm install --prefer-offline --no-audit --no-fund --silent; \
+      npm install --prefer-offline --no-audit --no-fund; \
     fi
 
 # Stage 2: Builder
-FROM node:25-alpine AS builder
+FROM node:alpine AS builder
 WORKDIR /app
 
 # Copy node_modules from deps stage
@@ -42,7 +41,7 @@ RUN --mount=type=cache,target=/app/.next/cache \
     npm run build
 
 # Stage 3: Runner (Production)
-FROM node:25-alpine AS runner
+FROM node:alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
