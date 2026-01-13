@@ -15,6 +15,7 @@ export default function ViewSecret() {
 
   useEffect(() => {
     checkSecret()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id])
 
   const checkSecret = async () => {
@@ -37,7 +38,7 @@ export default function ViewSecret() {
         setSecret(data.secret)
         setViewed(true)
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load secret')
     }
   }
