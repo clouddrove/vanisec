@@ -19,6 +19,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      x-bake:
+        cache-from:
+          - type=registry,ref=ghcr.io/clouddrove/tessera:buildcache
+        cache-to:
+          - type=registry,ref=ghcr.io/clouddrove/tessera:buildcache,mode=max
     container_name: ots-app
     ports:
       - "3000:3000"
