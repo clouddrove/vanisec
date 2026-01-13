@@ -43,7 +43,7 @@ export async function GET(
     await deleteSecret(id)
 
     return NextResponse.json({ secret: secret.secret })
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to retrieve secret' },
       { status: 500 }
@@ -102,7 +102,7 @@ export async function POST(
     await deleteSecret(id)
 
     return NextResponse.json({ secret: secret.secret })
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to retrieve secret' },
       { status: 500 }

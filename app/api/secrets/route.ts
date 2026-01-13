@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const id = await createSecret(secret, password, expiresIn)
 
     return NextResponse.json({ id })
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create secret' },
       { status: 500 }
