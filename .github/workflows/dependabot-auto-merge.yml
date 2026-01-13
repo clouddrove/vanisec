@@ -24,9 +24,10 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          check-regexp: '.*'
+          check-regexp: '^(CI|Build and Push Docker Image)'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
+          timeout: 600
           allowed-conclusions: success,neutral,skipped
 
       - name: Enable auto-merge for Dependabot PRs

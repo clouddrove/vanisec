@@ -6,12 +6,13 @@ WORKDIR /app
 # Copy only package files first for better caching
 COPY package.json package-lock.json* ./
 
-# Install dependencies with optimizations and BuildKit cache mount
+# Install dependencies with BuildKit cache mount for npm cache
 RUN --mount=type=cache,target=/root/.npm \
+    --mount=type=cache,target=/app/node_modules/.cache \
     if [ -f package-lock.json ]; then \
-      npm ci --prefer-offline --no-audit --no-fund; \
+      npm ci --prefer-offline --no-audit --no-fund --silent; \
     else \
-      npm install --prefer-offline --no-audit --no-fund; \
+      npm install --prefer-offline --no-audit --no-fund --silent; \
     fi
 
 # Stage 2: Builder
@@ -34,8 +35,9 @@ COPY lib ./lib
 COPY public ./public
 
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 
-# Build with optimizations and BuildKit cache mount for Next.js cache
+# Build with BuildKit cache mount for Next.js cache
 RUN --mount=type=cache,target=/app/.next/cache \
     npm run build
 
@@ -46,8 +48,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
 # Copy public directory
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
