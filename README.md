@@ -23,10 +23,17 @@ A secure, one-time secret sharing application built with Next.js, featuring the 
 Start the application with a single command:
 
 ```bash
+# Enable BuildKit for faster builds (optional but recommended)
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+
+# Build and start
 docker-compose up -d --build
 ```
 
 The application will be available at [http://localhost:3000](http://localhost:3000).
+
+**Note**: Enable BuildKit for faster builds with better caching. The Dockerfile is optimized for layer caching.
 
 **Common Commands**
 

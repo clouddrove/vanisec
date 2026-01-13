@@ -6,9 +6,13 @@ WORKDIR /app
 # Copy only package files first for better caching
 COPY package.json package-lock.json* ./
 
-# Use BuildKit cache mount for npm cache
+# Install dependencies with optimizations and BuildKit cache mount
 RUN --mount=type=cache,target=/root/.npm \
-    if [ -f package-lock.json ]; then npm ci --prefer-offline --no-audit; else npm install --prefer-offline --no-audit; fi
+    if [ -f package-lock.json ]; then \
+      npm ci --prefer-offline --no-audit --no-fund; \
+    else \
+      npm install --prefer-offline --no-audit --no-fund; \
+    fi
 
 # Stage 2: Builder
 FROM node:20-alpine AS builder
@@ -31,7 +35,7 @@ COPY public ./public
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Use BuildKit cache mount for Next.js cache
+# Build with optimizations and BuildKit cache mount for Next.js cache
 RUN --mount=type=cache,target=/app/.next/cache \
     npm run build
 

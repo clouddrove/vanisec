@@ -1,27 +1,62 @@
-Dockerfile
-.dockerignore
+# Dependencies
 node_modules
 npm-debug.log
-README.md
+package-lock.json
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Environment files
 .env
 .env*.local
-.next
+.env.production
+
+# Git
 .git
 .gitignore
+.gitattributes
+
+# Documentation
+README.md
 *.md
-.DS_Store
-docker-compose.yml
-docker-compose.*.yml
-.github
-helm
 LICENSE
 CONTRIBUTING.md
 CHANGELOG.md
-*.log
-coverage
+
+# IDE
 .vscode
 .idea
 *.swp
 *.swo
 *~
 
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.*.yml
+
+# CI/CD
+.github
+
+# Helm
+helm
+
+# Logs
+*.log
+logs
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+*.pem
+.cache
