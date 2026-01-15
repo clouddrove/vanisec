@@ -26,9 +26,17 @@ spec:
           containerPort: 6379
           protocol: TCP
         command:
+        {{- if .Values.redis.password }}
         - redis-server
         - --appendonly
         - "yes"
+        - --requirepass
+        - {{ .Values.redis.password | quote }}
+        {{- else }}
+        - redis-server
+        - --appendonly
+        - "yes"
+        {{- end }}
         volumeMounts:
         - name: redis-data
           mountPath: /data
@@ -37,15 +45,29 @@ spec:
         livenessProbe:
           exec:
             command:
+            {{- if .Values.redis.password }}
+            - redis-cli
+            - -a
+            - {{ .Values.redis.password | quote }}
+            - ping
+            {{- else }}
             - redis-cli
             - ping
+            {{- end }}
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           exec:
             command:
+            {{- if .Values.redis.password }}
+            - redis-cli
+            - -a
+            - {{ .Values.redis.password | quote }}
+            - ping
+            {{- else }}
             - redis-cli
             - ping
+            {{- end }}
           initialDelaySeconds: 5
           periodSeconds: 5
       volumes:
