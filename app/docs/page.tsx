@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Documentation',
-  description: 'Comprehensive guides for Tessera - understand how to utilize the protected single-use confidential sharing platform.',
+  description: 'Comprehensive guides for Vanisec - understand how to utilize the protected single-use confidential sharing platform.',
 }
 
 export default function DocsPage() {
@@ -13,7 +13,7 @@ export default function DocsPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Documentation</h1>
           <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
-            Master Tessera to exchange confidential data safely
+            Master Vanisec to exchange confidential data safely
           </p>
         </div>
 

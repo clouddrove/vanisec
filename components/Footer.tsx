@@ -12,9 +12,9 @@ export default function Footer() {
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-lg">
-                <span className="text-white text-2xl font-bold">t</span>
+                <span className="text-white text-2xl font-bold">V</span>
               </div>
-              <span className="text-clouddrove-dark font-bold text-xl">Tessera</span>
+              <span className="text-clouddrove-dark font-bold text-xl">Vanisec</span>
             </div>
             <p className="text-clouddrove-light text-sm leading-relaxed">
               A trusted way to share sensitive information that self-destructs after being viewed.
@@ -43,7 +43,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <a 
-                  href="https://github.com/clouddrove/tessera" 
+                  href="https://github.com/clouddrove/vanisec" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-clouddrove-light hover:text-clouddrove-dark transition-colors"
@@ -70,7 +70,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Copyright */}
             <div className="text-clouddrove-light text-sm">
-              © {currentYear} Tessera. All rights reserved.
+              © {currentYear} Vanisec. All rights reserved.
             </div>
 
             {/* Legal Links */}

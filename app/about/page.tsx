@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Discover Tessera - a complimentary, protected single-use confidential sharing solution. Our objective is delivering secure, private, and straightforward confidential sharing capabilities for all users.',
+  description: 'Discover Vanisec - a complimentary, protected single-use confidential sharing solution. Our objective is delivering secure, private, and straightforward confidential sharing capabilities for all users.',
 }
 
 export default function AboutPage() {
@@ -10,7 +10,7 @@ export default function AboutPage() {
     <div className="min-h-screen py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">About Tessera</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">About Vanisec</h1>
           <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
             Protected confidential sharing simplified, complimentary, and available to all
           </p>
@@ -20,10 +20,10 @@ export default function AboutPage() {
           <section className="prose prose-lg max-w-none">
             <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Our Mission</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Tessera operates on the principle that protected communication must be universally available, independent of technical knowledge or financial resources. We aim to deliver a complimentary, intuitive solution for exchanging sensitive data securely.
+              Vanisec operates on the principle that protected communication must be universally available, independent of technical knowledge or financial resources. We aim to deliver a complimentary, intuitive solution for exchanging sensitive data securely.
             </p>
             <p className="text-clouddrove-light leading-relaxed">
-              We recognize that in the modern digital landscape, exchanging authentication credentials, API tokens, access keys, and other sensitive information occurs regularly. Conventional approaches such as email and instant messaging lack security and create permanent records. Tessera addresses this challenge by offering encrypted, single-view confidential sharing that removes itself automatically after access.
+              We recognize that in the modern digital landscape, exchanging authentication credentials, API tokens, access keys, and other sensitive information occurs regularly. Conventional approaches such as email and instant messaging lack security and create permanent records. Vanisec addresses this challenge by offering encrypted, single-view confidential sharing that removes itself automatically after access.
             </p>
           </section>
 
@@ -36,7 +36,7 @@ export default function AboutPage() {
                 </svg>
                 <div>
                   <h3 className="text-xl font-semibold text-clouddrove-dark mb-1">Completely Free</h3>
-                  <p className="text-clouddrove-light">Zero registration needed, no payment methods required, no additional charges. Utilize Tessera without limitations, entirely at no cost.</p>
+                  <p className="text-clouddrove-light">Zero registration needed, no payment methods required, no additional charges. Utilize Vanisec without limitations, entirely at no cost.</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -54,7 +54,7 @@ export default function AboutPage() {
                 </svg>
                 <div>
                   <h3 className="text-xl font-semibold text-clouddrove-dark mb-1">Open Source</h3>
-                  <p className="text-clouddrove-light">Tessera operates as open-source software, enabling you to examine the source code, participate in development, or deploy your own version.</p>
+                  <p className="text-clouddrove-light">Vanisec operates as open-source software, enabling you to examine the source code, participate in development, or deploy your own version.</p>
                 </div>
               </li>
             </ul>
@@ -63,7 +63,7 @@ export default function AboutPage() {
           <section className="prose prose-lg max-w-none">
             <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Built by CloudDrove</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Tessera is created and supported by CloudDrove, an organization committed to developing protected, open-source utilities that enhance internet safety. We value openness, protection, and universal access.
+              Vanisec is created and supported by CloudDrove, an organization committed to developing protected, open-source utilities that enhance internet safety. We value openness, protection, and universal access.
             </p>
           </section>
 

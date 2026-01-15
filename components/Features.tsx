@@ -52,7 +52,7 @@ export default function Features() {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Key Features</h2>
           <p className="text-lg text-clouddrove-light max-w-2xl mx-auto">
-            Explore the capabilities that position Tessera as the leading choice for confidential information exchange
+            Explore the capabilities that position Vanisec as the leading choice for confidential information exchange
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

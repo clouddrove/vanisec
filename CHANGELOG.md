@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-01-13
 
 ### Added
-- Initial release of Tessera
+- Initial release of Vanisec
 - One-time secret sharing functionality
 - Password protection for secrets
 - Configurable expiration times (1 hour to 7 days)

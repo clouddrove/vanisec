@@ -94,7 +94,7 @@ export default function ViewSecret() {
                 <div className="absolute -inset-2 bg-green-400 rounded-2xl blur-xl opacity-30 animate-pulse-slow"></div>
               </div>
             </div>
-            <p className="text-clouddrove-light text-xl font-light tracking-wide mb-2">Tessera</p>
+            <p className="text-clouddrove-light text-xl font-light tracking-wide mb-2">Vanisec</p>
             <p className="text-clouddrove-dark text-sm font-medium italic tracking-wide">
               Share once. Vanish forever.
             </p>
@@ -141,12 +141,12 @@ export default function ViewSecret() {
           <div className="inline-block mb-6 animate-float">
             <div className="relative">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-clouddrove-light via-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-glow transform rotate-3">
-                <span className="text-white text-5xl font-bold">t</span>
+                <span className="text-white text-5xl font-bold">V</span>
               </div>
               <div className="absolute -inset-1 bg-gradient-to-br from-clouddrove-light to-clouddrove-dark rounded-2xl blur opacity-30 animate-pulse-slow"></div>
             </div>
           </div>
-          <p className="text-clouddrove-light text-xl font-light tracking-wide mb-2">Tessera</p>
+          <p className="text-clouddrove-light text-xl font-light tracking-wide mb-2">Vanisec</p>
           <p className="text-clouddrove-dark text-sm font-medium italic tracking-wide">
             Share once. Vanish forever.
           </p>

@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Security & Compliance',
-  description: 'Understand Tessera protection mechanisms, data encryption, and regulatory alignment with SOC2, GDPR, CCPA, and HIPAA standards.',
+  description: 'Understand Vanisec protection mechanisms, data encryption, and regulatory alignment with SOC2, GDPR, CCPA, and HIPAA standards.',
 }
 
 export default function SecurityPage() {
@@ -51,7 +51,7 @@ export default function SecurityPage() {
           <section className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
             <h2 className="text-3xl font-bold text-clouddrove-dark mb-6">Compliance Information</h2>
             <p className="text-clouddrove-light mb-6">
-              Tessera is architected to facilitate meeting protection and regulatory standards for secure data management:
+              Vanisec is architected to facilitate meeting protection and regulatory standards for secure data management:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl p-6 border border-clouddrove-light/30">
@@ -117,7 +117,7 @@ export default function SecurityPage() {
                 </svg>
                 <div>
                   <h3 className="text-lg font-semibold text-clouddrove-dark mb-1">Open Source</h3>
-                  <p className="text-clouddrove-light">Tessera operates as open-source software, allowing you to inspect the codebase and validate our protection methodologies.</p>
+                  <p className="text-clouddrove-light">Vanisec operates as open-source software, allowing you to inspect the codebase and validate our protection methodologies.</p>
                 </div>
               </li>
             </ul>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Privacy Policy for Tessera - understand how we manage your data and safeguard your privacy.',
+  description: 'Privacy Policy for Vanisec - understand how we manage your data and safeguard your privacy.',
 }
 
 export default function PrivacyPage() {
@@ -18,7 +18,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">1. Information We Collect</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Tessera is architected with privacy as a fundamental principle. We gather minimal data:
+              Vanisec is architected with privacy as a fundamental principle. We gather minimal data:
             </p>
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
               <li><strong>Confidential Entries:</strong> Held temporarily in Redis until accessed or expired, then permanently eliminated</li>
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">5. Third-Party Services</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Tessera utilizes Redis for temporary storage. We do not disclose your confidential entries to external services. If Google Analytics is enabled (via NEXT_PUBLIC_GA_ID), standard analytical data may be gathered by Google.
+              Vanisec utilizes Redis for temporary storage. We do not disclose your confidential entries to external services. If Google Analytics is enabled (via NEXT_PUBLIC_GA_ID), standard analytical data may be gathered by Google.
             </p>
           </section>
 

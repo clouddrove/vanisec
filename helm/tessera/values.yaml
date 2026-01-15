@@ -1,8 +1,8 @@
-# Default values for tessera
+# Default values for vanisec
 replicaCount: 2
 
 image:
-  repository: ghcr.io/clouddrove/tessera
+  repository: ghcr.io/clouddrove/vanisec
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -39,7 +39,7 @@ ingress:
   className: "nginx"
   annotations: {}
   hosts:
-    - host: tessera.example.com
+    - host: vanisec.example.com
       paths:
         - path: /
           pathType: Prefix
@@ -67,7 +67,7 @@ redis:
 
 env:
   NODE_ENV: "production"
-  REDIS_URL: "redis://tessera-redis:6379/3"
+  REDIS_URL: "redis://vanisec-redis:6379/3"
   NEXT_PUBLIC_BASE_URL: ""
   # Optional: Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
   NEXT_PUBLIC_GA_ID: ""

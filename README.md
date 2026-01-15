@@ -1,10 +1,10 @@
-# Tessera
+# Vanisec
 
 **Share once. Vanish forever.**
 
 A secure, one-time secret sharing application built with Next.js, featuring the CloudDrove brand design.
 
-[![CI](https://github.com/clouddrove/tessera/actions/workflows/ci.yml/badge.svg)](https://github.com/clouddrove/tessera/actions/workflows/ci.yml)
+[![CI](https://github.com/clouddrove/vanisec/actions/workflows/ci.yml/badge.svg)](https://github.com/clouddrove/vanisec/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## Features
@@ -185,13 +185,13 @@ The application includes a Helm chart for easy Kubernetes deployment.
 
 ```bash
 # Install with default values
-helm install tessera ./helm/tessera
+helm install vanisec ./helm/tessera
 
 # Or install with custom values
-helm install tessera ./helm/tessera -f my-values.yaml
+helm install vanisec ./helm/tessera -f my-values.yaml
 
 # Upgrade existing installation
-helm upgrade tessera ./helm/tessera
+helm upgrade vanisec ./helm/tessera
 ```
 
 ### Configuration
@@ -211,14 +211,14 @@ Edit `helm/tessera/values.yaml` to customize:
 replicaCount: 3
 
 image:
-  repository: ghcr.io/clouddrove/tessera
+  repository: ghcr.io/clouddrove/vanisec
   tag: "v1.0.0"
 
 ingress:
   enabled: true
   className: "nginx"
   hosts:
-    - host: tessera.example.com
+    - host: vanisec.example.com
       paths:
         - path: /
           pathType: Prefix
@@ -277,7 +277,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ### Development Setup
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/your-username/tessera.git`
+2. Clone your fork: `git clone https://github.com/your-username/vanisec.git`
 3. Create a branch: `git checkout -b feature/your-feature`
 4. Make your changes
 5. Run tests: `npm run lint && npm run build`
@@ -307,7 +307,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-For support, please open an issue in the [GitHub repository](https://github.com/clouddrove/tessera/issues).
+For support, please open an issue in the [GitHub repository](https://github.com/clouddrove/vanisec/issues).
 
 ## Changelog
 

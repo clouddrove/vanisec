@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Reach out to the Tessera team. We welcome feedback, inquiries, and suggestions.',
+  description: 'Reach out to the Vanisec team. We welcome feedback, inquiries, and suggestions.',
 }
 
 export default function ContactPage() {
@@ -23,7 +23,7 @@ export default function ContactPage() {
               Report issues, submit feature requests, or contribute to the project development.
             </p>
             <a
-              href="https://github.com/clouddrove/tessera"
+              href="https://github.com/clouddrove/vanisec"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-3 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"

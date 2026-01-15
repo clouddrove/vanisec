@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'API Documentation',
-  description: 'Tessera API reference - incorporate protected single-use confidential sharing functionality into your software applications.',
+  description: 'Vanisec API reference - incorporate protected single-use confidential sharing functionality into your software applications.',
 }
 
 export default function APIPage() {
@@ -12,7 +12,7 @@ export default function APIPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">API Documentation</h1>
           <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
-            Incorporate Tessera into your software applications
+            Incorporate Vanisec into your software applications
           </p>
         </div>
 
@@ -50,7 +50,7 @@ export default function APIPage() {
             <div className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <h3 className="text-lg font-semibold text-clouddrove-dark mb-4">cURL</h3>
               <pre className="bg-clouddrove-light/10 rounded-lg p-4 overflow-x-auto text-sm">
-{`curl -X POST https://tessera.clouddrove.com/api/secrets \\
+{`curl -X POST https://vanisec.clouddrove.com/api/secrets \\
   -H "Content-Type: application/json" \\
   -d '{
     "secret": "my-secret-api-key",
@@ -61,7 +61,7 @@ export default function APIPage() {
 
               <h3 className="text-lg font-semibold text-clouddrove-dark mb-4 mt-6">JavaScript</h3>
               <pre className="bg-clouddrove-light/10 rounded-lg p-4 overflow-x-auto text-sm">
-{`const response = await fetch('https://tessera.clouddrove.com/api/secrets', {
+{`const response = await fetch('https://vanisec.clouddrove.com/api/secrets', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -92,10 +92,10 @@ console.log(data.url); // Share this URL`}
             <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Open Source</h2>
             <div className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30 text-center">
               <p className="text-clouddrove-light mb-4">
-                Tessera operates as open-source software. You can examine the codebase, participate in development, or deploy your own version.
+                Vanisec operates as open-source software. You can examine the codebase, participate in development, or deploy your own version.
               </p>
               <a
-                href="https://github.com/clouddrove/tessera"
+                href="https://github.com/clouddrove/vanisec"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-3 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"

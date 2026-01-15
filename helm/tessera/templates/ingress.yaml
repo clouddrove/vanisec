@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "tessera.fullname" . }}
+  name: {{ include "vanisec.fullname" . }}
   labels:
-    {{- include "tessera.labels" . | nindent 4 }}
+    {{- include "vanisec.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -33,7 +33,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "tessera.fullname" $ }}
+                name: {{ include "vanisec.fullname" $ }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}
