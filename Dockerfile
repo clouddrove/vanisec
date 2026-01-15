@@ -7,9 +7,9 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # Install dependencies with BuildKit cache mount for npm cache
-# Using npm ci for faster, reproducible builds (requires package-lock.json)
+# Try npm ci first, fallback to npm install if package-lock.json is missing/outdated
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --prefer-offline --no-audit --no-fund
+    sh -c "npm ci --no-audit --no-fund || npm install --no-audit --no-fund"
 
 # Stage 2: Builder
 FROM node:alpine AS builder
