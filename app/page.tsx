@@ -5,7 +5,7 @@ import HowItWorks from '@/components/HowItWorks'
 import UseCases from '@/components/UseCases'
 
 export const metadata: Metadata = {
-  title: 'Free Secure One-Time Secret Sharing | Share Once, Vanish Forever',
+  title: 'Vanisec - Designed to vanish | Share Once, Vanish Forever',
   description: 'Share sensitive information securely with Vanisec. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
   keywords: [
     // Primary keywords
@@ -60,13 +60,13 @@ export const metadata: Metadata = {
     'encrypted paste',
   ],
   openGraph: {
-    title: 'Vanisec - Free Secure One-Time Secret Sharing',
+    title: 'Vanisec - Designed to vanish',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing. Free and no sign-up required.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vanisec - Free Secure One-Time Secret Sharing',
+    title: 'Vanisec - Designed to vanish',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing.',
   },
 }

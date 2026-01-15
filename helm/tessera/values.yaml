@@ -76,6 +76,8 @@ env:
   # Optional: Redis password (if Redis requires authentication)
   # This will be used if REDIS_URL doesn't include password
   REDIS_PASSWORD: ""
+  # Base URL for the application (e.g., https://vanisec.clouddrove.com)
+  # Protocol (https://) is optional - will be added automatically if missing
   NEXT_PUBLIC_BASE_URL: ""
   # Optional: Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
   NEXT_PUBLIC_GA_ID: ""

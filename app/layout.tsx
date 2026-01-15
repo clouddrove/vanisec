@@ -5,13 +5,22 @@ import Footer from '@/components/Footer'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import StructuredData from '@/components/StructuredData'
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://vanisec.clouddrove.com'
+// Helper function to ensure URL has protocol
+function ensureProtocol(url: string): string {
+  if (!url) return 'https://vanisec.clouddrove.com'
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+  }
+  return `https://${url}`
+}
+
+const baseUrl = ensureProtocol(process.env.NEXT_PUBLIC_BASE_URL || 'https://vanisec.clouddrove.com')
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Vanisec - Free Secure One-Time Secret Sharing | Share Once, Vanish Forever',
-    template: '%s | Vanisec - Secure Secret Sharing',
+    default: 'Vanisec - Designed to vanish | Share Once, Vanish Forever',
+    template: '%s | Vanisec - Designed to vanish',
   },
   description: 'Share sensitive information securely with Vanisec. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
   keywords: [
@@ -125,7 +134,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: baseUrl,
     siteName: 'Vanisec',
-    title: 'Vanisec - Free Secure One-Time Secret Sharing',
+    title: 'Vanisec - Designed to vanish',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing. Free and no sign-up required.',
     images: [
       {
@@ -138,7 +147,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vanisec - Free Secure One-Time Secret Sharing',
+    title: 'Vanisec - Designed to vanish',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing.',
     images: [`${baseUrl}/og-image.png`],
     creator: '@clouddrove',
