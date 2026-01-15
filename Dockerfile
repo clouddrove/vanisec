@@ -7,8 +7,9 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # Install dependencies with BuildKit cache mount for npm cache
+# Using npm ci for faster, reproducible builds (requires package-lock.json)
 RUN --mount=type=cache,target=/root/.npm \
-    npm install --prefer-offline --no-audit --no-fund
+    npm ci --prefer-offline --no-audit --no-fund
 
 # Stage 2: Builder
 FROM node:alpine AS builder
@@ -33,6 +34,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
 # Build with BuildKit cache mount for Next.js cache
+# Using standalone output for smaller final image
 RUN --mount=type=cache,target=/app/.next/cache \
     npm run build
 
