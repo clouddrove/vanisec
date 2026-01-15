@@ -6,8 +6,14 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    # Optional: Uncomment to enable Redis password authentication
+    # command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
     command: redis-server --appendonly yes
+    # Uncomment and set password if you want Redis authentication
+    # environment:
+    #   - REDIS_PASSWORD=${REDIS_PASSWORD:-}
     healthcheck:
+      # If using password, update healthcheck: redis-cli -a ${REDIS_PASSWORD} ping
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
@@ -24,7 +30,11 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      # If Redis has password, use: redis://:password@redis:6379/3
+      # Or set REDIS_PASSWORD env var separately
       - REDIS_URL=redis://redis:6379/3
+      # Optional: Uncomment if Redis requires password authentication
+      # - REDIS_PASSWORD=${REDIS_PASSWORD:-}
       # Optional: Uncomment and set your Google Analytics Measurement ID
       # - NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
     depends_on:

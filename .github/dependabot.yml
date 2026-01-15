@@ -42,6 +42,8 @@ updates:
       - "dependencies"
       - "docker"
       - "automated"
+    # Update Docker base images
+    target-branch: "master"
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"

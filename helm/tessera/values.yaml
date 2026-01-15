@@ -50,6 +50,9 @@ redis:
   image:
     repository: redis
     tag: "7-alpine"
+  # Optional: Set password for Redis authentication
+  # If set, Redis will require this password for connections
+  password: ""
   persistence:
     enabled: true
     size: 8Gi
@@ -67,7 +70,12 @@ redis:
 
 env:
   NODE_ENV: "production"
+  # If Redis password is set, use: redis://:password@vanisec-redis:6379/3
+  # Or set REDIS_PASSWORD separately (recommended)
   REDIS_URL: "redis://vanisec-redis:6379/3"
+  # Optional: Redis password (if Redis requires authentication)
+  # This will be used if REDIS_URL doesn't include password
+  REDIS_PASSWORD: ""
   NEXT_PUBLIC_BASE_URL: ""
   # Optional: Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
   NEXT_PUBLIC_GA_ID: ""
