@@ -26,9 +26,9 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-lg">
-              <span className="text-white text-xl font-bold">t</span>
+              <span className="text-white text-xl font-bold">V</span>
             </div>
-            <span className="text-clouddrove-dark font-bold text-xl">Tessera</span>
+            <span className="text-clouddrove-dark font-bold text-xl">Vanisec</span>
           </Link>
 
           {/* Desktop Navigation */}

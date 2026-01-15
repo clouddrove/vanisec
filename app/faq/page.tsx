@@ -2,26 +2,26 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions',
-  description: 'Common inquiries about Tessera - protected single-use confidential sharing solution.',
+  description: 'Common inquiries about Vanisec - protected single-use confidential sharing solution.',
 }
 
 export default function FAQPage() {
   const faqs = [
     {
-      question: 'What is Tessera?',
-      answer: 'Tessera (alternatively referred to as OTS or One-Time Secret) represents a complimentary, protected single-use confidential sharing solution. Exchange sensitive data such as authentication credentials, API tokens, access keys, or proprietary information through encrypted URLs that permit only one viewing session and remove themselves automatically.',
+      question: 'What is Vanisec?',
+      answer: 'Vanisec (alternatively referred to as OTS or One-Time Secret) represents a complimentary, protected single-use confidential sharing solution. Exchange sensitive data such as authentication credentials, API tokens, access keys, or proprietary information through encrypted URLs that permit only one viewing session and remove themselves automatically.',
     },
     {
-      question: 'Is Tessera free to use?',
-      answer: 'Absolutely, Tessera operates entirely without cost. Registration is unnecessary, payment methods are not required, and no concealed charges exist. Utilize the service extensively without limitations, perpetually at no expense.',
+      question: 'Is Vanisec free to use?',
+      answer: 'Absolutely, Vanisec operates entirely without cost. Registration is unnecessary, payment methods are not required, and no concealed charges exist. Utilize the service extensively without limitations, perpetually at no expense.',
     },
     {
-      question: 'How secure is Tessera?',
-      answer: 'Tessera employs encryption to safeguard your confidential entries. Data resides temporarily in Redis with automatic expiration, permits only single access, and gets permanently eliminated after viewing or expiration. Passphrase protection can be added for enhanced security.',
+      question: 'How secure is Vanisec?',
+      answer: 'Vanisec employs encryption to safeguard your confidential entries. Data resides temporarily in Redis with automatic expiration, permits only single access, and gets permanently eliminated after viewing or expiration. Passphrase protection can be added for enhanced security.',
     },
     {
       question: 'Do I need to create an account?',
-      answer: 'No, Tessera functions without registration or account creation requirements. Begin exchanging confidential data immediately without any signup process.',
+      answer: 'No, Vanisec functions without registration or account creation requirements. Begin exchanging confidential data immediately without any signup process.',
     },
     {
       question: 'What happens to my secret after it is viewed?',
@@ -48,12 +48,12 @@ export default function FAQPage() {
       answer: 'Confidential entries remain temporarily in Redis until accessed or expired. We never retain entries in activity logs, analytical systems, or persistent storage. After removal, they disappear permanently.',
     },
     {
-      question: 'Can I use Tessera for commercial purposes?',
-      answer: 'Yes, Tessera operates without cost for both personal and commercial applications. Usage restrictions do not apply.',
+      question: 'Can I use Vanisec for commercial purposes?',
+      answer: 'Yes, Vanisec operates without cost for both personal and commercial applications. Usage restrictions do not apply.',
     },
     {
-      question: 'Is Tessera open source?',
-      answer: 'Yes, Tessera functions as open-source software. You can examine the codebase, contribute improvements, or deploy your own instance. Visit our GitHub repository for additional details.',
+      question: 'Is Vanisec open source?',
+      answer: 'Yes, Vanisec functions as open-source software. You can examine the codebase, contribute improvements, or deploy your own instance. Visit our GitHub repository for additional details.',
     },
   ]
 
@@ -63,7 +63,7 @@ export default function FAQPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Frequently Asked Questions</h1>
           <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
-            Essential information about Tessera
+            Essential information about Vanisec
           </p>
         </div>
 

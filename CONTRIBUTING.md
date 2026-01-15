@@ -1,6 +1,6 @@
-# Contributing to Tessera
+# Contributing to Vanisec
 
-Thank you for your interest in contributing to Tessera! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Vanisec! This document provides guidelines and instructions for contributing.
 
 ## Code of Conduct
 
@@ -10,7 +10,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/clouddrove/tessera/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/clouddrove/vanisec/issues)
 2. If not, create a new issue with:
    - Clear title and description
    - Steps to reproduce
@@ -39,8 +39,8 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ```bash
 # Clone your fork
-git clone https://github.com/your-username/tessera.git
-cd tessera
+git clone https://github.com/your-username/vanisec.git
+cd vanisec
 
 # Install dependencies
 npm install
@@ -69,5 +69,5 @@ Use clear, descriptive commit messages:
 
 Feel free to open an issue for questions or reach out to the maintainers.
 
-Thank you for contributing to Tessera!
+Thank you for contributing to Vanisec!
 

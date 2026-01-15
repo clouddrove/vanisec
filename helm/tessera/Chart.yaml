@@ -1,18 +1,18 @@
 apiVersion: v2
-name: tessera
-description: A Helm chart for Tessera - Secure Secret Sharing
+name: vanisec
+description: A Helm chart for Vanisec - Secure Secret Sharing
 type: application
 version: 1.0.0
 appVersion: "1.0.0"
 keywords:
-  - tessera
+  - vanisec
   - secret
   - one-time
   - clouddrove
   - redis
 maintainers:
   - name: CloudDrove Team
-home: https://github.com/clouddrove/tessera
+home: https://github.com/clouddrove/vanisec
 sources:
-  - https://github.com/clouddrove/tessera
+  - https://github.com/clouddrove/vanisec
 

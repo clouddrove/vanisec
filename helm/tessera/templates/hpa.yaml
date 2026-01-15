@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "tessera.fullname" . }}
+  name: {{ include "vanisec.fullname" . }}
   labels:
-    {{- include "tessera.labels" . | nindent 4 }}
+    {{- include "vanisec.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "tessera.fullname" . }}
+    name: {{ include "vanisec.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

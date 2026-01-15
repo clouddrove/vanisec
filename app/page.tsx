@@ -6,7 +6,7 @@ import UseCases from '@/components/UseCases'
 
 export const metadata: Metadata = {
   title: 'Free Secure One-Time Secret Sharing | Share Once, Vanish Forever',
-  description: 'Share sensitive information securely with Tessera. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
+  description: 'Share sensitive information securely with Vanisec. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
   keywords: [
     // Primary keywords
     'one time secret',
@@ -60,13 +60,13 @@ export const metadata: Metadata = {
     'encrypted paste',
   ],
   openGraph: {
-    title: 'Tessera - Free Secure One-Time Secret Sharing',
+    title: 'Vanisec - Free Secure One-Time Secret Sharing',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing. Free and no sign-up required.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tessera - Free Secure One-Time Secret Sharing',
+    title: 'Vanisec - Free Secure One-Time Secret Sharing',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing.',
   },
 }
@@ -88,12 +88,12 @@ export default function Home() {
             <div className="inline-block mb-6 animate-float">
               <div className="relative">
                 <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-clouddrove-light via-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-glow transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                  <span className="text-white text-5xl font-bold">t</span>
+                  <span className="text-white text-5xl font-bold">V</span>
                 </div>
                 <div className="absolute -inset-1 bg-gradient-to-br from-clouddrove-light to-clouddrove-dark rounded-2xl blur opacity-30 animate-pulse-slow"></div>
               </div>
             </div>
-            <h1 className="text-clouddrove-light text-2xl font-light tracking-wide mb-2">Tessera</h1>
+            <h1 className="text-clouddrove-light text-2xl font-light tracking-wide mb-2">Vanisec</h1>
             <p className="text-clouddrove-dark text-base font-medium italic tracking-wide">
               Share once. Vanish forever.
             </p>

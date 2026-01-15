@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "tessera.fullname" . }}
+  name: {{ include "vanisec.fullname" . }}
   labels:
-    {{- include "tessera.labels" . | nindent 4 }}
+    {{- include "vanisec.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "tessera.selectorLabels" . | nindent 6 }}
+      {{- include "vanisec.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -18,13 +18,13 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "tessera.selectorLabels" . | nindent 8 }}
+        {{- include "vanisec.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "tessera.serviceAccountName" . }}
+      serviceAccountName: {{ include "vanisec.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:

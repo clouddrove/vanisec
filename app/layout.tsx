@@ -5,18 +5,18 @@ import Footer from '@/components/Footer'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import StructuredData from '@/components/StructuredData'
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://tessera.clouddrove.com'
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://vanisec.clouddrove.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Tessera - Free Secure One-Time Secret Sharing | Share Once, Vanish Forever',
-    template: '%s | Tessera - Secure Secret Sharing',
+    default: 'Vanisec - Free Secure One-Time Secret Sharing | Share Once, Vanish Forever',
+    template: '%s | Vanisec - Secure Secret Sharing',
   },
-  description: 'Share sensitive information securely with Tessera. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
+  description: 'Share sensitive information securely with Vanisec. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
   keywords: [
     // Brand and product names
-    'tessera',
+    'vanisec',
     'OTS',
     'one time secret',
     'one-time secret',
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
     
     // Company
     'clouddrove',
-    'clouddrove tessera',
+    'clouddrove vanisec',
   ],
   authors: [{ name: 'CloudDrove' }],
   creator: 'CloudDrove',
@@ -124,21 +124,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: baseUrl,
-    siteName: 'Tessera',
-    title: 'Tessera - Free Secure One-Time Secret Sharing',
+    siteName: 'Vanisec',
+    title: 'Vanisec - Free Secure One-Time Secret Sharing',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing. Free and no sign-up required.',
     images: [
       {
         url: `${baseUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'Tessera - Secure Secret Sharing',
+        alt: 'Vanisec - Secure Secret Sharing',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tessera - Free Secure One-Time Secret Sharing',
+    title: 'Vanisec - Free Secure One-Time Secret Sharing',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing.',
     images: [`${baseUrl}/og-image.png`],
     creator: '@clouddrove',

@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "tessera.fullname" . }}-redis
+  name: {{ include "vanisec.fullname" . }}-redis
   labels:
-    {{- include "tessera.labels" . | nindent 4 }}
+    {{- include "vanisec.labels" . | nindent 4 }}
     app.kubernetes.io/component: redis
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "tessera.selectorLabels" . | nindent 6 }}
+      {{- include "vanisec.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: redis
   template:
     metadata:
       labels:
-        {{- include "tessera.selectorLabels" . | nindent 8 }}
+        {{- include "vanisec.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: redis
     spec:
       containers:
@@ -52,7 +52,7 @@ spec:
       {{- if .Values.redis.persistence.enabled }}
       - name: redis-data
         persistentVolumeClaim:
-          claimName: {{ include "tessera.fullname" . }}-redis
+          claimName: {{ include "vanisec.fullname" . }}-redis
       {{- else }}
       - name: redis-data
         emptyDir: {}
@@ -61,9 +61,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "tessera.fullname" . }}-redis
+  name: {{ include "vanisec.fullname" . }}-redis
   labels:
-    {{- include "tessera.labels" . | nindent 4 }}
+    {{- include "vanisec.labels" . | nindent 4 }}
     app.kubernetes.io/component: redis
 spec:
   type: {{ .Values.redis.service.type }}
@@ -73,16 +73,16 @@ spec:
       protocol: TCP
       name: redis
   selector:
-    {{- include "tessera.selectorLabels" . | nindent 4 }}
+    {{- include "vanisec.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: redis
 ---
 {{- if .Values.redis.persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "tessera.fullname" . }}-redis
+  name: {{ include "vanisec.fullname" . }}-redis
   labels:
-    {{- include "tessera.labels" . | nindent 4 }}
+    {{- include "vanisec.labels" . | nindent 4 }}
     app.kubernetes.io/component: redis
 spec:
   accessModes:
