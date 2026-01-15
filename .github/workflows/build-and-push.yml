@@ -47,12 +47,10 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            # Tag with commit SHA (always unique)
-            type=sha,prefix={{branch}}-,format=long
-            # Tag with branch name for branch pushes
-            type=ref,event=branch
-            # Tag with PR number for pull requests
-            type=ref,event=pr
+            # Always tag with latest for pushes to master
+            type=raw,value=latest,enable={{is_default_branch}}
+            # Tag with short git hash (7 characters)
+            type=sha,format=short
             # Tag with semantic version for version tags (e.g., v1.0.0)
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
