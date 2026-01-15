@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Reach out to the Vanisec team. We welcome feedback, inquiries, and suggestions.',
+  description: 'Get in touch with the Vanisec team. Share feedback, ask questions, or propose improvements.',
 }
 
 export default function ContactPage() {
@@ -67,7 +67,7 @@ export default function ContactPage() {
               </svg>
               <div>
                 <h3 className="font-semibold text-clouddrove-dark mb-1">Feature Requests</h3>
-                <p className="text-clouddrove-light">Have a feature idea? We welcome suggestions! Submit a feature request on GitHub.</p>
+                <p className="text-clouddrove-light">Have a feature idea? Share your suggestions by opening a feature request on GitHub.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">

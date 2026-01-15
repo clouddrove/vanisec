@@ -1,73 +1,85 @@
 # Contributing to Vanisec
 
-Thank you for your interest in contributing to Vanisec! This document provides guidelines and instructions for contributing.
+Contributions help make Vanisec better for everyone. This guide outlines how to participate in the project.
 
-## Code of Conduct
+## Community Guidelines
 
-By participating in this project, you agree to maintain a respectful and inclusive environment for all contributors.
+All contributors are expected to foster a collaborative and respectful environment. Be constructive, patient, and considerate in all interactions.
 
-## How to Contribute
+## Contribution Process
 
-### Reporting Bugs
+### Bug Reports
 
-1. Check if the bug has already been reported in [Issues](https://github.com/clouddrove/vanisec/issues)
-2. If not, create a new issue with:
-   - Clear title and description
-   - Steps to reproduce
-   - Expected vs actual behavior
-   - Environment details (OS, Node version, etc.)
+Before reporting a bug:
 
-### Suggesting Features
+1. Search existing [Issues](https://github.com/clouddrove/vanisec/issues) to see if it's already documented
+2. If not found, create a new issue containing:
+   - Descriptive title summarizing the issue
+   - Detailed description of the problem
+   - Step-by-step reproduction instructions
+   - Expected behavior vs actual behavior
+   - System information (operating system, Node.js version, browser, etc.)
+   - Relevant logs or error messages
 
-1. Check existing issues and discussions
-2. Open a new issue with:
-   - Clear description of the feature
-   - Use case and benefits
-   - Proposed implementation (if applicable)
+### Feature Proposals
 
-### Pull Requests
+When suggesting new features:
 
-1. Fork the repository
+1. Review existing issues and discussions to avoid duplicates
+2. Create an issue that includes:
+   - Feature description and motivation
+   - Specific use cases and benefits
+   - Potential implementation approach (if you have ideas)
+   - Any breaking changes or considerations
+
+### Code Contributions
+
+To contribute code:
+
+1. Fork the repository to your GitHub account
 2. Create a feature branch: `git checkout -b feature/your-feature-name`
-3. Make your changes
-4. Ensure all tests pass: `npm run lint && npm run build`
-5. Commit with clear messages
-6. Push to your fork
-7. Open a pull request with a clear description
+3. Implement your changes following the project's code style
+4. Verify everything works: `npm run lint && npm run build`
+5. Write clear, descriptive commit messages
+6. Push your branch to your fork
+7. Open a pull request with a comprehensive description of changes
 
-### Development Setup
+### Local Development Environment
+
+Set up your development environment:
 
 ```bash
 # Clone your fork
 git clone https://github.com/your-username/vanisec.git
 cd vanisec
 
-# Install dependencies
+# Install project dependencies
 npm install
 
-# Start development server
+# Launch the development server
 npm run dev
 ```
 
-### Code Style
+### Coding Standards
 
-- Follow TypeScript best practices
-- Use meaningful variable and function names
-- Add comments for complex logic
-- Run `npm run lint` before committing
-- Ensure code is properly formatted
+- Adhere to TypeScript best practices and type safety
+- Choose descriptive names for variables, functions, and components
+- Document complex algorithms and business logic
+- Execute `npm run lint` prior to committing changes
+- Maintain consistent code formatting throughout
 
-### Commit Messages
+### Commit Message Format
 
-Use clear, descriptive commit messages:
+Follow conventional commit message format:
+
 - `feat: Add password protection feature`
 - `fix: Resolve Redis connection timeout`
 - `docs: Update README with deployment instructions`
 - `refactor: Improve error handling`
+- `chore: Update dependencies`
 
-## Questions?
+## Getting Help
 
-Feel free to open an issue for questions or reach out to the maintainers.
+If you have questions or need clarification, open an issue with the `question` label or contact the maintainers directly.
 
-Thank you for contributing to Vanisec!
-
+Your contributions make Vanisec possible. We appreciate your time and effort!
