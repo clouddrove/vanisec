@@ -77,6 +77,7 @@ Create a `.env.local` file:
 
 ```env
 REDIS_URL=redis://localhost:6379/3
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX  # Optional: Google Analytics Measurement ID
 ```
 
 #### Run Development Server
@@ -127,6 +128,9 @@ npm start
   - The application uses Redis database 3
   - Format: `redis://host:port/db` or `redis://host:port` (database 3 is set in code)
 - `NEXT_PUBLIC_BASE_URL` - Base URL for the application (optional, for sitemap generation)
+- `NEXT_PUBLIC_GA_ID` - Google Analytics Measurement ID (optional)
+  - If provided, Google Analytics tracking will be enabled
+  - Format: `G-XXXXXXXXXX` (Google Analytics 4 Measurement ID)
 
 ## Production Deployment
 
