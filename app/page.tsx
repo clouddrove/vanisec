@@ -75,12 +75,11 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
+      <section className="min-h-screen flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden bg-white">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-clouddrove-light opacity-5 rounded-full blur-3xl animate-float"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-clouddrove-dark opacity-5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-clouddrove-light opacity-3 rounded-full blur-3xl animate-pulse-slow"></div>
         </div>
 
         <div className="w-full max-w-2xl relative z-10">
@@ -94,8 +93,8 @@ export default function Home() {
                 <div className="absolute -inset-1 bg-gradient-to-br from-clouddrove-light to-clouddrove-dark rounded-2xl blur opacity-30 animate-pulse-slow"></div>
               </div>
             </div>
-            <h1 className="text-clouddrove-light text-xl font-light tracking-wide mb-2">Tessera</h1>
-            <p className="text-clouddrove-dark text-sm font-medium italic tracking-wide">
+            <h1 className="text-clouddrove-light text-2xl font-light tracking-wide mb-2">Tessera</h1>
+            <p className="text-clouddrove-dark text-base font-medium italic tracking-wide">
               Share once. Vanish forever.
             </p>
             <div className="mt-4 flex items-center justify-center gap-2">

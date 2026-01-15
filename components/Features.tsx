@@ -1,80 +1,69 @@
 export default function Features() {
   const features = [
     {
-      title: 'One-Time View Access',
-      description: 'Each secret can only be viewed once. After viewing, it is permanently deleted from our servers, ensuring maximum security.',
+      title: 'Enhanced Privacy Options',
+      description: 'Implement an additional passphrase layer for heightened protection. Only individuals possessing the correct passphrase gain access to view the confidential content.',
       icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
       ),
     },
     {
-      title: 'Password Protection',
-      description: 'Add an optional password for an extra layer of security. Only those with the password can view the secret.',
+      title: 'Self-Destructing Links',
+      description: 'Upon viewing or reaching expiration, your confidential data gets completely removed from our infrastructure. Zero copies remain, leaving no digital footprint behind.',
       icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </div>
       ),
     },
     {
       title: 'Automatic Expiration',
-      description: 'Set expiration times from 1 hour to 7 days. Secrets are automatically deleted when they expire, even if not viewed.',
+      description: 'Configure time-to-live settings ranging from 60 minutes up to one week. Confidential entries get systematically purged upon expiration, guaranteeing your data never persists unnecessarily.',
       icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
       ),
     },
     {
-      title: 'No Sign-Up Required',
-      description: 'Start sharing secrets immediately. No account creation, no email verification, no credit card required. Completely free.',
+      title: 'Compliance Ready',
+      description: 'Engineered to support adherence to SOC2, GDPR, CCPA, and HIPAA standards for confidential data management and privacy protection requirements.',
       icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-        </svg>
-      ),
-    },
-    {
-      title: 'Encrypted Storage',
-      description: 'All secrets are encrypted before storage. Your sensitive information is protected with industry-standard encryption.',
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      ),
-    },
-    {
-      title: 'Privacy First',
-      description: 'We never store your secrets in logs or analytics. Once deleted, your information is gone forever. No tracking, no data collection.',
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
       ),
     },
   ]
 
   return (
-    <section className="py-16 px-4">
+    <section className="py-20 px-4 bg-gradient-to-b from-white to-clouddrove-light/5">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-clouddrove-dark mb-4">Key Features</h2>
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Key Features</h2>
           <p className="text-lg text-clouddrove-light max-w-2xl mx-auto">
-            Discover what makes Tessera the preferred solution for secure information sharing
+            Explore the capabilities that position Tessera as the leading choice for confidential information exchange
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="glass-effect rounded-xl p-6 border border-clouddrove-light/20 hover:border-clouddrove-dark/30 transition-all"
+              className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
-              <div className="text-clouddrove-dark mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-clouddrove-dark mb-2">{feature.title}</h3>
-              <p className="text-clouddrove-light">{feature.description}</p>
+              <div className="mb-6 flex justify-center">{feature.icon}</div>
+              <h3 className="text-xl font-bold text-clouddrove-dark mb-3 text-center">{feature.title}</h3>
+              <p className="text-clouddrove-light text-center leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
@@ -82,4 +71,3 @@ export default function Features() {
     </section>
   )
 }
-
