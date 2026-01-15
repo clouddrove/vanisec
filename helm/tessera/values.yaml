@@ -69,6 +69,8 @@ env:
   NODE_ENV: "production"
   REDIS_URL: "redis://tessera-redis:6379/3"
   NEXT_PUBLIC_BASE_URL: ""
+  # Optional: Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
+  NEXT_PUBLIC_GA_ID: ""
 
 resources:
   requests:

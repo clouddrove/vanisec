@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Footer from '@/components/Footer'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export const metadata: Metadata = {
   title: 'Tessera - Secure Secret Sharing',
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
+        <GoogleAnalytics />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>
