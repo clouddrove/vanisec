@@ -45,8 +45,10 @@ ingress:
           pathType: Prefix
   tls: []
 
+# Redis Configuration
+# Set enabled: false to use an external Redis instance
 redis:
-  enabled: true
+  enabled: true  # Set to false to use external Redis
   image:
     repository: redis
     tag: "7-alpine"
@@ -70,11 +72,17 @@ redis:
 
 env:
   NODE_ENV: "production"
-  # If Redis password is set, use: redis://:password@vanisec-redis:6379/3
-  # Or set REDIS_PASSWORD separately (recommended)
+  # Redis Connection URL
+  # - If redis.enabled: true, use: redis://vanisec-redis:6379/3 (default)
+  # - If redis.enabled: false, set to your external Redis URL
+  #   Examples:
+  #     - redis://external-redis.example.com:6379/3
+  #     - redis://:password@external-redis.example.com:6379/3
+  #     - redis://redis-service.namespace.svc.cluster.local:6379/3
   REDIS_URL: "redis://vanisec-redis:6379/3"
   # Optional: Redis password (if Redis requires authentication)
   # This will be used if REDIS_URL doesn't include password
+  # Only needed if password is not included in REDIS_URL
   REDIS_PASSWORD: ""
   # Base URL for the application (e.g., https://vanisec.clouddrove.com)
   # Protocol (https://) is optional - will be added automatically if missing

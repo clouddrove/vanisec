@@ -20,16 +20,16 @@ A secure, open-source one-time secret sharing platform built with modern web tec
 
 ## Overview
 
-Vanisec is a production-ready, open-source platform for secure one-time secret sharing. Share sensitive information like passwords, API keys, credentials, or confidential data through encrypted links that can only be viewed once and are automatically deleted after access.
+Vanisec provides a production-grade, open-source solution for ephemeral secret sharing. Exchange sensitive data including passwords, API keys, authentication credentials, or confidential information via encrypted links designed for single-use access with automatic deletion.
 
-### Why Vanisec?
+### Why Choose Vanisec?
 
-- 🔒 **Security First**: End-to-end encryption with automatic deletion
-- ⚡ **Zero Configuration**: No sign-up, no accounts, no hassle
-- 🚀 **Production Ready**: Optimized Docker builds, Kubernetes-ready Helm charts
-- 🎨 **Modern UI**: Clean, responsive design with CloudDrove branding
-- 📦 **Self-Hosted**: Full control over your data and infrastructure
-- 🌐 **Open Source**: MIT licensed, community-driven development
+- 🔒 **Security-Focused**: Implements end-to-end encryption with immediate deletion after access
+- ⚡ **Zero Friction**: No registration, authentication, or account management required
+- 🚀 **Enterprise-Grade**: Production-optimized container builds with comprehensive Kubernetes support
+- 🎨 **Polished Interface**: Modern, responsive design featuring CloudDrove's visual identity
+- 📦 **Self-Hostable**: Complete infrastructure control and data sovereignty
+- 🌐 **Open Source**: MIT-licensed with active community participation
 
 ## Features
 
@@ -188,11 +188,74 @@ Edit `_infra/helm/vanisec/values.yaml` to customize:
 - Replica count and autoscaling
 - Image repository and tag
 - Resource limits and requests
-- Redis configuration and persistence
+- Redis configuration (embedded or external)
 - Ingress settings and TLS
 - Environment variables
 
-**Example Custom Values:**
+#### Redis Configuration
+
+Vanisec supports two Redis deployment modes:
+
+**Option 1: Embedded Redis (Default)**
+
+Redis is deployed as part of the Helm chart:
+
+```yaml
+redis:
+  enabled: true  # Deploy Redis with the application
+  password: ""   # Optional: Set password for Redis authentication
+  persistence:
+    enabled: true
+    size: 8Gi
+
+env:
+  REDIS_URL: "redis://vanisec-redis:6379/3"  # Points to embedded Redis
+  REDIS_PASSWORD: ""  # Optional: Redis password
+```
+
+**Option 2: External Redis**
+
+Use an existing Redis instance (managed service, external cluster, etc.):
+
+```yaml
+redis:
+  enabled: false  # Disable embedded Redis deployment
+
+env:
+  # Point to your external Redis instance
+  REDIS_URL: "redis://external-redis.example.com:6379/3"
+  # Or with password:
+  # REDIS_URL: "redis://:password@external-redis.example.com:6379/3"
+  # Or using Kubernetes service:
+  # REDIS_URL: "redis://redis-service.namespace.svc.cluster.local:6379/3"
+  REDIS_PASSWORD: ""  # Optional: Set if not included in URL
+```
+
+**Example: Using External Redis in Kubernetes**
+
+```yaml
+redis:
+  enabled: false  # Don't deploy Redis
+
+env:
+  # Connect to Redis in another namespace
+  REDIS_URL: "redis://redis.default.svc.cluster.local:6379/3"
+  REDIS_PASSWORD: "your-redis-password"
+```
+
+**Example: Using Managed Redis Service (AWS ElastiCache, Azure Cache, etc.)**
+
+```yaml
+redis:
+  enabled: false
+
+env:
+  # Connect to managed Redis service
+  REDIS_URL: "redis://your-redis-cluster.cache.amazonaws.com:6379/3"
+  REDIS_PASSWORD: "your-secure-password"
+```
+
+#### Example Custom Values (Embedded Redis)
 
 ```yaml
 replicaCount: 3
@@ -200,6 +263,13 @@ replicaCount: 3
 image:
   repository: ghcr.io/clouddrove/vanisec
   tag: "latest"
+
+redis:
+  enabled: true
+  password: "secure-redis-password"
+  persistence:
+    enabled: true
+    size: 8Gi
 
 ingress:
   enabled: true
@@ -222,7 +292,8 @@ autoscaling:
 
 env:
   NEXT_PUBLIC_BASE_URL: "https://vanisec.example.com"
-  REDIS_PASSWORD: "your-secure-password"
+  REDIS_URL: "redis://vanisec-redis:6379/3"
+  REDIS_PASSWORD: "secure-redis-password"
 ```
 
 ## Architecture
@@ -317,9 +388,21 @@ Key configuration options in `_infra/helm/vanisec/values.yaml`:
 
 - **Replicas**: Number of application instances
 - **Resources**: CPU and memory limits
-- **Redis**: Embedded or external Redis configuration
+- **Redis**: 
+  - `redis.enabled: true` - Deploy embedded Redis (default)
+  - `redis.enabled: false` - Use external Redis (set `REDIS_URL` accordingly)
 - **Ingress**: TLS termination and routing
 - **Autoscaling**: Horizontal Pod Autoscaler settings
+
+**Redis Deployment Modes:**
+
+1. **Embedded Redis** (`redis.enabled: true`): Redis is deployed as part of the Helm release
+   - Suitable for: Development, small deployments, single-tenant
+   - Benefits: Simple setup, no external dependencies
+   
+2. **External Redis** (`redis.enabled: false`): Connect to existing Redis instance
+   - Suitable for: Production, high availability, managed services
+   - Benefits: Better performance, shared infrastructure, managed backups
 
 ## Development
 
@@ -413,36 +496,37 @@ GitHub Actions workflows:
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+Contributions are essential for Vanisec's growth. See our [Contributing Guide](CONTRIBUTING.md) for complete details.
 
-### Quick Start for Contributors
+### Getting Started
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `npm run lint && npm run build`
-5. Commit: `git commit -m 'Add amazing feature'`
-6. Push: `git push origin feature/amazing-feature`
-7. Open a Pull Request
+1. Fork the repository to your account
+2. Create a feature branch: `git checkout -b feature/your-feature-name`
+3. Implement your changes
+4. Run validation: `npm run lint && npm run build`
+5. Commit with descriptive messages: `git commit -m 'feat: Add new feature'`
+6. Push to your fork: `git push origin feature/your-feature-name`
+7. Submit a pull request with a clear description
 
-### Development Guidelines
+### Contribution Guidelines
 
-- Follow TypeScript best practices
-- Write clear commit messages
-- Update documentation for new features
-- Add tests for new functionality
-- Ensure all checks pass before submitting PR
+- Maintain TypeScript type safety and best practices
+- Use conventional commit message format
+- Update relevant documentation alongside code changes
+- Include appropriate tests for new functionality
+- Verify all linting and build checks pass before submitting
 
 ## Security
 
-### Security Policy
+### Vulnerability Reporting
 
-We take security seriously. If you discover a security vulnerability, please:
+Security is a top priority for Vanisec. To report a security vulnerability:
 
-1. **Do not** open a public issue
-2. Email security details to: **security@clouddrove.com**
-3. Include steps to reproduce the vulnerability
-4. We will respond within 48 hours
+1. **Do not** create a public GitHub issue
+2. Send details via email to: **security@clouddrove.com**
+3. Provide detailed steps to reproduce the issue
+4. Include potential impact assessment if possible
+5. Expect a response within 48 hours acknowledging receipt
 
 ### Security Features
 
@@ -467,10 +551,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Built with [Next.js](https://nextjs.org/)
-- Styled with [Tailwind CSS](https://tailwindcss.com/)
-- Powered by [Redis](https://redis.io/)
-- Container images hosted on [GitHub Container Registry](https://github.com/clouddrove/vanisec/pkgs/container/vanisec)
+Vanisec leverages several excellent open-source technologies:
+
+- **Next.js** - React framework powering the application
+- **Tailwind CSS** - Utility-first CSS framework for styling
+- **Redis** - In-memory data store for ephemeral secret storage
+- **GitHub Container Registry** - Container image hosting and distribution
 
 ## Support
 
