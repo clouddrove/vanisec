@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSecret } from '@/lib/secrets'
+import { trackSecretCreated } from '@/lib/analytics'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,6 +15,11 @@ export async function POST(request: NextRequest) {
     }
 
     const id = await createSecret(secret, password, expiresIn)
+    
+    // Track analytics (non-blocking)
+    trackSecretCreated().catch((err) => {
+      console.error('Failed to track secret creation:', err)
+    })
 
     return NextResponse.json({ id })
   } catch {

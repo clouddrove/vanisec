@@ -37,6 +37,8 @@ services:
       # - REDIS_PASSWORD=${REDIS_PASSWORD:-}
       # Optional: Uncomment and set your Google Analytics Measurement ID
       # - NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+      # Optional: Dashboard access token (required to access /dashboard)
+      - DASHBOARD_TOKEN=${DASHBOARD_TOKEN:-}
     depends_on:
       redis:
         condition: service_healthy

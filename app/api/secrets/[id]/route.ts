@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSecret, deleteSecret } from '@/lib/secrets'
+import { trackSecretViewed } from '@/lib/analytics'
 
 export async function GET(
   request: NextRequest,
@@ -41,6 +42,11 @@ export async function GET(
 
     // Mark as viewed and delete
     await deleteSecret(id)
+    
+    // Track analytics (non-blocking)
+    trackSecretViewed().catch((err) => {
+      console.error('Failed to track secret view:', err)
+    })
 
     return NextResponse.json({ secret: secret.secret })
   } catch {
@@ -88,6 +94,12 @@ export async function POST(
     if (!secret.password) {
       // No password required, return secret
       await deleteSecret(id)
+      
+      // Track analytics (non-blocking)
+      trackSecretViewed().catch((err) => {
+        console.error('Failed to track secret view:', err)
+      })
+      
       return NextResponse.json({ secret: secret.secret })
     }
 
@@ -100,6 +112,11 @@ export async function POST(
 
     // Password correct, mark as viewed and delete
     await deleteSecret(id)
+    
+    // Track analytics (non-blocking)
+    trackSecretViewed().catch((err) => {
+      console.error('Failed to track secret view:', err)
+    })
 
     return NextResponse.json({ secret: secret.secret })
   } catch {
