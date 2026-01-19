@@ -369,7 +369,7 @@ env:
 | `REDIS_PASSWORD` | Redis password (if authentication enabled) | - | No |
 | `NEXT_PUBLIC_BASE_URL` | Base URL for the application | `https://vanisec.clouddrove.com` | No |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics Measurement ID | - | No |
-| `DASHBOARD_TOKEN` | Token required to access `/dashboard` analytics | - | No (recommended for production) |
+| `DASHBOARD_TOKEN` | Token required to access `/bob` analytics | - | No (recommended for production) |
 | `NODE_ENV` | Environment mode | `production` | No |
 
 **Redis URL Format:**
@@ -382,7 +382,7 @@ redis://:password@redis.example.com:6379/3
 
 ### Dashboard Access
 
-Vanisec includes an analytics dashboard at `/dashboard` to monitor usage statistics. The dashboard is protected by token authentication.
+Vanisec includes an analytics dashboard at `/bob` to monitor usage statistics. The dashboard is protected by token authentication and restricted to private networks only.
 
 **Setting up Dashboard Access:**
 
@@ -392,13 +392,13 @@ Vanisec includes an analytics dashboard at `/dashboard` to monitor usage statist
    ```
 
 2. Access the dashboard:
-   - Visit `/dashboard` in your browser
+   - Visit `/bob` in your browser (only accessible from private/internal networks)
    - Enter the token when prompted
    - The token is stored in browser localStorage for convenience
 
 3. Access via URL (token is removed from URL after first use):
    ```
-   https://your-domain.com/dashboard?token=your-secure-token-here
+   https://your-domain.com/bob?token=your-secure-token-here
    ```
 
 **Dashboard Features:**
