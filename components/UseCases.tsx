@@ -3,7 +3,7 @@ export default function UseCases() {
     {
       title: 'IT Professionals',
       description: 'Exchange access credentials and authentication details with colleagues safely. Eliminate credential exposure risks in email threads and messaging platforms.',
-      example: 'prod_api_token_51H7xYz9A2bC3dE4fG',
+      example: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC7...',
       benefits: [
         'Eliminate credential exposure risks in email threads and messaging platforms',
         'Monitor when confidential data gets accessed',
@@ -13,7 +13,7 @@ export default function UseCases() {
     {
       title: 'Developers',
       description: 'Exchange API credentials, database connection strings, and configuration parameters during team integration or collaborative projects.',
-      example: 'DATABASE_URL=postgresql://...',
+      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
       benefits: [
         'Streamline secure team integration workflows',
         'Exchange configuration parameters safely',
@@ -23,7 +23,7 @@ export default function UseCases() {
     {
       title: 'Business Teams',
       description: 'Exchange proprietary business intelligence, financial metrics, or sensitive documents with external partners and stakeholders.',
-      example: 'Q4 Revenue: $2.5M',
+      example: 'Contract #CN-2024-8472 | Client: Acme Corp',
       benefits: [
         'Safeguard proprietary business intelligence',
         'Maintain adherence to data protection regulations',

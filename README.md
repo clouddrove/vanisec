@@ -58,6 +58,13 @@ Vanisec provides a production-grade, open-source solution for ephemeral secret s
 - **Non-Root Execution**: Docker containers run with minimal privileges
 - **Health Monitoring**: Built-in health checks and monitoring
 
+### Analytics Dashboard
+
+- **Usage Tracking**: Monitor secrets created, viewed, and active secrets
+- **Time-Based Metrics**: Hourly and daily breakdowns of usage patterns
+- **Secure Access**: Token-based authentication for dashboard access
+- **Real-Time Updates**: Auto-refreshing dashboard with live statistics
+
 ## Table of Contents
 
 - [Quick Start](#quick-start)
@@ -362,6 +369,7 @@ env:
 | `REDIS_PASSWORD` | Redis password (if authentication enabled) | - | No |
 | `NEXT_PUBLIC_BASE_URL` | Base URL for the application | `https://vanisec.clouddrove.com` | No |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics Measurement ID | - | No |
+| `DASHBOARD_TOKEN` | Token required to access `/dashboard` analytics | - | No (recommended for production) |
 | `NODE_ENV` | Environment mode | `production` | No |
 
 **Redis URL Format:**
@@ -371,6 +379,37 @@ redis://[password@]host:port[/database]
 redis://localhost:6379/3
 redis://:password@redis.example.com:6379/3
 ```
+
+### Dashboard Access
+
+Vanisec includes an analytics dashboard at `/dashboard` to monitor usage statistics. The dashboard is protected by token authentication.
+
+**Setting up Dashboard Access:**
+
+1. Set the `DASHBOARD_TOKEN` environment variable:
+   ```bash
+   export DASHBOARD_TOKEN=your-secure-token-here
+   ```
+
+2. Access the dashboard:
+   - Visit `/dashboard` in your browser
+   - Enter the token when prompted
+   - The token is stored in browser localStorage for convenience
+
+3. Access via URL (token is removed from URL after first use):
+   ```
+   https://your-domain.com/dashboard?token=your-secure-token-here
+   ```
+
+**Dashboard Features:**
+- Total secrets created and viewed
+- Active secrets count
+- View rate percentage
+- Hourly usage charts (last 24 hours)
+- Daily usage charts (configurable: 7, 14, 30, or 90 days)
+- Auto-refresh every 30 seconds
+
+**Security Note:** If `DASHBOARD_TOKEN` is not set, the dashboard will be accessible without authentication (not recommended for production).
 
 ### Docker Configuration
 
