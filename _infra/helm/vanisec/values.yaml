@@ -89,7 +89,7 @@ env:
   NEXT_PUBLIC_BASE_URL: ""
   # Optional: Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
   NEXT_PUBLIC_GA_ID: ""
-  # Optional: Dashboard access token (required to access /dashboard analytics)
+  # Optional: Dashboard access token (required to access /bob analytics)
   # If not set, dashboard will be accessible without authentication (not recommended for production)
   DASHBOARD_TOKEN: ""
 
