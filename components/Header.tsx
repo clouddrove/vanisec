@@ -17,7 +17,6 @@ export default function Header() {
     { href: '/docs', label: 'Documentation' },
     { href: '/api', label: 'API' },
     { href: '/faq', label: 'FAQ' },
-    { href: '/dashboard', label: 'Dashboard' },
   ]
 
   return (
