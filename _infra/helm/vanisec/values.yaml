@@ -88,7 +88,6 @@ env:
   # Protocol (https://) is optional - will be added automatically if missing
   NEXT_PUBLIC_BASE_URL: ""
   # Optional: Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
-  # Defaults to REMOVED if not set
   NEXT_PUBLIC_GA_ID: ""
   # Optional: Dashboard access token (required to access /bob analytics)
   # If not set, dashboard will be accessible without authentication (not recommended for production)
