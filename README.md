@@ -1,20 +1,26 @@
-# Vanisec
+<p align="center">
+  <img src="public/favicon.svg" width="80" height="80" alt="Vanisec logo" />
+</p>
 
-<div align="center">
+<h1 align="center">Vanisec</h1>
+<p align="center"><strong>Designed to vanish</strong></p>
+<p align="center">A secure, open-source one-time secret sharing platform built with modern web technologies.</p>
 
-**Designed to vanish**
+<p align="center">
+  <a href="https://github.com/clouddrove/vanisec/actions/workflows/build-and-push.yml"><img src="https://github.com/clouddrove/vanisec/actions/workflows/build-and-push.yml/badge.svg" alt="Build Status" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" /></a>
+  <a href="https://github.com/clouddrove/vanisec/pkgs/container/vanisec"><img src="https://img.shields.io/badge/docker-ghcr.io%2Fclouddrove%2Fvanisec-blue" alt="Docker Image" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.2-blue" alt="TypeScript" /></a>
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.1-black" alt="Next.js" /></a>
+</p>
 
-A secure, open-source one-time secret sharing platform built with modern web technologies.
-
-[![Build Status](https://github.com/clouddrove/vanisec/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/clouddrove/vanisec/actions/workflows/build-and-push.yml)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Docker Image](https://img.shields.io/badge/docker-ghcr.io%2Fclouddrove%2Fvanisec-blue)](https://github.com/clouddrove/vanisec/pkgs/container/vanisec)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.1-black)](https://nextjs.org/)
-
-[Features](#features) • [Quick Start](#quick-start) • [Documentation](#documentation) • [Contributing](#contributing) • [License](#license)
-
-</div>
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#documentation">Documentation</a> •
+  <a href="#contributing">Contributing</a> •
+  <a href="#license">License</a>
+</p>
 
 ---
 
@@ -140,7 +146,7 @@ Create a `.env.local` file:
 ```env
 REDIS_URL=redis://localhost:6379/3
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX  # Optional: Google Analytics
+GA_ID=G-XXXXXXXXXX  # Optional: Google Analytics (runtime)
 ```
 
 #### Run Development Server
@@ -361,7 +367,8 @@ env:
 | `REDIS_URL` | Redis connection URL | `redis://localhost:6379/3` | Yes |
 | `REDIS_PASSWORD` | Redis password (if authentication enabled) | - | No |
 | `NEXT_PUBLIC_BASE_URL` | Base URL for the application | `https://vanisec.clouddrove.com` | No |
-| `NEXT_PUBLIC_GA_ID` | Google Analytics Measurement ID | - | No |
+| `GA_ID` | Google Analytics Measurement ID (runtime; no rebuild needed) | - | No |
+| `NEXT_PUBLIC_GA_ID` | Google Analytics Measurement ID (build-time alternative) | - | No |
 | `NODE_ENV` | Environment mode | `production` | No |
 
 **Redis URL Format:**
@@ -403,6 +410,12 @@ Key configuration options in `_infra/helm/vanisec/values.yaml`:
 2. **External Redis** (`redis.enabled: false`): Connect to existing Redis instance
    - Suitable for: Production, high availability, managed services
    - Benefits: Better performance, shared infrastructure, managed backups
+
+## Documentation
+
+- **In-app**: Run the app and visit `/docs`, `/api`, `/faq` for usage and API details
+- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ## Development
 
@@ -571,10 +584,9 @@ See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes and version hist
 
 ---
 
-<div align="center">
-
-**Made with ❤️ by [CloudDrove](https://clouddrove.com)**
-
-[Website](https://clouddrove.com) • [GitHub](https://github.com/clouddrove) • [Twitter](https://twitter.com/clouddrove)
-
-</div>
+<p align="center">
+  <strong>Made with ❤️ by <a href="https://clouddrove.com">CloudDrove</a></strong><br />
+  <a href="https://clouddrove.com">Website</a> •
+  <a href="https://github.com/clouddrove">GitHub</a> •
+  <a href="https://twitter.com/clouddrove">Twitter</a>
+</p>
