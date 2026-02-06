@@ -87,15 +87,8 @@ env:
   # Base URL for the application (e.g., https://vanisec.clouddrove.com)
   # Protocol (https://) is optional - will be added automatically if missing
   NEXT_PUBLIC_BASE_URL: ""
-  # Optional: Google Analytics Measurement ID
-  # Option 1: NEXT_PUBLIC_GA_ID - Must be set at BUILD TIME (embedded in client bundle)
-  # Option 2: GA_ID - Can be set at RUNTIME (fetched via API, less efficient)
-  # Use NEXT_PUBLIC_GA_ID if building image with GA ID, or GA_ID for runtime configuration
+  # Optional: Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
   NEXT_PUBLIC_GA_ID: ""
-  GA_ID: ""
-  # Optional: Dashboard access token (required to access /bob analytics)
-  # If not set, dashboard will be accessible without authentication (not recommended for production)
-  DASHBOARD_TOKEN: ""
 
 resources:
   requests:

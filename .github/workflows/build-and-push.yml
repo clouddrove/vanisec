@@ -72,7 +72,4 @@ jobs:
           cache-to: type=gha,mode=max
           # Load image for potential testing on PRs (no push, so no untagged images)
           load: ${{ github.event_name == 'pull_request' }}
-          # Build args for environment variables that need to be available at build time
-          build-args: |
-            NEXT_PUBLIC_GA_ID=${{ secrets.NEXT_PUBLIC_GA_ID }}
 

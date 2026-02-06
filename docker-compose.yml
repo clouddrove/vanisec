@@ -35,11 +35,8 @@ services:
       - REDIS_URL=redis://redis:6379/3
       # Optional: Uncomment if Redis requires password authentication
       # - REDIS_PASSWORD=${REDIS_PASSWORD:-}
-      # Optional: Google Analytics Measurement ID
-      # Set via environment variable: NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID:-}
-      - NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID:-}
-      # Optional: Dashboard access token (required to access /bob)
-      - DASHBOARD_TOKEN=${DASHBOARD_TOKEN:-}
+      # Optional: Uncomment and set your Google Analytics Measurement ID
+      # - NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
     depends_on:
       redis:
         condition: service_healthy

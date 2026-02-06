@@ -37,7 +37,7 @@ export default function Dashboard() {
       localStorage.setItem('dashboard_token', urlToken)
       setStoredToken(urlToken)
       // Clean up URL
-      router.replace('/bob')
+      router.replace('/bot')
     } else if (localToken) {
       setStoredToken(localToken)
     }

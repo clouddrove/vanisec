@@ -1,5 +1,6 @@
 # Stage 1: Dependencies
-FROM node:alpine AS deps
+# Next.js 16 requires Node.js >= 20.9.0
+FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -12,7 +13,7 @@ RUN --mount=type=cache,target=/root/.npm \
     sh -c "npm ci --no-audit --no-fund || npm install --no-audit --no-fund"
 
 # Stage 2: Builder
-FROM node:alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy node_modules from deps stage
@@ -33,18 +34,13 @@ COPY public ./public
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Accept Google Analytics ID as build argument (optional)
-# This allows setting it at build time instead of runtime
-ARG NEXT_PUBLIC_GA_ID
-ENV NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
-
 # Build with BuildKit cache mount for Next.js cache
 # Using standalone output for smaller final image
 RUN --mount=type=cache,target=/app/.next/cache \
     npm run build
 
 # Stage 3: Runner (Production)
-FROM node:alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production

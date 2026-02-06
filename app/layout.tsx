@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import GoogleAnalyticsRuntime from '@/components/GoogleAnalyticsRuntime'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import StructuredData from '@/components/StructuredData'
 
 // Helper function to ensure URL has protocol
@@ -178,7 +178,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex flex-col min-h-screen">
         <StructuredData />
-        <GoogleAnalyticsRuntime />
+        <GoogleAnalytics />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

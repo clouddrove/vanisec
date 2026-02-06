@@ -54,10 +54,6 @@ spec:
         - name: NEXT_PUBLIC_GA_ID
           value: {{ .Values.env.NEXT_PUBLIC_GA_ID | quote }}
         {{- end }}
-        {{- if .Values.env.GA_ID }}
-        - name: GA_ID
-          value: {{ .Values.env.GA_ID | quote }}
-        {{- end }}
         {{- if .Values.healthcheck.enabled }}
         livenessProbe:
           httpGet:
