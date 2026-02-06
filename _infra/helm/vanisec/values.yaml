@@ -87,7 +87,8 @@ env:
   # Base URL for the application (e.g., https://vanisec.clouddrove.com)
   # Protocol (https://) is optional - will be added automatically if missing
   NEXT_PUBLIC_BASE_URL: ""
-  # Optional: Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
+  # Google Analytics: set GA_ID for runtime (no rebuild needed), or NEXT_PUBLIC_GA_ID at build time
+  GA_ID: ""
   NEXT_PUBLIC_GA_ID: ""
 
 resources:
