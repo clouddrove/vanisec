@@ -33,6 +33,11 @@ COPY public ./public
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+# Accept Google Analytics ID as build argument (optional)
+# This allows setting it at build time instead of runtime
+ARG NEXT_PUBLIC_GA_ID
+ENV NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
+
 # Build with BuildKit cache mount for Next.js cache
 # Using standalone output for smaller final image
 RUN --mount=type=cache,target=/app/.next/cache \

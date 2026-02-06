@@ -11,6 +11,7 @@ export default function GoogleAnalytics() {
 
   return (
     <>
+      {/* Google tag (gtag.js) */}
       <Script
         async
         src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
