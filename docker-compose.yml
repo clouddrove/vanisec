@@ -35,8 +35,8 @@ services:
       - REDIS_URL=redis://redis:6379/3
       # Optional: Uncomment if Redis requires password authentication
       # - REDIS_PASSWORD=${REDIS_PASSWORD:-}
-      # Optional: Uncomment and set your Google Analytics Measurement ID
-      # - NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+      # Google Analytics Measurement ID
+      - NEXT_PUBLIC_GA_ID=REMOVED
       # Optional: Dashboard access token (required to access /bob)
       - DASHBOARD_TOKEN=${DASHBOARD_TOKEN:-}
     depends_on:
