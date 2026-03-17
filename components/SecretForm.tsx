@@ -22,6 +22,12 @@ export default function SecretForm() {
       return
     }
 
+    if (!password.trim()) {
+      setError('Password is required')
+      setLoading(false)
+      return
+    }
+
     try {
       const response = await fetch('/api/secrets', {
         method: 'POST',
@@ -30,7 +36,7 @@ export default function SecretForm() {
         },
         body: JSON.stringify({
           secret,
-          password: password || undefined,
+          password,
           expiresIn: parseInt(expiresIn),
         }),
       })
@@ -84,7 +90,6 @@ export default function SecretForm() {
             <div>
               <label htmlFor="password" className="block text-sm font-semibold text-clouddrove-dark mb-3 tracking-wide">
                 Password Protection
-                <span className="text-clouddrove-light font-normal ml-2">(Optional)</span>
               </label>
               <input
                 type="password"
@@ -92,7 +97,8 @@ export default function SecretForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-5 py-4 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50"
-                placeholder="Add a password"
+                placeholder="Enter a password"
+                required
               />
             </div>
 

@@ -13,6 +13,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (!password || typeof password !== 'string' || !password.trim()) {
+      return NextResponse.json(
+        { error: 'Password is required' },
+        { status: 400 }
+      )
+    }
+
     const id = await createSecret(secret, password, expiresIn)
 
     return NextResponse.json({ id })
