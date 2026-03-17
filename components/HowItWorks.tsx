@@ -3,17 +3,17 @@ export default function HowItWorks() {
     {
       number: '1',
       title: 'Create a Secret',
-      description: 'Input your confidential data and produce a protected single-use URL',
+      description: 'Paste your sensitive data, set an expiry time, and optionally add a passphrase. Click to generate a secure one-time link.',
     },
     {
       number: '2',
       title: 'Share the Link',
-      description: 'Distribute the protected URL via any communication method',
+      description: 'Send the link to your recipient through any channel — email, Slack, or a direct message. The link is the key.',
     },
     {
       number: '3',
       title: 'Gone Forever',
-      description: "The recipient accesses the confidential data once, then it's completely removed",
+      description: "The recipient opens it once, reads the secret, and it's permanently deleted. The link becomes dead immediately after.",
     },
   ]
 
@@ -23,7 +23,7 @@ export default function HowItWorks() {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">How It Works</h2>
           <p className="text-lg text-clouddrove-light max-w-2xl mx-auto">
-            Exchange your data once, then it's completely removed
+            Three steps. No accounts. No traces.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

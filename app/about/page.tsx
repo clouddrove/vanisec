@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Discover Vanisec - a complimentary, protected single-use confidential sharing solution. Our objective is delivering secure, private, and straightforward confidential sharing capabilities for all users.',
+  description: 'Vanisec is a free, open-source one-time secret sharing tool built by CloudDrove. Share sensitive data securely — no accounts, no logs, no traces.',
 }
 
 export default function AboutPage() {
@@ -12,7 +12,7 @@ export default function AboutPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">About Vanisec</h1>
           <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
-            Protected confidential sharing simplified, complimentary, and available to all
+            Secure secret sharing — free, open-source, and built for everyone
           </p>
         </div>
 
@@ -20,10 +20,10 @@ export default function AboutPage() {
           <section className="prose prose-lg max-w-none">
             <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Our Mission</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Vanisec operates on the principle that protected communication must be universally available, independent of technical knowledge or financial resources. We aim to deliver a complimentary, intuitive solution for exchanging sensitive data securely.
+              Vanisec was built on a simple belief: secure communication should be accessible to everyone, regardless of technical background or budget. Sharing sensitive information shouldn't require enterprise tools, complex setup, or expensive subscriptions.
             </p>
             <p className="text-clouddrove-light leading-relaxed">
-              We recognize that in the modern digital landscape, exchanging authentication credentials, API tokens, access keys, and other sensitive information occurs regularly. Conventional approaches such as email and instant messaging lack security and create permanent records. Vanisec addresses this challenge by offering encrypted, single-view confidential sharing that removes itself automatically after access.
+              Every day, people share passwords, API keys, tokens, and private data over email and chat — channels that create permanent, insecure records. Vanisec solves this by generating encrypted, one-time links that self-destruct after being opened. No history. No exposure. No risk of something sensitive being found months later in a chat log.
             </p>
           </section>
 
@@ -36,7 +36,7 @@ export default function AboutPage() {
                 </svg>
                 <div>
                   <h3 className="text-xl font-semibold text-clouddrove-dark mb-1">Completely Free</h3>
-                  <p className="text-clouddrove-light">Zero registration needed, no payment methods required, no additional charges. Utilize Vanisec without limitations, entirely at no cost.</p>
+                  <p className="text-clouddrove-light">No account. No credit card. No hidden limits. Vanisec is free to use for individuals and teams alike.</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -45,7 +45,7 @@ export default function AboutPage() {
                 </svg>
                 <div>
                   <h3 className="text-xl font-semibold text-clouddrove-dark mb-1">Privacy First</h3>
-                  <p className="text-clouddrove-light">We never retain your confidential data in activity logs or analytical systems. After removal, your information disappears permanently.</p>
+                  <p className="text-clouddrove-light">We never log your secrets. Once a secret is deleted — whether opened or expired — it's gone for good and cannot be recovered.</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -54,7 +54,7 @@ export default function AboutPage() {
                 </svg>
                 <div>
                   <h3 className="text-xl font-semibold text-clouddrove-dark mb-1">Open Source</h3>
-                  <p className="text-clouddrove-light">Vanisec operates as open-source software, enabling you to examine the source code, participate in development, or deploy your own version.</p>
+                  <p className="text-clouddrove-light">Vanisec is fully open source. Inspect the code, contribute improvements, or self-host your own instance. Trust is built on transparency.</p>
                 </div>
               </li>
             </ul>
@@ -63,14 +63,14 @@ export default function AboutPage() {
           <section className="prose prose-lg max-w-none">
             <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Built by CloudDrove</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Vanisec is created and supported by CloudDrove, an organization committed to developing protected, open-source utilities that enhance internet safety. We value openness, protection, and universal access.
+              Vanisec is built and maintained by <strong className="text-clouddrove-dark">CloudDrove</strong>, a team dedicated to creating open-source tools that make the internet safer and more secure. We believe in transparency, privacy, and giving back to the developer community.
             </p>
           </section>
 
           <section className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
-            <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Get Started</h2>
+            <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Ready to Get Started?</h2>
             <p className="text-clouddrove-light mb-6">
-              Prepared to begin exchanging confidential data securely? Registration unnecessary - simply generate your initial protected link.
+              No sign-up required. Create your first secure, self-destructing link in seconds.
             </p>
             <a
               href="/"

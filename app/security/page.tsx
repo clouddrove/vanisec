@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Security & Compliance',
-  description: 'Understand Vanisec protection mechanisms, data encryption, and regulatory alignment with SOC2, GDPR, CCPA, and HIPAA standards.',
+  description: 'How Vanisec protects your data — encryption, one-time access, automatic deletion, and support for SOC 2, GDPR, CCPA, and HIPAA compliance requirements.',
 }
 
 export default function SecurityPage() {
@@ -13,7 +13,7 @@ export default function SecurityPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Security & Compliance</h1>
           <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
-            Your confidential data gets encrypted, excluded from activity logs, and removed automatically after access
+            Your secrets are encrypted, never logged, and permanently deleted after use
           </p>
         </div>
 
@@ -22,60 +22,60 @@ export default function SecurityPage() {
             <h2 className="text-3xl font-bold text-clouddrove-dark mb-6">Security Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">Encryption</h3>
+                <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">Encryption at Rest & in Transit</h3>
                 <p className="text-clouddrove-light">
-                  All confidential entries undergo encryption prior to storage utilizing enterprise-grade cryptographic methods. Your sensitive content remains protected both at rest and during transmission.
+                  All secrets are encrypted before being stored using industry-standard cryptography. Your data is protected both at rest in Redis and in transit over HTTPS.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">One-Time Access</h3>
                 <p className="text-clouddrove-light">
-                  Every confidential entry permits only a single viewing session. Following access, it gets instantly and irreversibly eliminated from our infrastructure.
+                  Each secret can only be viewed once. The moment it's opened, it's permanently and irreversibly deleted from our servers — the link immediately becomes dead.
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">Password Protection</h3>
+                <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">Optional Passphrase</h3>
                 <p className="text-clouddrove-light">
-                  Include an optional passphrase for supplementary protection. Access remains restricted to those who possess the correct passphrase.
+                  Add a passphrase to your secret for a second layer of protection. Even if someone intercepts the link, they can't open the secret without the passphrase.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">Automatic Expiration</h3>
                 <p className="text-clouddrove-light">
-                  Confidential entries automatically become invalid according to your selected duration (60 minutes through 7 days). Expired entries get permanently removed.
+                  Secrets automatically expire between 1 hour and 7 days, regardless of whether they were ever viewed. Expired secrets are permanently purged.
                 </p>
               </div>
             </div>
           </section>
 
           <section className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
-            <h2 className="text-3xl font-bold text-clouddrove-dark mb-6">Compliance Information</h2>
+            <h2 className="text-3xl font-bold text-clouddrove-dark mb-6">Compliance</h2>
             <p className="text-clouddrove-light mb-6">
-              Vanisec is architected to facilitate meeting protection and regulatory standards for secure data management:
+              Vanisec is designed to help organizations meet data security and privacy compliance requirements:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl p-6 border border-clouddrove-light/30">
                 <h3 className="text-lg font-semibold text-clouddrove-dark mb-2">SOC 2</h3>
                 <p className="text-clouddrove-light text-sm">
-                  Facilitates meeting SOC 2 protection requirements for access management and data safeguarding.
+                  Supports SOC 2 security requirements around access control and data protection through ephemeral, encrypted storage.
                 </p>
               </div>
               <div className="bg-white rounded-xl p-6 border border-clouddrove-light/30">
                 <h3 className="text-lg font-semibold text-clouddrove-dark mb-2">ISO 27001</h3>
                 <p className="text-clouddrove-light text-sm">
-                  Compatible with ISO 27001 protection standards for information security governance.
+                  Aligned with ISO 27001 information security standards for managing sensitive data and controlling access.
                 </p>
               </div>
               <div className="bg-white rounded-xl p-6 border border-clouddrove-light/30">
                 <h3 className="text-lg font-semibold text-clouddrove-dark mb-2">GDPR</h3>
                 <p className="text-clouddrove-light text-sm">
-                  Aligns with GDPR mandates for data privacy and deletion rights.
+                  Meets GDPR principles of data minimization and the right to erasure — secrets are deleted automatically and cannot be recovered.
                 </p>
               </div>
               <div className="bg-white rounded-xl p-6 border border-clouddrove-light/30">
                 <h3 className="text-lg font-semibold text-clouddrove-dark mb-2">CCPA & HIPAA</h3>
                 <p className="text-clouddrove-light text-sm">
-                  Structured to support CCPA and HIPAA compliance for secure data management.
+                  Designed to support CCPA and HIPAA compliance for handling sensitive personal and health-related information.
                 </p>
               </div>
             </div>
@@ -90,7 +90,7 @@ export default function SecurityPage() {
                 </svg>
                 <div>
                   <h3 className="text-lg font-semibold text-clouddrove-dark mb-1">No Logging</h3>
-                  <p className="text-clouddrove-light">We never retain your confidential entries in activity logs, analytical systems, or persistent storage beyond the ephemeral Redis cache.</p>
+                  <p className="text-clouddrove-light">We never write your secrets to application logs, analytics systems, or any persistent storage beyond the ephemeral Redis cache used to serve them.</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -99,7 +99,7 @@ export default function SecurityPage() {
                 </svg>
                 <div>
                   <h3 className="text-lg font-semibold text-clouddrove-dark mb-1">No Tracking</h3>
-                  <p className="text-clouddrove-light">We don't monitor your usage patterns, gather personal details, or employ tracking cookies.</p>
+                  <p className="text-clouddrove-light">We don't track your behavior, collect personal data, or use tracking cookies. Vanisec is designed to know as little about you as possible.</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -108,7 +108,7 @@ export default function SecurityPage() {
                 </svg>
                 <div>
                   <h3 className="text-lg font-semibold text-clouddrove-dark mb-1">Permanent Deletion</h3>
-                  <p className="text-clouddrove-light">Once a confidential entry gets accessed or expires, it becomes permanently removed and unrecoverable.</p>
+                  <p className="text-clouddrove-light">Once a secret is opened or expires, it is permanently and irrecoverably deleted. There are no backups, no snapshots, no way to retrieve it.</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -116,8 +116,8 @@ export default function SecurityPage() {
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
-                  <h3 className="text-lg font-semibold text-clouddrove-dark mb-1">Open Source</h3>
-                  <p className="text-clouddrove-light">Vanisec operates as open-source software, allowing you to inspect the codebase and validate our protection methodologies.</p>
+                  <h3 className="text-lg font-semibold text-clouddrove-dark mb-1">Open Source & Auditable</h3>
+                  <p className="text-clouddrove-light">Vanisec is fully open source. You don't have to take our word for it — read the code, audit our implementation, or run your own instance.</p>
                 </div>
               </li>
             </ul>
@@ -128,7 +128,7 @@ export default function SecurityPage() {
               href="/"
               className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              Secure Your Credentials
+              Share a Secret Securely
             </Link>
           </section>
         </div>

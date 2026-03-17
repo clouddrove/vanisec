@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'Terms of Service for Vanisec - protected single-use confidential sharing solution.',
+  description: 'Terms of Service for Vanisec — the free, open-source one-time secret sharing tool by CloudDrove.',
 }
 
 export default function TermsPage() {
@@ -18,55 +18,55 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">1. Acceptance of Terms</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              By utilizing Vanisec, you acknowledge and consent to be governed by the terms and conditions outlined in this agreement. Should you disagree with any provisions, please refrain from using this platform.
+              By using Vanisec, you agree to these terms. If you don't agree, please don't use the service.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">2. Use License</h2>
+            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">2. Acceptable Use</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              You are permitted to utilize Vanisec temporarily for both personal and business applications. This constitutes a license grant, not a title transfer, and under this license you must not:
+              Vanisec is free to use for personal and commercial purposes. You may not:
             </p>
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
-              <li>Utilize the platform for unlawful activities or in contravention of applicable regulations</li>
-              <li>Seek to obtain unauthorized entry to the platform or associated infrastructure</li>
-              <li>Interfere with or compromise the platform or server infrastructure</li>
-              <li>Employ the platform to distribute malicious software or damaging materials</li>
+              <li>Use Vanisec for illegal activities or to violate applicable laws</li>
+              <li>Attempt to gain unauthorized access to Vanisec's systems or infrastructure</li>
+              <li>Interfere with or disrupt service availability for other users</li>
+              <li>Use Vanisec to distribute malware, spam, or other harmful content</li>
             </ul>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">3. Service Availability</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Vanisec is delivered "as is" without warranties of any kind. We cannot ensure continuous availability, uninterrupted operation, or error-free performance. We retain the authority to alter, suspend, or terminate the platform at any moment without prior notification.
+              Vanisec is provided "as is" without any warranties. We don't guarantee uptime, error-free operation, or continuous availability. We reserve the right to modify, suspend, or shut down the service at any time without notice.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">4. Privacy and Data</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Your utilization of Vanisec is additionally subject to our Privacy Policy. Confidential entries remain temporarily stored and get automatically removed after access or expiration. We do not retain confidential entries in activity logs or analytical systems.
+              Your use of Vanisec is also governed by our <a href="/privacy" className="text-clouddrove-dark hover:text-clouddrove-light underline">Privacy Policy</a>. Secrets are stored temporarily in Redis and automatically deleted after being viewed or when they expire. We do not log or store secret content beyond what is needed to serve the request.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">5. Limitation of Liability</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Under no circumstances shall Vanisec or its service providers bear responsibility for any losses resulting from platform usage or inability to use the platform, encompassing but not limited to information loss, security incidents, or service disruptions.
+              To the maximum extent permitted by law, Vanisec and CloudDrove are not liable for any damages arising from your use of the service, including but not limited to data loss, security breaches, or service interruptions.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">6. Changes to Terms</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              We maintain the right to revise these terms whenever necessary. Continued platform usage following modifications indicates acceptance of the updated terms.
+              We may update these terms from time to time. Continued use of Vanisec after changes are posted constitutes acceptance of the new terms.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">7. Contact Information</h2>
+            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">7. Contact</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              For inquiries regarding these Terms of Service, please reach out through our <a href="/contact" className="text-clouddrove-dark hover:text-clouddrove-light underline">contact page</a> or GitHub repository.
+              Questions about these Terms? Reach out via our <a href="/contact" className="text-clouddrove-dark hover:text-clouddrove-light underline">contact page</a> or open an issue on GitHub.
             </p>
           </section>
         </div>

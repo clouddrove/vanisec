@@ -1,8 +1,8 @@
 export default function Features() {
   const features = [
     {
-      title: 'Enhanced Privacy Options',
-      description: 'Implement an additional passphrase layer for heightened protection. Only individuals possessing the correct passphrase gain access to view the confidential content.',
+      title: 'Password Protection',
+      description: 'Add an optional passphrase to your secret for an extra layer of security. Only recipients who know the passphrase can unlock the content.',
       icon: (
         <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -13,7 +13,7 @@ export default function Features() {
     },
     {
       title: 'Self-Destructing Links',
-      description: 'Upon viewing or reaching expiration, your confidential data gets completely removed from our infrastructure. Zero copies remain, leaving no digital footprint behind.',
+      description: 'Once viewed or expired, your secret is permanently deleted from our servers. No copies, no backups — it simply vanishes without a trace.',
       icon: (
         <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -24,7 +24,7 @@ export default function Features() {
     },
     {
       title: 'Automatic Expiration',
-      description: 'Configure time-to-live settings ranging from 60 minutes up to one week. Confidential entries get systematically purged upon expiration, guaranteeing your data never persists unnecessarily.',
+      description: 'Set a TTL from 1 hour up to 7 days. Secrets are automatically purged when the timer runs out, whether or not they were ever opened.',
       icon: (
         <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@ export default function Features() {
     },
     {
       title: 'Compliance Ready',
-      description: 'Engineered to support adherence to SOC2, GDPR, CCPA, and HIPAA standards for confidential data management and privacy protection requirements.',
+      description: 'Designed to help teams meet SOC 2, GDPR, CCPA, and HIPAA requirements for sensitive data handling and privacy protection.',
       icon: (
         <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@ export default function Features() {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Key Features</h2>
           <p className="text-lg text-clouddrove-light max-w-2xl mx-auto">
-            Explore the capabilities that position Vanisec as the leading choice for confidential information exchange
+            Everything you need to share sensitive information safely — without the risk of it living on forever
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

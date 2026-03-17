@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Privacy Policy for Vanisec - understand how we manage your data and safeguard your privacy.',
+  description: 'Privacy Policy for Vanisec — how we handle your data, what we collect, and how secrets are stored and deleted.',
 }
 
 export default function PrivacyPage() {
@@ -16,74 +16,74 @@ export default function PrivacyPage() {
 
         <div className="prose prose-lg max-w-none space-y-8">
           <section>
-            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">1. Information We Collect</h2>
+            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">1. What We Collect</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Vanisec is architected with privacy as a fundamental principle. We gather minimal data:
+              Vanisec is built with minimal data collection in mind. Here's what we do and don't collect:
             </p>
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
-              <li><strong>Confidential Entries:</strong> Held temporarily in Redis until accessed or expired, then permanently eliminated</li>
-              <li><strong>No Personal Data:</strong> Registration is unnecessary, so we don't gather names, email addresses, or other identifying information</li>
-              <li><strong>No Tracking:</strong> We don't employ tracking cookies or gather analytical data on your usage patterns</li>
+              <li><strong className="text-clouddrove-dark">Secrets:</strong> Stored temporarily in Redis until viewed or expired, then permanently deleted</li>
+              <li><strong className="text-clouddrove-dark">No personal data:</strong> No accounts required, so we collect no names, emails, or identifying information</li>
+              <li><strong className="text-clouddrove-dark">No tracking cookies:</strong> We don't use tracking cookies or collect behavioral analytics</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">2. How We Use Information</h2>
+            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">2. How We Use Your Data</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Confidential entries remain temporarily in Redis to facilitate the single-access functionality. They get automatically eliminated after access or expiration. We never retain confidential entries in activity logs, analytical systems, or persistent storage.
+              Secrets are stored in Redis only long enough to serve them once to the recipient. They are deleted immediately after being viewed or when the TTL expires. We never write secret content to application logs, databases, or any form of persistent storage.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">3. Data Security</h2>
+            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">3. Security Measures</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              We deploy protection mechanisms to safeguard your data:
+              We take the following measures to protect your data:
             </p>
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
-              <li>All confidential entries undergo encryption prior to storage</li>
-              <li>Confidential entries permit only a single access session</li>
-              <li>Automatic expiration guarantees removal even without access</li>
-              <li>No recording of confidential entries or sensitive data</li>
+              <li>Secrets are encrypted before being stored</li>
+              <li>Each secret can only be viewed once before being deleted</li>
+              <li>Automatic expiration ensures secrets don't persist indefinitely</li>
+              <li>No sensitive content is written to logs or monitoring systems</li>
             </ul>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">4. Data Retention</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Confidential entries remain stored only until accessed or expired (maximum 7 days). After elimination, they become unrecoverable. We do not maintain backup copies of confidential entries.
+              Secrets are stored for a maximum of 7 days, or until they are viewed — whichever comes first. Once deleted, they are permanently unrecoverable. We do not keep backups of secret content.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">5. Third-Party Services</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Vanisec utilizes Redis for temporary storage. We do not disclose your confidential entries to external services. If Google Analytics is enabled (via NEXT_PUBLIC_GA_ID), standard analytical data may be gathered by Google.
+              Vanisec uses Redis for temporary secret storage. Secret content is not shared with any third parties. If Google Analytics is configured via the <code className="text-clouddrove-dark bg-clouddrove-light/10 px-1 rounded">NEXT_PUBLIC_GA_ID</code> environment variable, standard anonymous usage data (page views, referrers) may be collected by Google Analytics.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">6. Your Rights</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Since we don't gather personal information and confidential entries get automatically removed, you maintain complete control:
+              Because we collect no personal data and secrets self-destruct, there's very little to manage:
             </p>
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
-              <li>No account requirement means no personal data retention</li>
-              <li>Confidential entries get automatically eliminated after access or expiration</li>
-              <li>You may discontinue platform usage at any moment</li>
+              <li>No account means no personal profile to request or delete</li>
+              <li>Secrets are automatically deleted after use or expiration</li>
+              <li>You can stop using the service at any time — no data lingers</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">7. Changes to Privacy Policy</h2>
+            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">7. Changes to This Policy</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              We may periodically revise this Privacy Policy. We will communicate any modifications by publishing the updated Privacy Policy on this page and revising the "Last updated" date.
+              We may update this Privacy Policy from time to time. Changes will be posted here with an updated date. Continued use of Vanisec after changes are posted constitutes acceptance of the updated policy.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">8. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">8. Contact</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              For questions regarding this Privacy Policy, please contact us through our <a href="/contact" className="text-clouddrove-dark hover:text-clouddrove-light underline">contact page</a> or GitHub repository.
+              Questions about this Privacy Policy? Contact us via our <a href="/contact" className="text-clouddrove-dark hover:text-clouddrove-light underline">contact page</a> or open an issue on GitHub.
             </p>
           </section>
         </div>

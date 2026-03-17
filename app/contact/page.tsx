@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with the Vanisec team. Share feedback, ask questions, or propose improvements.',
+  description: 'Get in touch with the Vanisec team — report bugs, request features, or ask questions on GitHub.',
 }
 
 export default function ContactPage() {
@@ -12,7 +12,7 @@ export default function ContactPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Contact Us</h1>
           <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
-            We appreciate hearing from you. Send us a message and we'll respond promptly.
+            We'd love to hear from you — bug reports, feature ideas, or general feedback.
           </p>
         </div>
 
@@ -20,7 +20,7 @@ export default function ContactPage() {
           <div className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">GitHub</h2>
             <p className="text-clouddrove-light mb-4">
-              Report issues, submit feature requests, or contribute to the project development.
+              The best way to reach us. Open an issue to report bugs, request features, or start a discussion.
             </p>
             <a
               href="https://github.com/clouddrove/vanisec"
@@ -35,7 +35,7 @@ export default function ContactPage() {
           <div className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">Documentation</h2>
             <p className="text-clouddrove-light mb-4">
-              Explore our documentation for comprehensive guides and API reference materials.
+              Check the docs for guides on how to use Vanisec and integrate with the API.
             </p>
             <a
               href="/docs"
@@ -47,9 +47,9 @@ export default function ContactPage() {
         </div>
 
         <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
-          <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">Feedback & Support</h2>
+          <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">How to Reach Us</h2>
           <p className="text-clouddrove-light mb-6">
-            For feedback, questions, or support assistance, please open an issue on our GitHub repository. We actively monitor and respond to all issues and pull requests.
+            We actively monitor the GitHub repository and respond to all issues and pull requests. Here's the best way to get in touch for each type of request:
           </p>
           <div className="space-y-4">
             <div className="flex items-start gap-3">
@@ -58,7 +58,7 @@ export default function ContactPage() {
               </svg>
               <div>
                 <h3 className="font-semibold text-clouddrove-dark mb-1">Bug Reports</h3>
-                <p className="text-clouddrove-light">Discovered a bug? Report it on GitHub with comprehensive details.</p>
+                <p className="text-clouddrove-light">Found something broken? Open a GitHub issue with steps to reproduce and what you expected to happen.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -67,7 +67,7 @@ export default function ContactPage() {
               </svg>
               <div>
                 <h3 className="font-semibold text-clouddrove-dark mb-1">Feature Requests</h3>
-                <p className="text-clouddrove-light">Have a feature idea? Share your suggestions by opening a feature request on GitHub.</p>
+                <p className="text-clouddrove-light">Have an idea to improve Vanisec? Open a feature request issue on GitHub and describe what you'd like to see.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -76,7 +76,7 @@ export default function ContactPage() {
               </svg>
               <div>
                 <h3 className="font-semibold text-clouddrove-dark mb-1">Security Issues</h3>
-                <p className="text-clouddrove-light">Discovered a security vulnerability? Report it responsibly through GitHub security advisories.</p>
+                <p className="text-clouddrove-light">Found a security vulnerability? Please report it responsibly through GitHub's private security advisory feature rather than a public issue.</p>
               </div>
             </div>
           </div>
