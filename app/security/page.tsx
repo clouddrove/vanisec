@@ -124,6 +124,24 @@ export default function SecurityPage() {
             </ul>
           </section>
 
+          <section className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Learn More</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Link href="/faq" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">FAQ</h3>
+                <p className="text-sm text-clouddrove-light">Common questions about how Vanisec works</p>
+              </Link>
+              <Link href="/docs" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">Documentation</h3>
+                <p className="text-sm text-clouddrove-light">Guides on creating and sharing secrets</p>
+              </Link>
+              <Link href="/privacy" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">Privacy Policy</h3>
+                <p className="text-sm text-clouddrove-light">How we handle your data</p>
+              </Link>
+            </div>
+          </section>
+
           <section className="text-center">
             <Link
               href="/"

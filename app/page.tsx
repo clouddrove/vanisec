@@ -5,7 +5,7 @@ import HowItWorks from '@/components/HowItWorks'
 import UseCases from '@/components/UseCases'
 
 export const metadata: Metadata = {
-  title: 'Vanisec - Designed to vanish | Free One-Time Secret Sharing',
+  title: 'Vanisec — Free One-Time Secret Sharing | Share Once, Vanish Forever',
   description: 'Share sensitive information securely with Vanisec. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
   alternates: { canonical: '/' },
   openGraph: {

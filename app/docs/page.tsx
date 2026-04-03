@@ -89,13 +89,22 @@ export default function DocsPage() {
             </div>
           </section>
 
-          <section className="text-center">
-            <Link
-              href="/api"
-              className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              View API Documentation
-            </Link>
+          <section className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Related Resources</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Link href="/security" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">Security</h3>
+                <p className="text-sm text-clouddrove-light">Encryption and compliance details</p>
+              </Link>
+              <Link href="/faq" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">FAQ</h3>
+                <p className="text-sm text-clouddrove-light">Answers to common questions</p>
+              </Link>
+              <Link href="/api" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">API Reference</h3>
+                <p className="text-sm text-clouddrove-light">Integrate Vanisec into your apps</p>
+              </Link>
+            </div>
           </section>
         </div>
       </div>

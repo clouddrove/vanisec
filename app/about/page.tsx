@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -61,11 +62,56 @@ export default function AboutPage() {
             </ul>
           </section>
 
+          <section className="bg-gradient-to-br from-clouddrove-light/5 to-clouddrove-dark/5 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-6">Why Open Source?</h2>
+            <p className="text-clouddrove-light leading-relaxed mb-4">
+              Security tools should be transparent. When your data is at stake, you shouldn't have to trust a black box. Vanisec is fully open source so anyone can audit the code, verify the implementation, and confirm that secrets are handled exactly as we describe.
+            </p>
+            <p className="text-clouddrove-light leading-relaxed mb-4">
+              Open source also means you can self-host Vanisec on your own infrastructure. If your organization requires full control over where data is stored and processed, deploy your own instance using our Docker and Kubernetes configurations — no vendor lock-in, no external dependencies.
+            </p>
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+              <div className="bg-white rounded-xl p-4 border border-clouddrove-light/30">
+                <p className="text-2xl font-bold text-clouddrove-dark">MIT</p>
+                <p className="text-sm text-clouddrove-light">Licensed</p>
+              </div>
+              <div className="bg-white rounded-xl p-4 border border-clouddrove-light/30">
+                <p className="text-2xl font-bold text-clouddrove-dark">100%</p>
+                <p className="text-sm text-clouddrove-light">Free to use</p>
+              </div>
+              <div className="bg-white rounded-xl p-4 border border-clouddrove-light/30">
+                <p className="text-2xl font-bold text-clouddrove-dark">Self-Host</p>
+                <p className="text-sm text-clouddrove-light">Ready</p>
+              </div>
+            </div>
+          </section>
+
           <section className="prose prose-lg max-w-none">
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Built by CloudDrove</h2>
-            <p className="text-clouddrove-light leading-relaxed">
+            <p className="text-clouddrove-light leading-relaxed mb-4">
               Vanisec is built and maintained by <strong className="text-clouddrove-dark">CloudDrove</strong>, a team dedicated to creating open-source tools that make the internet safer and more secure. We believe in transparency, privacy, and giving back to the developer community.
             </p>
+            <p className="text-clouddrove-light leading-relaxed">
+              CloudDrove specializes in cloud infrastructure, DevOps tooling, and security-first solutions. Vanisec was born from a real problem we saw across engineering teams: sensitive credentials being shared through insecure channels like email, Slack DMs, and sticky notes. We built what we wished existed — a simple, secure, and ephemeral way to share secrets.
+            </p>
+          </section>
+
+          <section className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Learn More</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Link href="/security" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">Security</h3>
+                <p className="text-sm text-clouddrove-light">How we protect your data</p>
+              </Link>
+              <Link href="/docs" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">Documentation</h3>
+                <p className="text-sm text-clouddrove-light">Guides and best practices</p>
+              </Link>
+              <Link href="/faq" className="block p-4 rounded-xl border border-clouddrove-light/30 hover:border-clouddrove-dark/50 transition-colors">
+                <h3 className="font-semibold text-clouddrove-dark mb-1">FAQ</h3>
+                <p className="text-sm text-clouddrove-light">Answers to common questions</p>
+              </Link>
+            </div>
           </section>
 
           <section className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
@@ -73,12 +119,12 @@ export default function AboutPage() {
             <p className="text-clouddrove-light mb-6">
               No sign-up required. Create your first secure, self-destructing link in seconds.
             </p>
-            <a
+            <Link
               href="/"
               className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Create Your First Secret
-            </a>
+            </Link>
           </section>
         </div>
       </div>

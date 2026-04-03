@@ -24,8 +24,8 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-lg">
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity" aria-label="Vanisec home">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-lg" aria-hidden="true">
               <span className="text-white text-xl font-bold">V</span>
             </div>
             <span className="text-clouddrove-dark font-bold text-xl">Vanisec</span>

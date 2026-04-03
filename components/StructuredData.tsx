@@ -107,6 +107,62 @@ export default function StructuredData() {
           text: 'Once a secret is viewed, it is immediately and permanently deleted from our servers. It cannot be accessed again, even with the same link.',
         },
       },
+      {
+        '@type': 'Question',
+        name: 'What if my secret expires before it is viewed?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'If the secret expires before anyone opens it, it is automatically and permanently deleted. The link stops working and the secret cannot be recovered.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can a secret be viewed more than once?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'No. Each secret can only be viewed exactly one time. This is by design — it is what makes Vanisec useful for sharing sensitive information without risk of long-term exposure.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What expiration options are available?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'You can set secrets to expire after 1 hour, 6 hours, 24 hours, 72 hours, or 7 days. Secrets are deleted automatically when the timer runs out, regardless of whether they were viewed.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is the passphrase required?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'No, it is optional. But for especially sensitive information, we recommend using a passphrase and sharing it via a separate channel from the link itself.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Do you store my secrets?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Secrets are temporarily held in Redis until they are viewed or expire. We never write them to application logs, databases, or any persistent storage. Once deleted, they are gone permanently.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can I use Vanisec commercially?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. Vanisec is free for both personal and commercial use with no restrictions.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is Vanisec open source?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. The full source code is available on GitHub. You can read it, contribute to it, or deploy your own instance if you prefer to self-host.',
+        },
+      },
     ],
   }
 

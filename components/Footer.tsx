@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Column 1: Brand and Description */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-lg" aria-hidden="true">
                 <span className="text-white text-2xl font-bold">V</span>
               </div>
               <span className="text-clouddrove-dark font-bold text-xl">Vanisec</span>

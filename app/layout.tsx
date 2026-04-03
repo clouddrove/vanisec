@@ -19,8 +19,8 @@ const baseUrl = ensureProtocol(process.env.NEXT_PUBLIC_BASE_URL || 'https://vani
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Vanisec - Designed to vanish | Share Once, Vanish Forever',
-    template: '%s | Vanisec - Designed to vanish',
+    default: 'Vanisec — Free One-Time Secret Sharing | Share Once, Vanish Forever',
+    template: '%s | Vanisec',
   },
   description: 'Share sensitive information securely with Vanisec. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
   keywords: [
@@ -134,7 +134,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: baseUrl,
     siteName: 'Vanisec',
-    title: 'Vanisec - Designed to vanish',
+    title: 'Vanisec — Free One-Time Secret Sharing',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing. Free and no sign-up required.',
     images: [
       {
@@ -147,7 +147,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vanisec - Designed to vanish',
+    title: 'Vanisec — Free One-Time Secret Sharing',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing.',
     images: [`${baseUrl}/og-image.png`],
     creator: '@clouddrove',
