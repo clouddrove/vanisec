@@ -13,7 +13,7 @@ export default function Features() {
     },
     {
       title: 'Self-Destructing Links',
-      description: 'Once viewed or expired, your secret is permanently deleted from our servers. No copies, no backups — it simply vanishes without a trace.',
+      description: 'Once viewed or expired, your secret is permanently deleted from our servers. The link dies instantly — no residual data, no way to retrieve it.',
       icon: (
         <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -36,6 +36,17 @@ export default function Features() {
     {
       title: 'Compliance Ready',
       description: 'Designed to help teams meet SOC 2, GDPR, CCPA, and HIPAA requirements for sensitive data handling and privacy protection.',
+    },
+    {
+      title: 'File Upload',
+      description: 'Attach files up to 5MB alongside your secret text. Share documents, keys, or configs through the same secure one-time link.',
+      icon: (
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+        </div>
+      ),
       icon: (
         <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -55,7 +66,7 @@ export default function Features() {
             Everything you need to share sensitive information safely — without the risk of it living on forever
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {features.map((feature, index) => (
             <div
               key={index}

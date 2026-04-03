@@ -10,6 +10,7 @@ export default function ViewSecret() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [secret, setSecret] = useState('')
+  const [fileData, setFileData] = useState<{ name: string; type: string; size: number; data: string } | null>(null)
   const [requiresPassword, setRequiresPassword] = useState(false)
   const [viewed, setViewed] = useState(false)
 
@@ -36,6 +37,7 @@ export default function ViewSecret() {
         setRequiresPassword(true)
       } else {
         setSecret(data.secret)
+        if (data.file) setFileData(data.file)
         setViewed(true)
       }
     } catch {
@@ -64,6 +66,7 @@ export default function ViewSecret() {
       }
 
       setSecret(data.secret)
+      if (data.file) setFileData(data.file)
       setViewed(true)
       setRequiresPassword(false)
     } catch (err) {
@@ -110,11 +113,49 @@ export default function ViewSecret() {
               </p>
             </div>
 
-            <div className="bg-gradient-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-6 mb-6 backdrop-blur-sm">
-              <p className="text-clouddrove-dark whitespace-pre-wrap break-words text-lg leading-relaxed">
-                {secret}
-              </p>
-            </div>
+            {secret && (
+              <div className="bg-gradient-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-6 mb-6 backdrop-blur-sm">
+                <p className="text-clouddrove-dark whitespace-pre-wrap break-words text-lg leading-relaxed">
+                  {secret}
+                </p>
+              </div>
+            )}
+
+            {fileData && (
+              <div className="bg-gradient-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-6 mb-6 backdrop-blur-sm">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <svg className="w-8 h-8 text-clouddrove-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <div className="min-w-0">
+                      <p className="text-clouddrove-dark font-semibold truncate">{fileData.name}</p>
+                      <p className="text-xs text-clouddrove-light">{(fileData.size / 1024).toFixed(1)} KB</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const byteString = atob(fileData.data)
+                      const ab = new ArrayBuffer(byteString.length)
+                      const ia = new Uint8Array(ab)
+                      for (let i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i)
+                      }
+                      const blob = new Blob([ab], { type: fileData.type })
+                      const url = URL.createObjectURL(blob)
+                      const a = document.createElement('a')
+                      a.href = url
+                      a.download = fileData.name
+                      a.click()
+                      URL.revokeObjectURL(url)
+                    }}
+                    className="px-4 py-2 bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white rounded-lg font-semibold text-sm hover:from-clouddrove-light hover:to-clouddrove-dark transition-all min-h-[44px] shrink-0"
+                  >
+                    Download
+                  </button>
+                </div>
+              </div>
+            )}
 
             <button
               onClick={() => router.push('/')}

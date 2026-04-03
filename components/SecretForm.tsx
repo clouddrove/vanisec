@@ -6,18 +6,21 @@ export default function SecretForm() {
   const [secret, setSecret] = useState('')
   const [password, setPassword] = useState('')
   const [expiresIn, setExpiresIn] = useState('24')
+  const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [shareLink, setShareLink] = useState('')
   const [copied, setCopied] = useState(false)
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setLoading(true)
 
-    if (!secret.trim()) {
-      setError('Please enter a secret')
+    if (!secret.trim() && !file) {
+      setError('Please enter a secret or attach a file')
       setLoading(false)
       return
     }
@@ -28,17 +31,24 @@ export default function SecretForm() {
       return
     }
 
+    if (file && file.size > MAX_FILE_SIZE) {
+      setError('File size exceeds 5MB limit')
+      setLoading(false)
+      return
+    }
+
     try {
+      const formData = new FormData()
+      formData.append('secret', secret)
+      formData.append('password', password)
+      formData.append('expiresIn', expiresIn)
+      if (file) {
+        formData.append('file', file)
+      }
+
       const response = await fetch('/api/secrets', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          secret,
-          password,
-          expiresIn: parseInt(expiresIn),
-        }),
+        body: formData,
       })
 
       const data = await response.json()
@@ -81,9 +91,51 @@ export default function SecretForm() {
               rows={4}
               className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all resize-none bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50 md:rows-6"
               placeholder="Enter the secret you want to share securely..."
-              required
             />
             <p className="mt-2 text-xs text-clouddrove-light">This secret will be encrypted and can only be viewed once</p>
+          </div>
+
+          <div>
+            <label htmlFor="file" className="block text-sm font-semibold text-clouddrove-dark mb-3 tracking-wide">
+              Attach File <span className="font-normal text-clouddrove-light">(optional, max 5MB)</span>
+            </label>
+            <div className="relative">
+              <input
+                type="file"
+                id="file"
+                onChange={(e) => {
+                  const selected = e.target.files?.[0] || null
+                  if (selected && selected.size > MAX_FILE_SIZE) {
+                    setError('File size exceeds 5MB limit')
+                    setFile(null)
+                    e.target.value = ''
+                    return
+                  }
+                  setError('')
+                  setFile(selected)
+                }}
+                className="w-full px-4 py-3 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm min-h-[48px] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-clouddrove-dark/10 file:text-clouddrove-dark hover:file:bg-clouddrove-dark/20 cursor-pointer"
+              />
+              {file && (
+                <div className="mt-2 flex items-center gap-2 text-xs text-clouddrove-light">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                  </svg>
+                  <span>{file.name} ({(file.size / 1024).toFixed(1)} KB)</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFile(null)
+                      const input = document.getElementById('file') as HTMLInputElement
+                      if (input) input.value = ''
+                    }}
+                    className="text-red-500 hover:text-red-700 font-semibold"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -222,7 +274,10 @@ export default function SecretForm() {
               setSecret('')
               setPassword('')
               setExpiresIn('24')
+              setFile(null)
               setCopied(false)
+              const fileInput = document.getElementById('file') as HTMLInputElement
+              if (fileInput) fileInput.value = ''
             }}
             className="w-full bg-gradient-to-r from-clouddrove-light to-clouddrove-dark text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-dark hover:to-clouddrove-light transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
           >

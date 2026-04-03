@@ -1,10 +1,18 @@
 import { v4 as uuidv4 } from 'uuid'
 import { getRedisClient } from './redis'
 
+export interface SecretFile {
+  name: string
+  type: string
+  size: number
+  data: string // base64 encoded
+}
+
 export interface Secret {
   id: string
   secret: string
   password?: string
+  file?: SecretFile
   createdAt: number
   expiresAt: number
   viewed: boolean
@@ -16,7 +24,8 @@ const TTL_BUFFER = 60 // Add 60 seconds buffer to TTL
 export async function createSecret(
   secret: string,
   password?: string,
-  expiresIn: number = 24
+  expiresIn: number = 24,
+  file?: SecretFile
 ): Promise<string> {
   const id = uuidv4()
   const now = Date.now()
@@ -27,6 +36,7 @@ export async function createSecret(
     id,
     secret,
     password: password || undefined,
+    file: file || undefined,
     createdAt: now,
     expiresAt,
     viewed: false,

@@ -17,7 +17,7 @@ export default function Footer() {
               <span className="text-clouddrove-dark font-bold text-xl">Vanisec</span>
             </div>
             <p className="text-clouddrove-light text-sm leading-relaxed">
-              A trusted way to share sensitive information that self-destructs after being viewed.
+              Ephemeral secret sharing built for teams who refuse to leave credentials in chat logs and email threads.
             </p>
           </div>
 

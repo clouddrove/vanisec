@@ -17,7 +17,7 @@ export default function StructuredData() {
     alternateName: ['OTS', 'One-Time Secret', 'One Time Secret'],
     url: baseUrl,
     logo: `${baseUrl}/favicon.svg`,
-    description: 'Free secure one-time secret sharing platform (OTS). Share sensitive information like passwords, API keys, and credentials through encrypted links that automatically delete after viewing. No sign-up required.',
+    description: 'Vanisec is a free, open-source platform for sharing passwords, API keys, and credentials through encrypted one-time links. Secrets are automatically deleted after viewing — no account needed.',
     sameAs: [
       'https://github.com/clouddrove/vanisec',
     ],
@@ -34,7 +34,7 @@ export default function StructuredData() {
     name: 'Vanisec',
     alternateName: ['OTS', 'One-Time Secret', 'One Time Secret'],
     url: baseUrl,
-    description: 'Free secure one-time secret sharing platform (OTS). Share passwords, API keys, credentials, and confidential data through encrypted self-destructing links. No sign-up, completely free.',
+    description: 'Vanisec lets you create encrypted, single-use links for passwords, API keys, and confidential data. Every secret is permanently deleted after one view. Completely free, no account required.',
   }
 
   const softwareApplicationSchema = {
@@ -49,7 +49,7 @@ export default function StructuredData() {
       price: '0',
       priceCurrency: 'USD',
     },
-    description: 'Free secure one-time secret sharing platform (OTS). Share passwords, API keys, credentials, and confidential data through encrypted self-destructing links. No sign-up required, completely free.',
+    description: 'Vanisec is a free security tool for creating encrypted, single-use secret links. Share passwords, API keys, and credentials that automatically delete after one view. Open source, no account required.',
     url: baseUrl,
     featureList: [
       'One-time view access',

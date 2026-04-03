@@ -12,8 +12,8 @@ export default function HowItWorks() {
     },
     {
       number: '3',
-      title: 'Gone Forever',
-      description: "The recipient opens it once, reads the secret, and it's permanently deleted. The link becomes dead immediately after.",
+      title: 'It Vanishes',
+      description: "The recipient opens it once, reads the secret, and the data is wiped from our servers. The link is dead — no second chances, no recovery.",
     },
   ]
 

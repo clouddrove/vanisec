@@ -42,7 +42,10 @@ export async function GET(
     // Mark as viewed and delete
     await deleteSecret(id)
 
-    return NextResponse.json({ secret: secret.secret })
+    return NextResponse.json({
+      secret: secret.secret,
+      file: secret.file ? { name: secret.file.name, type: secret.file.type, size: secret.file.size, data: secret.file.data } : undefined,
+    })
   } catch {
     return NextResponse.json(
       { error: 'Failed to retrieve secret' },
@@ -88,7 +91,10 @@ export async function POST(
     if (!secret.password) {
       // No password required, return secret
       await deleteSecret(id)
-      return NextResponse.json({ secret: secret.secret })
+      return NextResponse.json({
+        secret: secret.secret,
+        file: secret.file ? { name: secret.file.name, type: secret.file.type, size: secret.file.size, data: secret.file.data } : undefined,
+      })
     }
 
     if (secret.password !== password) {
@@ -101,7 +107,10 @@ export async function POST(
     // Password correct, mark as viewed and delete
     await deleteSecret(id)
 
-    return NextResponse.json({ secret: secret.secret })
+    return NextResponse.json({
+      secret: secret.secret,
+      file: secret.file ? { name: secret.file.name, type: secret.file.type, size: secret.file.size, data: secret.file.data } : undefined,
+    })
   } catch {
     return NextResponse.json(
       { error: 'Failed to retrieve secret' },
