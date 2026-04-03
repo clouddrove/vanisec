@@ -2,7 +2,10 @@
 
 import { useState } from 'react'
 
+type Mode = 'text' | 'file'
+
 export default function SecretForm() {
+  const [mode, setMode] = useState<Mode>('text')
   const [secret, setSecret] = useState('')
   const [password, setPassword] = useState('')
   const [expiresIn, setExpiresIn] = useState('24')
@@ -19,8 +22,14 @@ export default function SecretForm() {
     setError('')
     setLoading(true)
 
-    if (!secret.trim() && !file) {
-      setError('Please enter a secret or attach a file')
+    if (mode === 'text' && !secret.trim()) {
+      setError('Please enter a secret')
+      setLoading(false)
+      return
+    }
+
+    if (mode === 'file' && !file) {
+      setError('Please select a file')
       setLoading(false)
       return
     }
@@ -39,10 +48,10 @@ export default function SecretForm() {
 
     try {
       const formData = new FormData()
-      formData.append('secret', secret)
+      formData.append('secret', mode === 'text' ? secret : '')
       formData.append('password', password)
       formData.append('expiresIn', expiresIn)
-      if (file) {
+      if (mode === 'file' && file) {
         formData.append('file', file)
       }
 
@@ -76,72 +85,116 @@ export default function SecretForm() {
     }
   }
 
+  const switchMode = (newMode: Mode) => {
+    setMode(newMode)
+    setError('')
+    setSecret('')
+    setFile(null)
+    const fileInput = document.getElementById('file') as HTMLInputElement
+    if (fileInput) fileInput.value = ''
+  }
+
   return (
     <div className="glass-effect rounded-2xl shadow-glow p-8 md:p-10 backdrop-blur-xl border border-clouddrove-light/20">
       {!shareLink ? (
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="secret" className="block text-sm font-semibold text-clouddrove-dark mb-3 tracking-wide">
-              Your Secret
-            </label>
-            <textarea
-              id="secret"
-              value={secret}
-              onChange={(e) => setSecret(e.target.value)}
-              rows={4}
-              className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all resize-none bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50 md:rows-6"
-              placeholder="Enter the secret you want to share securely..."
-            />
-            <p className="mt-2 text-xs text-clouddrove-light">This secret will be encrypted and can only be viewed once</p>
+          {/* Mode Tabs */}
+          <div className="flex rounded-xl bg-clouddrove-light/10 p-1">
+            <button
+              type="button"
+              onClick={() => switchMode('text')}
+              className={`flex-1 py-3 px-4 rounded-lg font-semibold text-sm transition-all min-h-[44px] ${
+                mode === 'text'
+                  ? 'bg-white text-clouddrove-dark shadow-md'
+                  : 'text-clouddrove-light hover:text-clouddrove-dark'
+              }`}
+            >
+              Share Text
+            </button>
+            <button
+              type="button"
+              onClick={() => switchMode('file')}
+              className={`flex-1 py-3 px-4 rounded-lg font-semibold text-sm transition-all min-h-[44px] ${
+                mode === 'file'
+                  ? 'bg-white text-clouddrove-dark shadow-md'
+                  : 'text-clouddrove-light hover:text-clouddrove-dark'
+              }`}
+            >
+              Share File
+            </button>
           </div>
 
-          <div>
-            <label htmlFor="file" className="block text-sm font-semibold text-clouddrove-dark mb-3 tracking-wide">
-              Attach File <span className="font-normal text-clouddrove-light">(optional, max 5MB)</span>
-            </label>
-            <div className="relative">
-              <input
-                type="file"
-                id="file"
-                onChange={(e) => {
-                  const selected = e.target.files?.[0] || null
-                  if (selected && selected.size > MAX_FILE_SIZE) {
-                    setError('File size exceeds 5MB limit')
-                    setFile(null)
-                    e.target.value = ''
-                    return
-                  }
-                  setError('')
-                  setFile(selected)
-                }}
-                className="w-full px-4 py-3 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm min-h-[48px] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-clouddrove-dark/10 file:text-clouddrove-dark hover:file:bg-clouddrove-dark/20 cursor-pointer"
+          {/* Text Mode */}
+          {mode === 'text' && (
+            <div>
+              <label htmlFor="secret" className="block text-sm font-semibold text-clouddrove-dark mb-3 tracking-wide">
+                Your Secret <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                id="secret"
+                value={secret}
+                onChange={(e) => setSecret(e.target.value)}
+                rows={4}
+                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all resize-none bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50 md:rows-6"
+                placeholder="Enter the secret you want to share securely..."
+                required
               />
-              {file && (
-                <div className="mt-2 flex items-center gap-2 text-xs text-clouddrove-light">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                  </svg>
-                  <span>{file.name} ({(file.size / 1024).toFixed(1)} KB)</span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFile(null)
-                      const input = document.getElementById('file') as HTMLInputElement
-                      if (input) input.value = ''
-                    }}
-                    className="text-red-500 hover:text-red-700 font-semibold"
-                  >
-                    Remove
-                  </button>
-                </div>
-              )}
+              <p className="mt-2 text-xs text-clouddrove-light">This secret will be encrypted and can only be viewed once</p>
             </div>
-          </div>
+          )}
+
+          {/* File Mode */}
+          {mode === 'file' && (
+            <div>
+              <label htmlFor="file" className="block text-sm font-semibold text-clouddrove-dark mb-3 tracking-wide">
+                Upload File <span className="text-red-500">*</span> <span className="font-normal text-clouddrove-light">(max 5MB)</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  id="file"
+                  onChange={(e) => {
+                    const selected = e.target.files?.[0] || null
+                    if (selected && selected.size > MAX_FILE_SIZE) {
+                      setError('File size exceeds 5MB limit')
+                      setFile(null)
+                      e.target.value = ''
+                      return
+                    }
+                    setError('')
+                    setFile(selected)
+                  }}
+                  className="w-full px-4 py-3 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm min-h-[48px] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-clouddrove-dark/10 file:text-clouddrove-dark hover:file:bg-clouddrove-dark/20 cursor-pointer"
+                  required
+                />
+                {file && (
+                  <div className="mt-2 flex items-center gap-2 text-xs text-clouddrove-light">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                    </svg>
+                    <span>{file.name} ({(file.size / 1024).toFixed(1)} KB)</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFile(null)
+                        const input = document.getElementById('file') as HTMLInputElement
+                        if (input) input.value = ''
+                      }}
+                      className="text-red-500 hover:text-red-700 font-semibold"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+              </div>
+              <p className="mt-2 text-xs text-clouddrove-light">Share documents, keys, or configs through a secure one-time link</p>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="password" className="block text-sm font-semibold text-clouddrove-dark mb-3 tracking-wide">
-                Password Protection
+                Password <span className="text-red-500">*</span>
               </label>
               <input
                 type="password"
@@ -276,6 +329,7 @@ export default function SecretForm() {
               setExpiresIn('24')
               setFile(null)
               setCopied(false)
+              setMode('text')
               const fileInput = document.getElementById('file') as HTMLInputElement
               if (fileInput) fileInput.value = ''
             }}
@@ -288,4 +342,3 @@ export default function SecretForm() {
     </div>
   )
 }
-
