@@ -33,20 +33,20 @@ export default function UseCases() {
   ]
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section className="py-12 md:py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Who Uses Vanisec</h2>
-          <p className="text-lg text-clouddrove-light max-w-2xl mx-auto">
+        <div className="text-center mb-10 md:mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-clouddrove-dark mb-4">Who Uses Vanisec</h2>
+          <p className="text-base md:text-lg text-clouddrove-light max-w-2xl mx-auto">
             Trusted by teams who take data security seriously
           </p>
         </div>
-        <div className="space-y-16">
+        <div className="space-y-10 md:space-y-16">
           {useCases.map((useCase, index) => (
-            <div key={index} className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
               {/* Left Column: Title, Description, Example */}
               <div>
-                <h3 className="text-3xl md:text-4xl font-bold text-clouddrove-dark mb-4">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-clouddrove-dark mb-4">
                   {useCase.title}
                 </h3>
                 <p className="text-lg text-clouddrove-light mb-8 leading-relaxed">
@@ -64,7 +64,7 @@ export default function UseCases() {
 
               {/* Right Column: Key Benefits */}
               <div>
-                <h4 className="text-xl font-bold text-clouddrove-dark mb-6">
+                <h4 className="text-lg md:text-xl font-bold text-clouddrove-dark mb-4 md:mb-6">
                   Key Benefits
                 </h4>
                 <ul className="space-y-4">

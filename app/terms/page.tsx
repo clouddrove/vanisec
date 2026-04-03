@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description: 'Terms of Service for Vanisec — the free, open-source one-time secret sharing tool by CloudDrove.',
+  alternates: { canonical: '/terms' },
 }
 
 export default function TermsPage() {

@@ -4,6 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Documentation',
   description: 'Learn how to use Vanisec to share sensitive information securely. Guides on creating secrets, password protection, expiration times, and best practices.',
+  alternates: { canonical: '/docs' },
 }
 
 export default function DocsPage() {
@@ -11,15 +12,15 @@ export default function DocsPage() {
     <div className="min-h-screen py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Documentation</h1>
-          <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-clouddrove-dark mb-4">Documentation</h1>
+          <p className="text-lg md:text-xl text-clouddrove-light max-w-2xl mx-auto">
             Everything you need to start sharing secrets securely
           </p>
         </div>
 
         <div className="space-y-12">
           <section>
-            <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Getting Started</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Getting Started</h2>
             <div className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">How to Create a Secret</h3>
               <ol className="list-decimal list-inside space-y-3 text-clouddrove-light">
@@ -33,7 +34,7 @@ export default function DocsPage() {
           </section>
 
           <section>
-            <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Features</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Features</h2>
             <div className="space-y-6">
               <div className="bg-white rounded-xl p-6 border-2 border-clouddrove-light/30">
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-2">Password Protection</h3>
@@ -57,7 +58,7 @@ export default function DocsPage() {
           </section>
 
           <section>
-            <h2 className="text-3xl font-bold text-clouddrove-dark mb-4">Best Practices</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Best Practices</h2>
             <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">

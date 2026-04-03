@@ -88,16 +88,16 @@ export default function Header() {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 border-t-2 border-clouddrove-light pt-4">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`text-base font-medium transition-colors ${
+                  className={`text-base font-medium transition-colors py-3 px-2 rounded-lg min-h-[44px] flex items-center ${
                     isActive(link.href)
-                      ? 'text-clouddrove-dark'
-                      : 'text-clouddrove-light hover:text-clouddrove-dark'
+                      ? 'text-clouddrove-dark bg-clouddrove-light/10'
+                      : 'text-clouddrove-light hover:text-clouddrove-dark hover:bg-clouddrove-light/5'
                   }`}
                 >
                   {link.label}
@@ -106,7 +106,7 @@ export default function Header() {
               <Link
                 href="/contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 text-center mt-2"
+                className="bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white px-4 py-3 rounded-lg text-sm font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 text-center mt-2 min-h-[44px] flex items-center justify-center"
               >
                 Contact
               </Link>

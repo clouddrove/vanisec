@@ -35,14 +35,6 @@ export default function StructuredData() {
     alternateName: ['OTS', 'One-Time Secret', 'One Time Secret'],
     url: baseUrl,
     description: 'Free secure one-time secret sharing platform (OTS). Share passwords, API keys, credentials, and confidential data through encrypted self-destructing links. No sign-up, completely free.',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${baseUrl}/?q={search_term_string}`,
-      },
-      'query-input': 'required name=search_term_string',
-    },
   }
 
   const softwareApplicationSchema = {

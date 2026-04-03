@@ -78,8 +78,8 @@ export default function SecretForm() {
               id="secret"
               value={secret}
               onChange={(e) => setSecret(e.target.value)}
-              rows={6}
-              className="w-full px-5 py-4 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all resize-none bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50"
+              rows={4}
+              className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all resize-none bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50 md:rows-6"
               placeholder="Enter the secret you want to share securely..."
               required
             />
@@ -96,7 +96,7 @@ export default function SecretForm() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-5 py-4 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50"
+                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50 min-h-[48px]"
                 placeholder="Enter a password"
                 required
               />
@@ -110,7 +110,7 @@ export default function SecretForm() {
                 id="expiresIn"
                 value={expiresIn}
                 onChange={(e) => setExpiresIn(e.target.value)}
-                className="w-full px-5 py-4 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm appearance-none cursor-pointer"
+                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm appearance-none cursor-pointer min-h-[48px]"
               >
                 <option value="1">1 hour</option>
                 <option value="6">6 hours</option>
@@ -135,7 +135,7 @@ export default function SecretForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+            className="w-full bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -174,17 +174,17 @@ export default function SecretForm() {
             </p>
           </div>
 
-          <div className="bg-gradient-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-5 backdrop-blur-sm">
-            <div className="flex items-center gap-3">
+          <div className="bg-gradient-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-4 md:p-5 backdrop-blur-sm">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <input
                 type="text"
                 value={shareLink}
                 readOnly
-                className="flex-1 bg-white/50 backdrop-blur-sm border border-clouddrove-light/30 rounded-lg px-4 py-3 text-clouddrove-dark text-sm focus:outline-none font-mono"
+                className="flex-1 bg-white/50 backdrop-blur-sm border border-clouddrove-light/30 rounded-lg px-4 py-3 text-clouddrove-dark text-sm focus:outline-none font-mono min-h-[48px] min-w-0"
               />
               <button
                 onClick={copyToClipboard}
-                className={`px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                className={`px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 min-h-[48px] shrink-0 ${
                   copied
                     ? 'bg-green-500 text-white'
                     : 'bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white hover:from-clouddrove-light hover:to-clouddrove-dark'
@@ -224,7 +224,7 @@ export default function SecretForm() {
               setExpiresIn('24')
               setCopied(false)
             }}
-            className="w-full bg-gradient-to-r from-clouddrove-light to-clouddrove-dark text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-dark hover:to-clouddrove-light transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+            className="w-full bg-gradient-to-r from-clouddrove-light to-clouddrove-dark text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-dark hover:to-clouddrove-light transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
           >
             Create Another Secret
           </button>

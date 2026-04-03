@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Privacy Policy for Vanisec — how we handle your data, what we collect, and how secrets are stored and deleted.',
+  alternates: { canonical: '/privacy' },
 }
 
 export default function PrivacyPage() {

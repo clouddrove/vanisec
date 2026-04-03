@@ -47,15 +47,15 @@ export default function Features() {
   ]
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-white to-clouddrove-light/5">
+    <section className="py-12 md:py-20 px-4 bg-gradient-to-b from-white to-clouddrove-light/5">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Key Features</h2>
-          <p className="text-lg text-clouddrove-light max-w-2xl mx-auto">
+        <div className="text-center mb-10 md:mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-clouddrove-dark mb-4">Key Features</h2>
+          <p className="text-base md:text-lg text-clouddrove-light max-w-2xl mx-auto">
             Everything you need to share sensitive information safely — without the risk of it living on forever
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {features.map((feature, index) => (
             <div
               key={index}

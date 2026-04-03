@@ -4,6 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Security & Compliance',
   description: 'How Vanisec protects your data — encryption, one-time access, automatic deletion, and support for SOC 2, GDPR, CCPA, and HIPAA compliance requirements.',
+  alternates: { canonical: '/security' },
 }
 
 export default function SecurityPage() {
@@ -11,15 +12,15 @@ export default function SecurityPage() {
     <div className="min-h-screen py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Security & Compliance</h1>
-          <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-clouddrove-dark mb-4">Security & Compliance</h1>
+          <p className="text-lg md:text-xl text-clouddrove-light max-w-2xl mx-auto">
             Your secrets are encrypted, never logged, and permanently deleted after use
           </p>
         </div>
 
         <div className="space-y-12">
           <section className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
-            <h2 className="text-3xl font-bold text-clouddrove-dark mb-6">Security Features</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-6">Security Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">Encryption at Rest & in Transit</h3>
@@ -49,7 +50,7 @@ export default function SecurityPage() {
           </section>
 
           <section className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
-            <h2 className="text-3xl font-bold text-clouddrove-dark mb-6">Compliance</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-6">Compliance</h2>
             <p className="text-clouddrove-light mb-6">
               Vanisec is designed to help organizations meet data security and privacy compliance requirements:
             </p>
@@ -82,7 +83,7 @@ export default function SecurityPage() {
           </section>
 
           <section className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30">
-            <h2 className="text-3xl font-bold text-clouddrove-dark mb-6">Privacy & Data Handling</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-6">Privacy & Data Handling</h2>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">

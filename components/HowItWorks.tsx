@@ -18,15 +18,15 @@ export default function HowItWorks() {
   ]
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section className="py-12 md:py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">How It Works</h2>
-          <p className="text-lg text-clouddrove-light max-w-2xl mx-auto">
+        <div className="text-center mb-10 md:mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-clouddrove-dark mb-4">How It Works</h2>
+          <p className="text-base md:text-lg text-clouddrove-light max-w-2xl mx-auto">
             Three steps. No accounts. No traces.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {steps.map((step, index) => (
             <div key={index} className="text-center">
               <div className="relative mb-8">
@@ -37,7 +37,7 @@ export default function HowItWorks() {
                   <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-clouddrove-light to-clouddrove-dark/20 transform translate-x-6"></div>
                 )}
               </div>
-              <h3 className="text-2xl font-bold text-clouddrove-dark mb-4">{step.title}</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-clouddrove-dark mb-4">{step.title}</h3>
               <p className="text-clouddrove-light text-base leading-relaxed">{step.description}</p>
             </div>
           ))}

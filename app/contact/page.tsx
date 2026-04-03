@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Get in touch with the Vanisec team — report bugs, request features, or ask questions on GitHub.',
+  alternates: { canonical: '/contact' },
 }
 
 export default function ContactPage() {
@@ -10,8 +11,8 @@ export default function ContactPage() {
     <div className="min-h-screen py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Contact Us</h1>
-          <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-clouddrove-dark mb-4">Contact Us</h1>
+          <p className="text-lg md:text-xl text-clouddrove-light max-w-2xl mx-auto">
             We'd love to hear from you — bug reports, feature ideas, or general feedback.
           </p>
         </div>
@@ -26,7 +27,7 @@ export default function ContactPage() {
               href="https://github.com/clouddrove/vanisec"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-3 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"
+              className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"
             >
               Visit GitHub
             </a>
@@ -39,7 +40,7 @@ export default function ContactPage() {
             </p>
             <a
               href="/docs"
-              className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-3 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"
+              className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"
             >
               View Docs
             </a>

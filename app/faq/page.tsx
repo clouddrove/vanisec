@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions',
   description: 'Common questions about Vanisec — how one-time secret sharing works, security details, expiration options, and more.',
+  alternates: { canonical: '/faq' },
 }
 
 export default function FAQPage() {
@@ -61,8 +62,8 @@ export default function FAQPage() {
     <div className="min-h-screen py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-clouddrove-dark mb-4">Frequently Asked Questions</h1>
-          <p className="text-xl text-clouddrove-light max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-clouddrove-dark mb-4">Frequently Asked Questions</h1>
+          <p className="text-lg md:text-xl text-clouddrove-light max-w-2xl mx-auto">
             Everything you need to know about Vanisec
           </p>
         </div>
@@ -83,7 +84,7 @@ export default function FAQPage() {
           </p>
           <a
             href="/contact"
-            className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-3 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Contact Us
           </a>

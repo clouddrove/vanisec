@@ -5,68 +5,17 @@ import HowItWorks from '@/components/HowItWorks'
 import UseCases from '@/components/UseCases'
 
 export const metadata: Metadata = {
-  title: 'Vanisec - Designed to vanish | Share Once, Vanish Forever',
+  title: 'Vanisec - Designed to vanish | Free One-Time Secret Sharing',
   description: 'Share sensitive information securely with Vanisec. Free, encrypted, one-time secret sharing that automatically deletes after viewing. Perfect for passwords, API keys, credentials, and confidential data. No sign-up required.',
-  keywords: [
-    // Primary keywords
-    'one time secret',
-    'one-time secret',
-    'OTS',
-    'secret sharing',
-    'secure secret sharing',
-    'one time secret sharing',
-    'onetimesecret',
-    
-    // Security and encryption
-    'encrypted secrets',
-    'secure secrets',
-    'temporary secrets',
-    'self-destructing secrets',
-    'burn after reading',
-    'ephemeral secrets',
-    
-    // Use cases
-    'password sharing',
-    'secure password sharing',
-    'API key sharing',
-    'credential sharing',
-    'token sharing',
-    'access key sharing',
-    'database password sharing',
-    
-    // Features
-    'secure link',
-    'one-time link',
-    'self-destructing link',
-    'self-destructing message',
-    'secure message',
-    'private message',
-    'encrypted message',
-    
-    // Service type
-    'free secret sharing',
-    'no signup secret sharing',
-    'anonymous secret sharing',
-    'temporary secrets',
-    'privacy tool',
-    'security tool',
-    'secure communication',
-    
-    // Technical
-    'auto-delete',
-    'automatic deletion',
-    'secure paste',
-    'private paste',
-    'encrypted paste',
-  ],
+  alternates: { canonical: '/' },
   openGraph: {
-    title: 'Vanisec - Designed to vanish',
+    title: 'Vanisec - Free One-Time Secret Sharing',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing. Free and no sign-up required.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vanisec - Designed to vanish',
+    title: 'Vanisec - Free One-Time Secret Sharing',
     description: 'Share sensitive information securely. Encrypted, one-time secret sharing that automatically deletes after viewing.',
   },
 }
@@ -75,7 +24,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden bg-white">
+      <section className="min-h-screen flex flex-col items-center justify-center px-4 py-10 md:py-16 relative overflow-hidden bg-white">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-clouddrove-light opacity-5 rounded-full blur-3xl animate-float"></div>
@@ -93,10 +42,10 @@ export default function Home() {
                 <div className="absolute -inset-1 bg-gradient-to-br from-clouddrove-light to-clouddrove-dark rounded-2xl blur opacity-30 animate-pulse-slow"></div>
               </div>
             </div>
-            <h1 className="text-clouddrove-light text-2xl font-light tracking-wide mb-2">Vanisec</h1>
-            <p className="text-clouddrove-dark text-base font-medium italic tracking-wide">
-              Share once. Vanish forever.
-            </p>
+            <p className="text-clouddrove-light text-2xl font-light tracking-wide mb-2">Vanisec</p>
+            <h1 className="text-clouddrove-dark text-sm md:text-base font-medium tracking-wide">
+              Free One-Time Secret Sharing — Share Once, Vanish Forever
+            </h1>
             <div className="mt-4 flex items-center justify-center gap-2">
               <div className="h-px w-16 bg-gradient-to-r from-transparent to-clouddrove-light"></div>
               <div className="w-2 h-2 rounded-full bg-clouddrove-dark"></div>

@@ -5,9 +5,9 @@ export default function Footer() {
 
   return (
     <footer className="bg-white border-t-2 border-clouddrove-light mt-auto">
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
           {/* Column 1: Brand and Description */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
@@ -32,6 +32,16 @@ export default function Footer() {
                   About
                 </Link>
               </li>
+              <li>
+                <Link href="/security" className="text-clouddrove-light hover:text-clouddrove-dark transition-colors">
+                  Security
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-clouddrove-light hover:text-clouddrove-dark transition-colors">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -42,16 +52,6 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <a 
-                  href="https://github.com/clouddrove/vanisec" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-clouddrove-light hover:text-clouddrove-dark transition-colors"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
                 <Link href="/docs" className="text-clouddrove-light hover:text-clouddrove-dark transition-colors">
                   Documentation
                 </Link>
@@ -60,6 +60,21 @@ export default function Footer() {
                 <Link href="/api" className="text-clouddrove-light hover:text-clouddrove-dark transition-colors">
                   API
                 </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="text-clouddrove-light hover:text-clouddrove-dark transition-colors">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/clouddrove/vanisec"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-clouddrove-light hover:text-clouddrove-dark transition-colors"
+                >
+                  GitHub
+                </a>
               </li>
             </ul>
           </div>
