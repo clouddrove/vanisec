@@ -2,6 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { decryptWithPassword, computeVerifier } from '@/lib/clientCrypto'
+
+interface SecretFile {
+  name: string
+  type: string
+  size: number
+  data: string
+}
 
 export default function ViewSecret() {
   const params = useParams()
@@ -10,9 +18,20 @@ export default function ViewSecret() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [secret, setSecret] = useState('')
-  const [fileData, setFileData] = useState<{ name: string; type: string; size: number; data: string } | null>(null)
+  const [fileData, setFileData] = useState<SecretFile | null>(null)
   const [requiresPassword, setRequiresPassword] = useState(false)
   const [viewed, setViewed] = useState(false)
+  // Salt needed to derive the decryption key from the password.
+  const [encSalt, setEncSalt] = useState('')
+  const [authSalt, setAuthSalt] = useState('')
+
+  // Decode the decrypted {text, file} envelope into view state.
+  const applyEnvelope = (plaintext: string) => {
+    const env = JSON.parse(plaintext) as { text?: string; file?: SecretFile | null }
+    setSecret(env.text || '')
+    setFileData(env.file || null)
+    setViewed(true)
+  }
 
   useEffect(() => {
     checkSecret()
@@ -25,7 +44,9 @@ export default function ViewSecret() {
       const data = await response.json()
 
       if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 401 && data.requiresPassword) {
+          setEncSalt(data.encSalt || '')
+          setAuthSalt(data.authSalt || '')
           setRequiresPassword(true)
         } else {
           setError(data.error || 'Secret not found or expired')
@@ -33,13 +54,8 @@ export default function ViewSecret() {
         return
       }
 
-      if (data.requiresPassword) {
-        setRequiresPassword(true)
-      } else {
-        setSecret(data.secret)
-        if (data.file) setFileData(data.file)
-        setViewed(true)
-      }
+      // Reached only for a (future) non-password secret — no key available here.
+      setError('This secret requires a password.')
     } catch {
       setError('Failed to load secret')
     }
@@ -51,12 +67,16 @@ export default function ViewSecret() {
     setLoading(true)
 
     try {
+      // Derive the retrieval verifier from the password; the server never sees
+      // the password itself.
+      const verifier = await computeVerifier(password, authSalt)
+
       const response = await fetch(`/api/secrets/${params.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ verifier }),
       })
 
       const data = await response.json()
@@ -65,9 +85,13 @@ export default function ViewSecret() {
         throw new Error(data.error || 'Invalid password')
       }
 
-      setSecret(data.secret)
-      if (data.file) setFileData(data.file)
-      setViewed(true)
+      // Decrypt in the browser, then split the envelope into text/file.
+      const plaintext = await decryptWithPassword(
+        { ciphertext: data.ciphertext, iv: data.iv },
+        password,
+        data.encSalt || encSalt
+      )
+      applyEnvelope(plaintext)
       setRequiresPassword(false)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid password')

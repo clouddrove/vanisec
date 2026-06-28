@@ -1,8 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import { encryptWithPassword } from '@/lib/clientCrypto'
 
 type Mode = 'text' | 'file'
+
+// Encode file bytes as standard base64 (chunked to avoid call-stack limits on
+// large files). The result is placed inside the envelope that gets encrypted.
+async function fileToBase64(file: File): Promise<string> {
+  const bytes = new Uint8Array(await file.arrayBuffer())
+  let bin = ''
+  const chunk = 0x8000
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + chunk)))
+  }
+  return btoa(bin)
+}
 
 export default function SecretForm() {
   const [mode, setMode] = useState<Mode>('text')
@@ -47,17 +60,32 @@ export default function SecretForm() {
     }
 
     try {
-      const formData = new FormData()
-      formData.append('secret', mode === 'text' ? secret : '')
-      formData.append('password', password)
-      formData.append('expiresIn', expiresIn)
-      if (mode === 'file' && file) {
-        formData.append('file', file)
-      }
+      // Bundle text + file into one envelope and encrypt it in the browser. The
+      // server only ever receives ciphertext (zero-knowledge) — it never sees
+      // the contents, the filename, or the password.
+      const filePayload =
+        mode === 'file' && file
+          ? { name: file.name, type: file.type, size: file.size, data: await fileToBase64(file) }
+          : null
+      const envelope = JSON.stringify({
+        text: mode === 'text' ? secret : '',
+        file: filePayload,
+      })
+
+      const enc = await encryptWithPassword(envelope, password)
 
       const response = await fetch('/api/secrets', {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ciphertext: enc.ciphertext,
+          iv: enc.iv,
+          passwordProtected: true,
+          encSalt: enc.encSalt,
+          authSalt: enc.authSalt,
+          verifier: enc.verifier,
+          expiresIn: parseInt(expiresIn),
+        }),
       })
 
       const data = await response.json()

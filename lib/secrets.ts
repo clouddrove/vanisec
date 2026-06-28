@@ -1,67 +1,86 @@
 import { v4 as uuidv4 } from 'uuid'
 import { getRedisClient } from './redis'
 
-export interface SecretFile {
-  name: string
-  type: string
-  size: number
-  data: string // base64 encoded
-}
+// Zero-knowledge storage model: the server only ever holds ciphertext and the
+// non-secret crypto parameters the browser needs to decrypt. It never sees the
+// plaintext (text or file), the filename/type, the password, or the encryption
+// key — text and file are bundled into a single JSON envelope that is encrypted
+// in the browser before upload.
+//
+// One-time semantics are enforced by an atomic GETDEL at retrieval (not by a
+// "viewed" flag) so two concurrent reads cannot both succeed.
 
-export interface Secret {
+export interface StoredSecret {
   id: string
-  secret: string
-  password?: string
-  file?: SecretFile
+  ciphertext: string // base64url, AES-GCM over the {text, file} envelope
+  iv: string // base64url
+  passwordProtected: boolean
+  // Present only when passwordProtected:
+  encSalt?: string // base64url — client derives the AES key from password + this
+  authSalt?: string // base64url — client derives the retrieval verifier
+  verifierHash?: string // sha256 hex of the client verifier (server-side gate)
   createdAt: number
   expiresAt: number
-  viewed: boolean
+}
+
+export interface CreateSecretInput {
+  ciphertext: string
+  iv: string
+  passwordProtected: boolean
+  encSalt?: string
+  authSalt?: string
+  verifierHash?: string
+  expiresIn: number // hours
 }
 
 const SECRET_PREFIX = 'secret:'
-const TTL_BUFFER = 60 // Add 60 seconds buffer to TTL
+const TTL_BUFFER = 60 // seconds
 
-export async function createSecret(
-  secret: string,
-  password?: string,
-  expiresIn: number = 24,
-  file?: SecretFile
-): Promise<string> {
+export async function createSecret(input: CreateSecretInput): Promise<string> {
   const id = uuidv4()
   const now = Date.now()
-  const expiresAt = now + expiresIn * 60 * 60 * 1000 // Convert hours to milliseconds
-  const ttl = Math.floor((expiresAt - now) / 1000) + TTL_BUFFER // Convert to seconds
+  const expiresAt = now + input.expiresIn * 60 * 60 * 1000
+  const ttl = Math.floor((expiresAt - now) / 1000) + TTL_BUFFER
 
-  const secretData: Secret = {
+  const data: StoredSecret = {
     id,
-    secret,
-    password: password || undefined,
-    file: file || undefined,
+    ciphertext: input.ciphertext,
+    iv: input.iv,
+    passwordProtected: input.passwordProtected,
+    encSalt: input.encSalt,
+    authSalt: input.authSalt,
+    verifierHash: input.verifierHash,
     createdAt: now,
     expiresAt,
-    viewed: false,
   }
 
   const redis = getRedisClient()
-  await redis.setex(
-    `${SECRET_PREFIX}${id}`,
-    ttl,
-    JSON.stringify(secretData)
-  )
-
+  await redis.setex(`${SECRET_PREFIX}${id}`, ttl, JSON.stringify(data))
   return id
 }
 
-export async function getSecret(id: string): Promise<Secret | null> {
+// Non-destructive read — used to inspect metadata (e.g. whether a password is
+// required) before the authoritative GETDEL.
+export async function peekSecret(id: string): Promise<StoredSecret | null> {
   const redis = getRedisClient()
   const data = await redis.get(`${SECRET_PREFIX}${id}`)
-
-  if (!data) {
+  if (!data) return null
+  try {
+    return JSON.parse(data) as StoredSecret
+  } catch (error) {
+    console.error('Error parsing secret data:', error)
     return null
   }
+}
 
+// Atomic fetch-and-delete. Returns the secret exactly once; a racing caller
+// gets null. This is the one-time guarantee.
+export async function takeSecret(id: string): Promise<StoredSecret | null> {
+  const redis = getRedisClient()
+  const data = (await redis.call('GETDEL', `${SECRET_PREFIX}${id}`)) as string | null
+  if (!data) return null
   try {
-    return JSON.parse(data) as Secret
+    return JSON.parse(data) as StoredSecret
   } catch (error) {
     console.error('Error parsing secret data:', error)
     return null

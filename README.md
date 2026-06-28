@@ -30,7 +30,7 @@ Vanisec provides a production-grade, open-source solution for ephemeral secret s
 
 ### Why Choose Vanisec?
 
-- 🔒 **Security-Focused**: Implements end-to-end encryption with immediate deletion after access
+- 🔒 **Zero-Knowledge**: Secrets are encrypted in your browser; the server only ever stores ciphertext, deleted immediately after access
 - ⚡ **Zero Friction**: No registration, authentication, or account management required
 - 🚀 **Enterprise-Grade**: Production-optimized container builds with comprehensive Kubernetes support
 - 🎨 **Polished Interface**: Modern, responsive design featuring CloudDrove's visual identity
@@ -42,7 +42,7 @@ Vanisec provides a production-grade, open-source solution for ephemeral secret s
 ### Core Functionality
 
 - **One-Time Access**: Secrets can only be viewed once and are immediately deleted after viewing
-- **Password Protection**: Optional password protection for an additional layer of security
+- **Password Protection**: Every secret is protected by a password that never leaves your browser — it derives the encryption key (PBKDF2) and gates retrieval via a one-way verifier
 - **Configurable Expiration**: Set expiration times from 1 hour to 7 days (default: 24 hours)
 - **Automatic Cleanup**: Redis TTL ensures expired secrets are automatically removed
 - **Unique URLs**: Cryptographically secure, unguessable secret identifiers
@@ -58,7 +58,7 @@ Vanisec provides a production-grade, open-source solution for ephemeral secret s
 
 ### Security Features
 
-- **Encrypted Storage**: Secrets are encrypted before storage
+- **Zero-Knowledge Storage**: Secrets are AES-GCM encrypted in the browser before upload; the server and Redis only ever hold ciphertext — never plaintext, filenames, or passwords
 - **No Persistence**: Secrets are never logged or stored permanently
 - **Automatic Deletion**: Immediate removal after viewing or expiration
 - **Non-Root Execution**: Docker containers run with minimal privileges
@@ -343,8 +343,8 @@ env:
 
 ### Data Flow
 
-1. **Secret Creation**: User submits secret → Encrypted → Stored in Redis with TTL → Unique URL generated
-2. **Secret Access**: URL accessed → Secret retrieved → Displayed once → Immediately deleted
+1. **Secret Creation**: Secret encrypted in the browser (AES-GCM) → ciphertext uploaded → Stored in Redis with TTL → Unique URL generated
+2. **Secret Access**: URL accessed → password verifier checked → ciphertext atomically fetched-and-deleted (GETDEL) → decrypted in the browser → displayed once
 3. **Expiration**: Redis TTL expires → Secret automatically removed
 
 ### Technology Stack
@@ -543,7 +543,7 @@ Security is a top priority for Vanisec. To report a security vulnerability:
 
 ### Security Features
 
-- **Encryption**: Secrets are encrypted before storage
+- **Encryption**: Secrets are AES-GCM encrypted in the browser; the server stores only ciphertext (zero-knowledge), atomically deleted on first view
 - **No Logging**: Secrets are never logged or persisted
 - **Automatic Deletion**: Immediate removal after viewing
 - **TTL Expiration**: Automatic cleanup of expired secrets
