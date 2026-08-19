@@ -366,10 +366,30 @@ env:
 |----------|-------------|----------|----------|
 | `REDIS_URL` | Redis connection URL | `redis://localhost:6379/3` | Yes |
 | `REDIS_PASSWORD` | Redis password (if authentication enabled) | - | No |
+| `REDIS_DB` | Redis database index. Ignored when `REDIS_URL` already selects one | `3` | No |
+| `TRUSTED_PROXY_HOPS` | Number of reverse proxies in front of the app. See below | `1` | No |
 | `NEXT_PUBLIC_BASE_URL` | Base URL for the application | `https://vanisec.clouddrove.com` | No |
 | `GA_ID` | Google Analytics Measurement ID (runtime; no rebuild needed) | - | No |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics Measurement ID (build-time alternative) | - | No |
 | `NODE_ENV` | Environment mode | `production` | No |
+
+**`TRUSTED_PROXY_HOPS` — set this to match your deployment.**
+
+Rate limiting identifies clients by IP, read from `X-Forwarded-For`. Each proxy
+appends to that header, so only the rightmost entries are trustworthy; anything
+further left was supplied by the caller and can be forged. The app reads the
+Nth entry from the right, where N is `TRUSTED_PROXY_HOPS`.
+
+| Deployment | Value |
+|------------|-------|
+| Single ingress / load balancer (default) | `1` |
+| CDN in front of an ingress (e.g. Cloudflare → nginx) | `2` |
+| No proxy, app exposed directly | `1` |
+
+Setting it **too high** reads an entry the client controls, letting one caller
+forge unlimited identities and bypass rate limiting. Setting it **too low**
+buckets everyone behind the proxy together, so one noisy client can rate-limit
+everyone else. Count your actual hops.
 
 **Redis URL Format:**
 
