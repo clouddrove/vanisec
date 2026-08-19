@@ -1,6 +1,5 @@
 'use client'
 
-import Script from 'next/script'
 import { useEffect, useState } from 'react'
 
 declare global {
@@ -10,10 +9,12 @@ declare global {
   }
 }
 
+// Loads gtag.js programmatically rather than through an inline <Script> block.
+// An inline bootstrap would need script-src 'unsafe-inline', which the
+// nonce-based CSP on /secret deliberately does not grant.
 export default function GoogleAnalytics() {
   const buildTimeId = process.env.NEXT_PUBLIC_GA_ID || null
   const [gaId, setGaId] = useState<string | null>(buildTimeId)
-  const [source, setSource] = useState<'build' | 'runtime' | null>(buildTimeId ? 'build' : null)
 
   useEffect(() => {
     // A build-time id is already in the initial state, so there is nothing to fetch.
@@ -22,16 +23,13 @@ export default function GoogleAnalytics() {
     fetch('/api/ga-config')
       .then((res) => res.json())
       .then((data: { gaId?: string }) => {
-        if (data?.gaId) {
-          setGaId(data.gaId)
-          setSource('runtime')
-        }
+        if (data?.gaId) setGaId(data.gaId)
       })
       .catch(() => {})
   }, [buildTimeId])
 
   useEffect(() => {
-    if (!gaId || source !== 'runtime') return
+    if (!gaId) return
     if (document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${gaId}"]`)) return
 
     window.dataLayer = window.dataLayer || []
@@ -46,33 +44,7 @@ export default function GoogleAnalytics() {
       gtag('config', gaId)
     }
     document.head.appendChild(script)
-  }, [gaId, source])
-
-  if (!gaId) return null
-
-  if (source === 'build') {
-    return (
-      <>
-        <Script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-          strategy="afterInteractive"
-        />
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${gaId}');
-            `,
-          }}
-        />
-      </>
-    )
-  }
+  }, [gaId])
 
   return null
 }

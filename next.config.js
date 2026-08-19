@@ -5,13 +5,16 @@
 const scriptSrc = ["'self'", "'unsafe-inline'", 'https://www.googletagmanager.com']
 const connectSrc = ["'self'", 'https://www.google-analytics.com']
 
+// Static pages are prerendered, so they cannot carry a per-request nonce and
+// Next's inline RSC bootstrap needs 'unsafe-inline'. These routes render no
+// secret material. /secret/* is dynamic and gets the nonce policy instead.
 const csp = [
   "default-src 'self'",
   `script-src ${scriptSrc.join(' ')}`,
-  // Tailwind injects styles inline.
-  "style-src 'self' 'unsafe-inline'",
+  // Tailwind injects styles inline; globals.css @imports Google Fonts.
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data: https://www.google-analytics.com",
-  "font-src 'self' data:",
+  "font-src 'self' data: https://fonts.gstatic.com",
   `connect-src ${connectSrc.join(' ')}`,
   // Decrypted secrets are rendered in-page; disallow embedding and plugins.
   "object-src 'none'",
@@ -21,8 +24,9 @@ const csp = [
   'upgrade-insecure-requests',
 ].join('; ')
 
+// Applied everywhere. CSP is kept separate because /secret gets a stricter,
+// nonce-based policy from middleware.ts and must not receive two policies.
 const securityHeaders = [
-  { key: 'Content-Security-Policy', value: csp },
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'no-referrer' },
@@ -42,6 +46,13 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: securityHeaders,
+      },
+      {
+        // Everything except /secret/*, which middleware.ts covers with a
+        // nonce-based policy. Two CSP headers on one response would have to be
+        // satisfied simultaneously, so they are kept mutually exclusive.
+        source: '/((?!secret/).*)',
+        headers: [{ key: 'Content-Security-Policy', value: csp }],
       },
       {
         // Secret URLs must never be cached by a proxy or the browser.
