@@ -10,7 +10,10 @@
 // The verifier uses a different salt and is one-way w.r.t. the encryption key,
 // so the server still cannot decrypt.
 
-const PBKDF2_ITERATIONS = 210_000
+import { PBKDF2_ITERATIONS } from './kdfParams'
+
+export { PBKDF2_ITERATIONS, LEGACY_PBKDF2_ITERATIONS } from './kdfParams'
+
 const IV_BYTES = 12
 const SALT_BYTES = 16
 const KEY_BITS = 256
@@ -62,7 +65,12 @@ async function importAesKey(raw: Uint8Array): Promise<CryptoKey> {
   ])
 }
 
-async function pbkdf2(password: string, salt: Uint8Array, bits: number): Promise<Uint8Array> {
+async function pbkdf2(
+  password: string,
+  salt: Uint8Array,
+  bits: number,
+  iterations: number = PBKDF2_ITERATIONS
+): Promise<Uint8Array> {
   const baseKey = await getSubtle().importKey(
     'raw',
     bs(enc.encode(password)),
@@ -71,7 +79,7 @@ async function pbkdf2(password: string, salt: Uint8Array, bits: number): Promise
     ['deriveBits']
   )
   const derived = await getSubtle().deriveBits(
-    { name: 'PBKDF2', salt: bs(salt), iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' },
+    { name: 'PBKDF2', salt: bs(salt), iterations, hash: 'SHA-256' },
     baseKey,
     bits
   )
@@ -125,6 +133,7 @@ export interface PasswordEncryptResult extends EncryptedPayload {
   encSalt: string // base64url, for key derivation
   authSalt: string // base64url, for verifier derivation
   verifier: string // base64url, sent to server to gate retrieval
+  iterations: number // PBKDF2 work factor used, stored with the secret
 }
 
 export async function encryptWithPassword(
@@ -142,21 +151,27 @@ export async function encryptWithPassword(
     encSalt: toBase64Url(encSalt),
     authSalt: toBase64Url(authSalt),
     verifier: toBase64Url(verifier),
+    iterations: PBKDF2_ITERATIONS,
   }
 }
 
 // Compute the verifier the server expects, from a candidate password.
-export async function computeVerifier(password: string, authSalt: string): Promise<string> {
-  const verifier = await pbkdf2(password, fromBase64Url(authSalt), 256)
+export async function computeVerifier(
+  password: string,
+  authSalt: string,
+  iterations: number = PBKDF2_ITERATIONS
+): Promise<string> {
+  const verifier = await pbkdf2(password, fromBase64Url(authSalt), 256, iterations)
   return toBase64Url(verifier)
 }
 
 export async function decryptWithPassword(
   payload: EncryptedPayload,
   password: string,
-  encSalt: string
+  encSalt: string,
+  iterations: number = PBKDF2_ITERATIONS
 ): Promise<string> {
-  const rawKey = await pbkdf2(password, fromBase64Url(encSalt), KEY_BITS)
+  const rawKey = await pbkdf2(password, fromBase64Url(encSalt), KEY_BITS, iterations)
   const key = await importAesKey(rawKey)
   return aesDecrypt(payload, key)
 }
