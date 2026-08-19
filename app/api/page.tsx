@@ -98,7 +98,7 @@ print(data['url'])  # Share this one-time link`}
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Rate Limits</h2>
             <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <p className="text-clouddrove-light">
-                The API currently has no rate limits. We may introduce limits in the future to ensure fair use for all users — if we do, we'll announce it in the GitHub repository.
+                The API currently has no rate limits. We may introduce limits in the future to ensure fair use for all users — if we do, we&apos;ll announce it in the GitHub repository.
               </p>
             </div>
           </section>

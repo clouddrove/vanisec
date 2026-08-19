@@ -7,7 +7,7 @@
     "dev:docker": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "ioredis": "^5.11.1",

@@ -19,12 +19,12 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">1. What We Collect</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Vanisec is built with minimal data collection in mind. Here's what we do and don't collect:
+              Vanisec is built with minimal data collection in mind. Here&apos;s what we do and don&apos;t collect:
             </p>
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
               <li><strong className="text-clouddrove-dark">Secrets:</strong> Stored temporarily in Redis until viewed or expired, then permanently deleted</li>
               <li><strong className="text-clouddrove-dark">No personal data:</strong> No accounts required, so we collect no names, emails, or identifying information</li>
-              <li><strong className="text-clouddrove-dark">No tracking cookies:</strong> We don't use tracking cookies or collect behavioral analytics</li>
+              <li><strong className="text-clouddrove-dark">No tracking cookies:</strong> We don&apos;t use tracking cookies or collect behavioral analytics</li>
             </ul>
           </section>
 
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
               <li>Secrets are encrypted before being stored</li>
               <li>Each secret can only be viewed once before being deleted</li>
-              <li>Automatic expiration ensures secrets don't persist indefinitely</li>
+              <li>Automatic expiration ensures secrets don&apos;t persist indefinitely</li>
               <li>No sensitive content is written to logs or monitoring systems</li>
             </ul>
           </section>
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">6. Your Rights</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Because we collect no personal data and secrets self-destruct, there's very little to manage:
+              Because we collect no personal data and secrets self-destruct, there&apos;s very little to manage:
             </p>
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
               <li>No account means no personal profile to request or delete</li>

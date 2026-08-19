@@ -22,7 +22,7 @@ export default function AboutPage() {
           <section className="prose prose-lg max-w-none">
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Our Mission</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Vanisec was built on a simple belief: secure communication should be accessible to everyone, regardless of technical background or budget. Sharing sensitive information shouldn't require enterprise tools, complex setup, or expensive subscriptions.
+              Vanisec was built on a simple belief: secure communication should be accessible to everyone, regardless of technical background or budget. Sharing sensitive information shouldn&apos;t require enterprise tools, complex setup, or expensive subscriptions.
             </p>
             <p className="text-clouddrove-light leading-relaxed">
               Every day, people share passwords, API keys, tokens, and private data over email and chat — channels that create permanent, insecure records. Vanisec solves this by generating encrypted, one-time links that self-destruct after being opened. No history. No exposure. No risk of something sensitive being found months later in a chat log.
@@ -47,7 +47,7 @@ export default function AboutPage() {
                 </svg>
                 <div>
                   <h3 className="text-xl font-semibold text-clouddrove-dark mb-1">Privacy First</h3>
-                  <p className="text-clouddrove-light">We never log your secrets. Once a secret is deleted — whether opened or expired — it's gone for good and cannot be recovered.</p>
+                  <p className="text-clouddrove-light">We never log your secrets. Once a secret is deleted — whether opened or expired — it&apos;s gone for good and cannot be recovered.</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -65,7 +65,7 @@ export default function AboutPage() {
           <section className="bg-gradient-to-br from-clouddrove-light/5 to-clouddrove-dark/5 rounded-2xl p-8 border-2 border-clouddrove-light/30">
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-6">Why Open Source?</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
-              Security tools should be transparent. When your data is at stake, you shouldn't have to trust a black box. Vanisec is fully open source so anyone can audit the code, verify the implementation, and confirm that secrets are handled exactly as we describe.
+              Security tools should be transparent. When your data is at stake, you shouldn&apos;t have to trust a black box. Vanisec is fully open source so anyone can audit the code, verify the implementation, and confirm that secrets are handled exactly as we describe.
             </p>
             <p className="text-clouddrove-light leading-relaxed mb-4">
               Open source also means you can self-host Vanisec on your own infrastructure. If your organization requires full control over where data is stored and processed, deploy your own instance using our Docker and Kubernetes configurations — no vendor lock-in, no external dependencies.

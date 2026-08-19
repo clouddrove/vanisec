@@ -31,13 +31,13 @@ export default function SecurityPage() {
               <div>
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">One-Time Access</h3>
                 <p className="text-clouddrove-light">
-                  Each secret can only be viewed once. The moment it's opened, it's permanently and irreversibly deleted from our servers — the link immediately becomes dead.
+                  Each secret can only be viewed once. The moment it&apos;s opened, it&apos;s permanently and irreversibly deleted from our servers — the link immediately becomes dead.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-3">Optional Passphrase</h3>
                 <p className="text-clouddrove-light">
-                  Add a passphrase to your secret for a second layer of protection. Even if someone intercepts the link, they can't open the secret without the passphrase.
+                  Add a passphrase to your secret for a second layer of protection. Even if someone intercepts the link, they can&apos;t open the secret without the passphrase.
                 </p>
               </div>
               <div>
@@ -100,7 +100,7 @@ export default function SecurityPage() {
                 </svg>
                 <div>
                   <h3 className="text-lg font-semibold text-clouddrove-dark mb-1">No Tracking</h3>
-                  <p className="text-clouddrove-light">We don't track your behavior, collect personal data, or use tracking cookies. Vanisec is designed to know as little about you as possible.</p>
+                  <p className="text-clouddrove-light">We don&apos;t track your behavior, collect personal data, or use tracking cookies. Vanisec is designed to know as little about you as possible.</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -118,7 +118,7 @@ export default function SecurityPage() {
                 </svg>
                 <div>
                   <h3 className="text-lg font-semibold text-clouddrove-dark mb-1">Open Source & Auditable</h3>
-                  <p className="text-clouddrove-light">Vanisec is fully open source. You don't have to take our word for it — read the code, audit our implementation, or run your own instance.</p>
+                  <p className="text-clouddrove-light">Vanisec is fully open source. You don&apos;t have to take our word for it — read the code, audit our implementation, or run your own instance.</p>
                 </div>
               </li>
             </ul>
