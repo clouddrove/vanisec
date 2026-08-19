@@ -24,7 +24,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.8.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          check-regexp: '^(Build and Push Docker Image)'
+          check-regexp: '^build-and-push$'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           timeout: 600
