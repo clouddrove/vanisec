@@ -19,6 +19,9 @@ export interface StoredSecret {
   encSalt?: string // base64url — client derives the AES key from password + this
   authSalt?: string // base64url — client derives the retrieval verifier
   verifierHash?: string // sha256 hex of the client verifier (server-side gate)
+  // PBKDF2 work factor used at creation. Absent on secrets written before the
+  // factor became configurable — those used LEGACY_PBKDF2_ITERATIONS.
+  iterations?: number
   createdAt: number
   expiresAt: number
 }
@@ -30,6 +33,7 @@ export interface CreateSecretInput {
   encSalt?: string
   authSalt?: string
   verifierHash?: string
+  iterations?: number
   expiresIn: number // hours
 }
 
@@ -50,6 +54,7 @@ export async function createSecret(input: CreateSecretInput): Promise<string> {
     encSalt: input.encSalt,
     authSalt: input.authSalt,
     verifierHash: input.verifierHash,
+    iterations: input.iterations,
     createdAt: now,
     expiresAt,
   }

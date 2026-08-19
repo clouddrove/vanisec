@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { decryptWithPassword, computeVerifier } from '@/lib/clientCrypto'
+import { LEGACY_PBKDF2_ITERATIONS } from '@/lib/kdfParams'
 
 interface SecretFile {
   name: string
@@ -22,8 +23,9 @@ export default function ViewSecret() {
   const [requiresPassword, setRequiresPassword] = useState(false)
   const [viewed, setViewed] = useState(false)
   // Salt needed to derive the decryption key from the password.
-  const [encSalt, setEncSalt] = useState('')
   const [authSalt, setAuthSalt] = useState('')
+  // Work factor this secret was created with; older secrets predate the field.
+  const [iterations, setIterations] = useState(LEGACY_PBKDF2_ITERATIONS)
 
   // Decode the decrypted {text, file} envelope into view state.
   const applyEnvelope = (plaintext: string) => {
@@ -40,8 +42,8 @@ export default function ViewSecret() {
 
       if (!response.ok) {
         if (response.status === 401 && data.requiresPassword) {
-          setEncSalt(data.encSalt || '')
           setAuthSalt(data.authSalt || '')
+          setIterations(data.iterations || LEGACY_PBKDF2_ITERATIONS)
           setRequiresPassword(true)
         } else {
           setError(data.error || 'Secret not found or expired')
@@ -71,7 +73,7 @@ export default function ViewSecret() {
     try {
       // Derive the retrieval verifier from the password; the server never sees
       // the password itself.
-      const verifier = await computeVerifier(password, authSalt)
+      const verifier = await computeVerifier(password, authSalt, iterations)
 
       const response = await fetch(`/api/secrets/${params.id}`, {
         method: 'POST',
@@ -88,10 +90,12 @@ export default function ViewSecret() {
       }
 
       // Decrypt in the browser, then split the envelope into text/file.
+      // encSalt is only returned once the verifier check passes.
       const plaintext = await decryptWithPassword(
         { ciphertext: data.ciphertext, iv: data.iv },
         password,
-        data.encSalt || encSalt
+        data.encSalt,
+        data.iterations || iterations
       )
       applyEnvelope(plaintext)
       setRequiresPassword(false)

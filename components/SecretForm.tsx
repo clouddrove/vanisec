@@ -84,6 +84,7 @@ export default function SecretForm() {
           encSalt: enc.encSalt,
           authSalt: enc.authSalt,
           verifier: enc.verifier,
+          iterations: enc.iterations,
           expiresIn: parseInt(expiresIn),
         }),
       })
