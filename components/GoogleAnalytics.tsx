@@ -16,11 +16,9 @@ export default function GoogleAnalytics() {
   const [source, setSource] = useState<'build' | 'runtime' | null>(buildTimeId ? 'build' : null)
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_GA_ID) {
-      setGaId(process.env.NEXT_PUBLIC_GA_ID)
-      setSource('build')
-      return
-    }
+    // A build-time id is already in the initial state, so there is nothing to fetch.
+    if (buildTimeId) return
+
     fetch('/api/ga-config')
       .then((res) => res.json())
       .then((data: { gaId?: string }) => {
@@ -30,7 +28,7 @@ export default function GoogleAnalytics() {
         }
       })
       .catch(() => {})
-  }, [])
+  }, [buildTimeId])
 
   useEffect(() => {
     if (!gaId || source !== 'runtime') return
