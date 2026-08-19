@@ -99,7 +99,7 @@ export default function FAQPage() {
         <div className="mt-8 text-center bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
           <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">Still have questions?</h2>
           <p className="text-clouddrove-light mb-6">
-            Can't find what you're looking for? Open an issue on GitHub or reach out.
+            Can&apos;t find what you&apos;re looking for? Open an issue on GitHub or reach out.
           </p>
           <Link
             href="/contact"

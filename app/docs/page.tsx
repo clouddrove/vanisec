@@ -39,7 +39,7 @@ export default function DocsPage() {
               <div className="bg-white rounded-xl p-6 border-2 border-clouddrove-light/30">
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-2">Password Protection</h3>
                 <p className="text-clouddrove-light">
-                  Add an optional passphrase when creating a secret. The recipient will need to enter the correct passphrase before the secret is revealed. This adds a second factor — even if someone intercepts the link, they can't read the secret without the passphrase.
+                  Add an optional passphrase when creating a secret. The recipient will need to enter the correct passphrase before the secret is revealed. This adds a second factor — even if someone intercepts the link, they can&apos;t read the secret without the passphrase.
                 </p>
               </div>
               <div className="bg-white rounded-xl p-6 border-2 border-clouddrove-light/30">
@@ -51,7 +51,7 @@ export default function DocsPage() {
               <div className="bg-white rounded-xl p-6 border-2 border-clouddrove-light/30">
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-2">One-Time View</h3>
                 <p className="text-clouddrove-light">
-                  Secrets can only be viewed once. The first person to open the link sees the secret — then it's gone. If someone else opens the link afterwards, they'll see that the secret no longer exists. This tells the sender if the link may have been intercepted.
+                  Secrets can only be viewed once. The first person to open the link sees the secret — then it&apos;s gone. If someone else opens the link afterwards, they&apos;ll see that the secret no longer exists. This tells the sender if the link may have been intercepted.
                 </p>
               </div>
             </div>

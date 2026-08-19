@@ -19,7 +19,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">1. Acceptance of Terms</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              By using Vanisec, you agree to these terms. If you don't agree, please don't use the service.
+              By using Vanisec, you agree to these terms. If you don&apos;t agree, please don&apos;t use the service.
             </p>
           </section>
 
@@ -30,7 +30,7 @@ export default function TermsPage() {
             </p>
             <ul className="list-disc list-inside space-y-2 text-clouddrove-light">
               <li>Use Vanisec for illegal activities or to violate applicable laws</li>
-              <li>Attempt to gain unauthorized access to Vanisec's systems or infrastructure</li>
+              <li>Attempt to gain unauthorized access to Vanisec&apos;s systems or infrastructure</li>
               <li>Interfere with or disrupt service availability for other users</li>
               <li>Use Vanisec to distribute malware, spam, or other harmful content</li>
             </ul>
@@ -39,7 +39,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">3. Service Availability</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Vanisec is provided "as is" without any warranties. We don't guarantee uptime, error-free operation, or continuous availability. We reserve the right to modify, suspend, or shut down the service at any time without notice.
+              Vanisec is provided &quot;as is&quot; without any warranties. We don&apos;t guarantee uptime, error-free operation, or continuous availability. We reserve the right to modify, suspend, or shut down the service at any time without notice.
             </p>
           </section>
 

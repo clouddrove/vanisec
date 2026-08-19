@@ -13,7 +13,7 @@ export default function ContactPage() {
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-clouddrove-dark mb-4">Contact Us</h1>
           <p className="text-lg md:text-xl text-clouddrove-light max-w-2xl mx-auto">
-            We'd love to hear from you — bug reports, feature ideas, or general feedback.
+            We&apos;d love to hear from you — bug reports, feature ideas, or general feedback.
           </p>
         </div>
 
@@ -50,7 +50,7 @@ export default function ContactPage() {
         <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
           <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">How to Reach Us</h2>
           <p className="text-clouddrove-light mb-6">
-            We actively monitor the GitHub repository and respond to all issues and pull requests. Here's the best way to get in touch for each type of request:
+            We actively monitor the GitHub repository and respond to all issues and pull requests. Here&apos;s the best way to get in touch for each type of request:
           </p>
           <div className="space-y-4">
             <div className="flex items-start gap-3">
@@ -68,7 +68,7 @@ export default function ContactPage() {
               </svg>
               <div>
                 <h3 className="font-semibold text-clouddrove-dark mb-1">Feature Requests</h3>
-                <p className="text-clouddrove-light">Have an idea to improve Vanisec? Open a feature request issue on GitHub and describe what you'd like to see.</p>
+                <p className="text-clouddrove-light">Have an idea to improve Vanisec? Open a feature request issue on GitHub and describe what you&apos;d like to see.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -77,7 +77,7 @@ export default function ContactPage() {
               </svg>
               <div>
                 <h3 className="font-semibold text-clouddrove-dark mb-1">Security Issues</h3>
-                <p className="text-clouddrove-light">Found a security vulnerability? Please report it responsibly through GitHub's private security advisory feature rather than a public issue.</p>
+                <p className="text-clouddrove-light">Found a security vulnerability? Please report it responsibly through GitHub&apos;s private security advisory feature rather than a public issue.</p>
               </div>
             </div>
           </div>
