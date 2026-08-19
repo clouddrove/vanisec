@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { decryptWithPassword, computeVerifier } from '@/lib/clientCrypto'
 
@@ -33,12 +33,7 @@ export default function ViewSecret() {
     setViewed(true)
   }
 
-  useEffect(() => {
-    checkSecret()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.id])
-
-  const checkSecret = async () => {
+  const checkSecret = useCallback(async () => {
     try {
       const response = await fetch(`/api/secrets/${params.id}`)
       const data = await response.json()
@@ -59,7 +54,14 @@ export default function ViewSecret() {
     } catch {
       setError('Failed to load secret')
     }
-  }
+  }, [params.id])
+
+  useEffect(() => {
+    // Fetches the secret's status on mount. Every setState in checkSecret happens
+    // after an await, so this is not the synchronous cascade the rule guards against.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    checkSecret()
+  }, [checkSecret])
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
