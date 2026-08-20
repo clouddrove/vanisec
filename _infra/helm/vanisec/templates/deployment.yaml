@@ -19,6 +19,7 @@ spec:
         {{- end }}
       labels:
         {{- include "vanisec.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: app
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -42,9 +43,14 @@ spec:
           value: {{ .Values.env.NODE_ENV | quote }}
         - name: REDIS_URL
           value: {{ .Values.env.REDIS_URL | quote }}
-        {{- if .Values.env.REDIS_PASSWORD }}
+        {{- /* env.REDIS_PASSWORD wins, so an external Redis can differ from the
+               embedded one. Falling back to redis.password matters because that
+               value is what puts --requirepass on the embedded server: setting
+               it alone used to lock the app out of its own Redis. */}}
+        {{- $redisPassword := .Values.env.REDIS_PASSWORD | default .Values.redis.password }}
+        {{- if $redisPassword }}
         - name: REDIS_PASSWORD
-          value: {{ .Values.env.REDIS_PASSWORD | quote }}
+          value: {{ $redisPassword | quote }}
         {{- end }}
         {{- if .Values.env.NEXT_PUBLIC_BASE_URL }}
         - name: NEXT_PUBLIC_BASE_URL
