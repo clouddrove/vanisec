@@ -62,11 +62,15 @@ the hosted endpoint only for a client that has no local process at all, such as
 Copilot's cloud agent, and pick it knowing you are giving up the property Vanisec
 is built on.
 
-The remote form is also newer and less exercised than stdio. The endpoint pins
-MCP protocol revision `2024-11-05`, two revisions behind the current `2026-07-28`
-(tracking issue [#111](https://github.com/clouddrove/vanisec/issues/111)). Each
-remote block below follows the shape its vendor documents. We have not tested
-every client against the endpoint.
+The remote form is also newer and less exercised than stdio. The endpoint
+negotiates the protocol revision instead of pinning one: ask for `2025-11-25`,
+`2025-06-18`, `2025-03-26` or `2024-11-05` and you get that same revision back,
+and anything else is answered with `2025-11-25`. It does not speak `2026-07-28`,
+the current revision, which replaced the initialize handshake with per-request
+metadata and a mandatory `server/discover`. It runs the Streamable HTTP JSON
+mode, so a `GET` for an SSE stream is declined with `405`, which that transport
+allows. Each remote block below follows the shape its vendor documents. We have
+not tested every client against the endpoint.
 
 ### One server, four different top-level keys
 

@@ -62,6 +62,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **The hosted MCP endpoint negotiates its protocol revision.** `/api/mcp`
+  answered a fixed `2024-11-05` to every client without ever reading
+  `params.protocolVersion`, so the two transports disagreed about what Vanisec
+  speaks: the stdio server negotiates through the SDK, the endpoint did not
+  negotiate at all. It now supports `2025-11-25`, `2025-06-18`, `2025-03-26` and
+  `2024-11-05`, echoes back whichever of those the client asks for, and answers
+  `2025-11-25` to anything else. The list stops there because `2026-07-28`, the
+  current revision, replaced the initialize handshake with per-request metadata
+  and a mandatory `server/discover`. Claiming `2025-06-18` also meant
+  implementing what it made binding: an unsupported `MCP-Protocol-Version`
+  header is now `400`, and an absent one is served rather than rejected. An
+  invalid `Origin` is now `403`, which `2025-11-25` requires; clients send no
+  `Origin`, so only browsers are affected and none could read an answer from
+  here anyway.
+- **A `GET` on the hosted MCP endpoint explains itself.** Probing for an SSE
+  stream returned a bare `405`, which does not tell a client whether the
+  endpoint is broken, moved or simply JSON only. The status and the `Allow`
+  header are unchanged, since the Streamable HTTP transport lets a server
+  decline the stream, but the body is now a JSON-RPC error saying so. A batched
+  array body is likewise refused by name instead of falling through to
+  "Invalid Request".
 - **Self-hosted builds no longer report analytics to CloudDrove.** `.env` was
   committed with `NEXT_PUBLIC_GA_ID` set to our own measurement ID, and Next
   inlines `NEXT_PUBLIC_*` into the client bundle at build time, so every build

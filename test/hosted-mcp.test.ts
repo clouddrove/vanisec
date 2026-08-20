@@ -11,7 +11,15 @@ import { test, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
 import { POST, GET } from '@/app/api/mcp/route'
 import { getRedisClient } from '@/lib/redis'
-import { jsonRequest, rawRequest, jsonBody } from './support/http'
+import { jsonRequest, rawRequest, getRequest, jsonBody, ORIGIN } from './support/http'
+
+// Kept as a literal rather than imported from the route, so that quietly
+// widening the route's list cannot quietly widen what the suite checks. The
+// list stops at 2025-11-25 because 2026-07-28 replaced the initialize handshake
+// with per-request metadata and a mandatory server/discover, none of which this
+// endpoint implements.
+const SUPPORTED_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']
+const PREFERRED_VERSION = SUPPORTED_VERSIONS[0]
 
 interface RpcError {
   jsonrpc: string
@@ -57,12 +65,168 @@ test('initialize advertises exactly the capabilities the switch implements', asy
     }>
   >('initialize')
 
-  assert.equal(body.result.protocolVersion, '2024-11-05')
+  // This request names no version, so the endpoint answers with its own best.
+  // It used to answer 2024-11-05 to everyone, having never read the request.
+  assert.equal(body.result.protocolVersion, PREFERRED_VERSION)
   // Declaring a capability the switch has no case for makes a client issue
   // requests that fall through to "Method not found".
   assert.deepEqual(body.result.capabilities, { tools: {}, prompts: {} })
   assert.equal(body.result.serverInfo.name, 'vanisec-hosted')
   assert.ok(body.result.instructions.trim().length > 0)
+})
+
+// "If the server supports the requested protocol version, it MUST respond with
+// the same version." Answering our newest to everyone would break the older
+// clients that work today, because a client handed a version it does not
+// support is told to disconnect.
+test('initialize echoes back each revision the endpoint supports', async () => {
+  for (const version of SUPPORTED_VERSIONS) {
+    const { body } = await rpc<RpcResult<{ protocolVersion: string }>>('initialize', {
+      protocolVersion: version,
+    })
+    assert.equal(body.result.protocolVersion, version, `${version} has to come back unchanged`)
+  }
+})
+
+// "Otherwise, the server MUST respond with another protocol version it
+// supports. This SHOULD be the latest version supported by the server."
+test('initialize answers its own best version for a revision it does not speak', async () => {
+  // 2026-07-28 is the current spec revision and is newer than anything here;
+  // 2024-10-07 is older than anything here and was never published as a
+  // revision on modelcontextprotocol.io; the third is simply not a version.
+  for (const version of ['2026-07-28', '2024-10-07', 'not-a-version']) {
+    const { body } = await rpc<RpcResult<{ protocolVersion: string }>>('initialize', {
+      protocolVersion: version,
+    })
+    assert.equal(body.result.protocolVersion, PREFERRED_VERSION, `asked for ${version}`)
+  }
+})
+
+test('initialize handles a missing or malformed protocolVersion without failing', async () => {
+  const cases: (Record<string, unknown> | undefined)[] = [
+    undefined,
+    {},
+    { protocolVersion: null },
+    { protocolVersion: 20241105 },
+    { protocolVersion: '' },
+    { protocolVersion: ['2025-11-25'] },
+  ]
+
+  for (const params of cases) {
+    const { status, body } = await rpc<RpcResult<{ protocolVersion: string }>>('initialize', params)
+    assert.equal(status, 200, JSON.stringify(params))
+    assert.equal(body.result.protocolVersion, PREFERRED_VERSION, JSON.stringify(params))
+  }
+})
+
+// From 2025-06-18 on, the client MUST send MCP-Protocol-Version on every
+// request after initialize, and the server MUST answer 400 to a version it
+// does not support. Claiming 2025-06-18 without this check was the reason the
+// old fixed 2024-11-05 answer could not simply be raised.
+test('a supported MCP-Protocol-Version header is accepted on any method', async () => {
+  for (const version of SUPPORTED_VERSIONS) {
+    const response = await POST(
+      jsonRequest(
+        '/api/mcp',
+        { jsonrpc: '2.0', id: 1, method: 'tools/list' },
+        { 'mcp-protocol-version': version }
+      )
+    )
+    assert.equal(response.status, 200, version)
+  }
+})
+
+test('an unsupported MCP-Protocol-Version header is 400 and names what we do speak', async () => {
+  const response = await POST(
+    jsonRequest(
+      '/api/mcp',
+      { jsonrpc: '2.0', id: 1, method: 'tools/list' },
+      { 'mcp-protocol-version': '2026-07-28' }
+    )
+  )
+  assert.equal(response.status, 400)
+
+  const body = await jsonBody<RpcError>(response)
+  assert.equal(body.error.code, -32000)
+  assert.match(body.error.message, /2026-07-28/)
+  for (const version of SUPPORTED_VERSIONS) {
+    assert.match(body.error.message, new RegExp(version), `${version} should be listed`)
+  }
+})
+
+// The spec tells a server with no other way to identify the version to assume
+// 2025-03-26 rather than reject. Nothing here answers differently per revision,
+// so the request simply proceeds.
+test('a request with no MCP-Protocol-Version header is served, not rejected', async () => {
+  const { status } = await rpc<RpcResult<{ tools: unknown[] }>>('tools/list')
+  assert.equal(status, 200)
+})
+
+// 2025-03-26 let a client batch messages into an array and 2025-06-18 removed
+// it again. This switch handles one message per request either way, so the
+// point of the test is that a batching client is told which it is.
+test('a batched array body is refused with a message that names batching', async () => {
+  const response = await POST(
+    jsonRequest('/api/mcp', [
+      { jsonrpc: '2.0', id: 1, method: 'ping' },
+      { jsonrpc: '2.0', id: 2, method: 'tools/list' },
+    ])
+  )
+  assert.equal(response.status, 400)
+
+  const body = await jsonBody<RpcError>(response)
+  assert.equal(body.error.code, -32600)
+  assert.match(body.error.message, /batching/i)
+})
+
+// "Servers MUST validate the Origin header on all incoming connections", and
+// since 2025-11-25 an invalid one MUST be answered with 403. Only browsers set
+// Origin, and a browser could never read an answer from here anyway, so this
+// costs real MCP clients nothing.
+test('a foreign Origin is refused with 403 on both POST and GET', async () => {
+  const posted = await POST(
+    jsonRequest(
+      '/api/mcp',
+      { jsonrpc: '2.0', id: 1, method: 'tools/list' },
+      { origin: 'https://evil.example' }
+    )
+  )
+  assert.equal(posted.status, 403)
+  assert.equal((await jsonBody<RpcError>(posted)).id, null, 'no request id can be attributed')
+
+  const got = await GET(getRequest('/api/mcp', { origin: 'https://evil.example' }))
+  assert.equal(got.status, 403)
+})
+
+test('the endpoint own origin is accepted, and so is no Origin at all', async () => {
+  const labelled = await POST(
+    jsonRequest('/api/mcp', { jsonrpc: '2.0', id: 1, method: 'tools/list' }, { origin: ORIGIN })
+  )
+  assert.equal(labelled.status, 200)
+
+  const { status } = await rpc<RpcResult<{ tools: unknown[] }>>('tools/list')
+  assert.equal(status, 200, 'MCP clients are not browsers and send no Origin')
+})
+
+// Behind a proxy the request URL carries the internal host, so the public
+// origin has to come from the configured base URL or a browser on the real site
+// would be turned away.
+test('NEXT_PUBLIC_BASE_URL widens the accepted Origin to the public site', async () => {
+  const previous = process.env.NEXT_PUBLIC_BASE_URL
+  process.env.NEXT_PUBLIC_BASE_URL = 'https://vanisec.clouddrove.com/'
+  try {
+    const response = await POST(
+      jsonRequest(
+        '/api/mcp',
+        { jsonrpc: '2.0', id: 1, method: 'tools/list' },
+        { origin: 'https://vanisec.clouddrove.com' }
+      )
+    )
+    assert.equal(response.status, 200)
+  } finally {
+    if (previous === undefined) delete process.env.NEXT_PUBLIC_BASE_URL
+    else process.env.NEXT_PUBLIC_BASE_URL = previous
+  }
 })
 
 test('tools/list offers the create tool and nothing else', async () => {
@@ -228,16 +392,35 @@ test('an oversized declared body is refused before it is read', async () => {
   assert.equal(response.status, 413)
 })
 
-test('GET declines with 405 and points at the documentation', async () => {
-  const response = await GET()
+// A GET here is a client probing for an SSE stream. The spec lets a server
+// decline with 405, so the status and the Allow header stay exactly as they
+// were. What changed is the body: it is now a JSON-RPC error, so a client that
+// only knows how to read JSON-RPC learns this endpoint is JSON mode rather than
+// broken or moved. The old flat shape is preserved under error.data.
+test('GET declines the SSE stream as a JSON-RPC error and keeps the 405', async () => {
+  const response = await GET(getRequest('/api/mcp'))
   assert.equal(response.status, 405)
   assert.equal(response.headers.get('Allow'), 'POST')
 
-  const body = await jsonBody<{ documentation: string; preferred: string; iterations: number }>(
-    response
-  )
-  assert.match(body.preferred, /@clouddrove\/vanisec-mcp/)
-  assert.equal(body.iterations, 600_000)
+  const body = await jsonBody<{
+    jsonrpc: string
+    id: null
+    error: {
+      code: number
+      message: string
+      data: { documentation: string; preferred: string; protocolVersions: string[]; iterations: number }
+    }
+  }>(response)
+
+  assert.equal(body.jsonrpc, '2.0')
+  assert.equal(body.id, null, 'a GET carries no request to answer')
+  assert.equal(typeof body.error.code, 'number')
+  assert.match(body.error.message, /does not open an SSE stream/i)
+  assert.match(body.error.message, /POST/)
+  assert.match(body.error.data.preferred, /@clouddrove\/vanisec-mcp/)
+  assert.match(body.error.data.documentation, /vanisec\.clouddrove\.com\/mcp/)
+  assert.deepEqual(body.error.data.protocolVersions, SUPPORTED_VERSIONS)
+  assert.equal(body.error.data.iterations, 600_000)
 })
 
 test('tools/call creates a secret and returns a link on this origin', async () => {

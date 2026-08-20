@@ -23,7 +23,45 @@ import { PBKDF2_ITERATIONS } from '@/lib/kdfParams'
 // request and response with nothing to stream, so the endpoint answers with
 // application/json and does not open an SSE stream.
 
-const PROTOCOL_VERSION = '2024-11-05'
+// The protocol revisions this endpoint speaks, newest first. Hardcoded rather
+// than imported from @modelcontextprotocol/sdk: the Next app does not depend on
+// that package, and adding it for two constants would tie the website build to
+// the separately published server in mcp/.
+//
+// The list stops at 2025-11-25 because that is the newest revision whose server
+// obligations this endpoint actually meets. Checked against the published spec:
+//
+//   - 2025-03-26 introduced Streamable HTTP. A JSON-only server is conformant:
+//     on POST the server "MUST either return Content-Type: text/event-stream
+//     ... or application/json", and on GET it "MUST either return
+//     Content-Type: text/event-stream ... or else return HTTP 405 Method Not
+//     Allowed, indicating that the server does not offer an SSE stream at this
+//     endpoint". Sessions and Mcp-Session-Id are a MAY, so a stateless server
+//     needs none. The one gap is JSON-RPC batching, which 2025-03-26 allows a
+//     client to send and this switch does not accept; the batch branch in POST
+//     says so rather than failing opaquely, and 2025-06-18 removed batching.
+//   - 2025-06-18 made the MCP-Protocol-Version header binding: a server that
+//     receives "an invalid or unsupported MCP-Protocol-Version ... MUST respond
+//     with 400 Bad Request", and when the header is absent it "SHOULD assume
+//     protocol version 2025-03-26". Both are implemented below.
+//   - 2025-11-25 adds icons, tasks, sampling tool calls and OAuth discovery,
+//     all opt-in through capabilities this endpoint does not declare, plus one
+//     server MUST: an invalid Origin has to be answered with 403 Forbidden.
+//     That is implemented below too.
+//   - 2026-07-28, the current revision, drops the initialize handshake for
+//     per-request metadata and a mandatory server/discover RPC. None of that
+//     exists here, so it is deliberately absent from this list.
+//
+// 2024-11-05 stays because dropping it would break clients that work today. It
+// means the 2024-11-05 message schema carried over Streamable HTTP; that
+// revision's own HTTP+SSE transport, with its two endpoints and endpoint event,
+// has never been implemented here.
+const SUPPORTED_PROTOCOL_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'] as const
+
+// What we answer with when the client asks for something we do not speak. The
+// spec says this SHOULD be the latest version the server supports.
+const PREFERRED_PROTOCOL_VERSION = SUPPORTED_PROTOCOL_VERSIONS[0]
+
 const ALLOWED_EXPIRY_HOURS = [1, 6, 24, 72, 168]
 const DEFAULT_EXPIRY_HOURS = 24
 const MAX_TEXT_CHARS = 100_000
@@ -53,6 +91,72 @@ function error(id: JsonRpcId, code: number, message: string, status = 200) {
 
 function toolText(text: string, isError = false) {
   return { content: [{ type: 'text', text }], ...(isError ? { isError: true } : {}) }
+}
+
+function speaks(version: string): boolean {
+  return (SUPPORTED_PROTOCOL_VERSIONS as readonly string[]).includes(version)
+}
+
+// Version negotiation, from the lifecycle spec: "If the server supports the
+// requested protocol version, it MUST respond with the same version. Otherwise,
+// the server MUST respond with another protocol version it supports."
+//
+// Echoing what the client asked for is the point. Always answering our newest
+// would hand 2025-11-25 to a client that asked for 2024-11-05, and the spec
+// tells such a client to disconnect, so today's working clients would break.
+//
+// Nothing else in this file branches on the negotiated version: every method
+// answers identically under all four revisions, so there is no state to keep
+// and nothing for a stateless endpoint to forget between requests.
+function negotiateProtocolVersion(params: Record<string, unknown> | undefined): string {
+  const requested = params?.protocolVersion
+  if (typeof requested === 'string' && speaks(requested)) return requested
+  return PREFERRED_PROTOCOL_VERSION
+}
+
+// "If the server receives a request with an invalid or unsupported
+// MCP-Protocol-Version, it MUST respond with 400 Bad Request." When the header
+// is absent the spec says to assume 2025-03-26, which needs no code here
+// because no answer depends on the revision.
+//
+// -32000 and this wording match what the SDK's own Streamable HTTP server
+// returns, so a client sees the same failure from either Vanisec transport.
+function unsupportedVersionHeader(request: NextRequest): NextResponse | null {
+  const requested = request.headers.get('mcp-protocol-version')
+  if (requested === null || speaks(requested)) return null
+  return error(
+    null,
+    -32000,
+    `Bad Request: Unsupported protocol version: ${requested} ` +
+      `(supported versions: ${SUPPORTED_PROTOCOL_VERSIONS.join(', ')})`,
+    400
+  )
+}
+
+// "Servers MUST validate the Origin header on all incoming connections to
+// prevent DNS rebinding attacks", and since 2025-11-25: "If the Origin header
+// is present and invalid, servers MUST respond with HTTP 403 Forbidden."
+//
+// Only a browser labels a request with an Origin, and a browser cannot read an
+// answer from here anyway because nothing serves CORS headers. So this rejects
+// the case the spec names and leaves every real MCP client, which sends no
+// Origin at all, untouched.
+function forbiddenOrigin(request: NextRequest): NextResponse | null {
+  const origin = request.headers.get('origin')
+  if (origin === null) return null
+
+  const allowed = [new URL(request.url).origin]
+  const configured = process.env.NEXT_PUBLIC_BASE_URL
+  if (configured) {
+    try {
+      allowed.push(new URL(configured).origin)
+    } catch {
+      // A malformed NEXT_PUBLIC_BASE_URL should not widen what is accepted.
+    }
+  }
+
+  if (allowed.includes(origin)) return null
+  return error(null, -32000, 'Forbidden: Origin not allowed', 403)
 }
 
 const CREATE_TOOL = {
@@ -262,17 +366,30 @@ async function handleCreate(
 }
 
 export async function POST(request: NextRequest) {
+  const rejected = forbiddenOrigin(request) ?? unsupportedVersionHeader(request)
+  if (rejected) return rejected
+
   const declaredLength = Number(request.headers.get('content-length') || 0)
   if (declaredLength > MAX_BODY_BYTES) {
     return error(null, -32600, 'Request body too large', 413)
   }
 
-  let body: JsonRpcRequest
+  let parsed: unknown
   try {
-    body = (await request.json()) as JsonRpcRequest
+    parsed = await request.json()
   } catch {
     return error(null, -32700, 'Parse error', 400)
   }
+
+  // 2025-03-26 let a client batch messages into an array. 2025-06-18 removed
+  // that again, and this switch answers one message per request. Naming the
+  // limitation costs a client one round trip; letting the array fall through to
+  // "Invalid Request" would leave it guessing what was wrong with its JSON.
+  if (Array.isArray(parsed)) {
+    return error(null, -32600, 'JSON-RPC batching is not supported. Send one message per request.', 400)
+  }
+
+  const body = parsed as JsonRpcRequest
 
   if (!body || body.jsonrpc !== '2.0' || typeof body.method !== 'string') {
     return error(body?.id ?? null, -32600, 'Invalid Request', 400)
@@ -283,7 +400,7 @@ export async function POST(request: NextRequest) {
   switch (body.method) {
     case 'initialize':
       return result(id, {
-        protocolVersion: PROTOCOL_VERSION,
+        protocolVersion: negotiateProtocolVersion(body.params),
         capabilities: { tools: {}, prompts: {} },
         serverInfo: { name: 'vanisec-hosted', version: '0.1.0' },
         instructions: INSTRUCTIONS,
@@ -361,15 +478,34 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// The spec allows a server to decline the SSE stream. Everything here answers
-// in a single JSON response, so there is no stream to open.
-export async function GET() {
+// A client GETs this path to open an SSE stream. The spec lets a server decline
+// with 405, and everything here answers in a single JSON response, so there is
+// no stream to open and 405 stays.
+//
+// What changed is the body. A bare status code tells a client nothing about
+// whether the endpoint is broken, moved or simply JSON only, so the answer is
+// now a JSON-RPC error saying which of those it is. The id is null because a
+// GET carries no request to answer.
+export async function GET(request: NextRequest) {
+  const rejected = forbiddenOrigin(request)
+  if (rejected) return rejected
+
   return NextResponse.json(
     {
-      error: 'This endpoint speaks MCP over POST only.',
-      documentation: 'https://vanisec.clouddrove.com/mcp',
-      preferred: 'npx -y @clouddrove/vanisec-mcp',
-      iterations: PBKDF2_ITERATIONS,
+      jsonrpc: '2.0',
+      id: null,
+      error: {
+        code: -32000,
+        message:
+          'This MCP endpoint runs the Streamable HTTP JSON mode and does not open an SSE stream. ' +
+          'Send JSON-RPC messages by POST to this same URL.',
+        data: {
+          documentation: 'https://vanisec.clouddrove.com/mcp',
+          preferred: 'npx -y @clouddrove/vanisec-mcp',
+          protocolVersions: SUPPORTED_PROTOCOL_VERSIONS,
+          iterations: PBKDF2_ITERATIONS,
+        },
+      },
     },
     { status: 405, headers: { Allow: 'POST' } }
   )
