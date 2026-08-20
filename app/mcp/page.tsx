@@ -150,6 +150,45 @@ export default function MCPPage() {
           </section>
 
           <section>
+            <h2 className={H2}>Hosted endpoint</h2>
+            <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+              <p className="text-clouddrove-light mb-4">
+                For clients that cannot run a local process, an MCP endpoint is available at{' '}
+                <code className="font-mono text-sm">POST https://vanisec.clouddrove.com/api/mcp</code>.
+              </p>
+              <p className="text-clouddrove-light mb-4">
+                <strong className="text-clouddrove-dark">
+                  It is not zero-knowledge, and you should use the local package instead wherever you can.
+                </strong>{' '}
+                The endpoint receives your secret and your password in the request body and encrypts them on our
+                server. For the duration of that request, Vanisec holds material it otherwise never sees. That is
+                the opposite of how the rest of this product works, and it is the entire reason the local package
+                exists.
+              </p>
+              <p className="text-clouddrove-light mb-4">
+                It offers <code className="font-mono text-sm">vanisec_create_secret</code> only.{' '}
+                <code className="font-mono text-sm">vanisec_generate_secret</code> is deliberately absent: its
+                purpose is putting the link password on your clipboard, and over HTTP the clipboard would be the
+                server&apos;s, so the password would have to travel back in the response and into your
+                conversation. Offering it here would defeat the reason it exists.
+              </p>
+              <pre className={PRE}>
+{`{
+  "mcpServers": {
+    "vanisec": {
+      "url": "https://vanisec.clouddrove.com/api/mcp"
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mt-4 text-sm">
+                Rate limited to 20 calls per 10 minutes per IP, since server side key derivation is more expensive
+                than the browser path.
+              </p>
+            </div>
+          </section>
+
+          <section>
             <h2 className={H2}>Self-hosting</h2>
             <div className={CARD}>
               <p className="text-clouddrove-light mb-3">
