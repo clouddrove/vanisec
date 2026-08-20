@@ -31,6 +31,34 @@ By design. A retrieved secret would land in the model's context and in the
 conversation transcript, so a one-time secret would stop being one-time in any
 useful sense. Open the link in a browser instead.
 
+## Releasing
+
+Publishing runs in CI, triggered by a tag. There is no manual `npm publish`.
+
+1. Bump `version` in `mcp/package.json`. A test holds the version the server
+   reports at initialization equal to this value, so `npm test` fails if only
+   one of them moves.
+2. Land that on `master`.
+3. Tag the commit and push the tag:
+
+```
+git tag mcp-v0.2.0
+git push origin mcp-v0.2.0
+```
+
+The tag prefix is `mcp-v` rather than `v`, because plain `v*` tags build the
+container image for the site and a site release should not push a package to
+the registry.
+
+The workflow refuses to publish if the tag disagrees with `package.json`, or if
+that version already exists on the registry, since npm versions are immutable.
+It typechecks, tests and builds before publishing, and attaches a provenance
+attestation so the registry records which workflow and commit produced the
+tarball.
+
+`workflow_dispatch` runs the same checks and packs the tarball without
+publishing, which is the way to see exactly what would ship.
+
 ## Install
 
 Two ways to run this, and they are not equivalent.

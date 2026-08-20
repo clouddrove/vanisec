@@ -1,0 +1,92 @@
+name: Publish MCP Package
+
+# The npm package is versioned separately from the site, so it gets its own tag
+# prefix. build-and-push.yml already claims 'v*' for container images, and a
+# site release should not push a package to the registry.
+on:
+  push:
+    tags:
+      - 'mcp-v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run every check and pack the tarball, but do not publish'
+        type: boolean
+        default: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Lets npm attach a provenance attestation, so the registry can show which
+      # workflow and commit produced the tarball. Also what npm trusted
+      # publishing would use if the NPM_TOKEN secret is ever retired.
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: mcp/package-lock.json
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        working-directory: mcp
+        run: npm ci
+
+      # A mistyped tag must not publish the wrong number. The tag is the
+      # release; package.json is what actually gets published, so they have to
+      # agree before anything leaves the runner.
+      - name: Check the tag matches mcp/package.json
+        if: startsWith(github.ref, 'refs/tags/')
+        working-directory: mcp
+        run: |
+          TAG="${GITHUB_REF_NAME#mcp-v}"
+          PKG="$(node -p "require('./package.json').version")"
+          echo "tag=$TAG package.json=$PKG"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "::error::Tag mcp-v$TAG does not match mcp/package.json $PKG. Fix one of them and retag."
+            exit 1
+          fi
+
+      # Refuse to republish an existing version rather than failing halfway
+      # through with a registry error. npm versions are immutable.
+      - name: Check the version is not already published
+        working-directory: mcp
+        run: |
+          PKG="$(node -p "require('./package.json').version")"
+          if npm view "@clouddrove/vanisec-mcp@$PKG" version >/dev/null 2>&1; then
+            echo "::error::@clouddrove/vanisec-mcp@$PKG is already on the registry. Bump the version."
+            exit 1
+          fi
+
+      - name: Typecheck
+        working-directory: mcp
+        run: npm run typecheck
+
+      # prepublishOnly runs build and test again, but this repo should not
+      # depend on that hook staying correct to know whether the package works.
+      - name: Test
+        working-directory: mcp
+        run: npm test
+
+      - name: Build
+        working-directory: mcp
+        run: npm run build
+
+      - name: Show what would ship
+        working-directory: mcp
+        run: npm pack --dry-run
+
+      - name: Publish to npm
+        if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+        working-directory: mcp
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
