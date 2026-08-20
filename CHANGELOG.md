@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### MCP package 0.2.0
+
+`@clouddrove/vanisec-mcp` goes to 0.2.0. The published 0.1.0 predates the prompts
+and the `instructions` field, so until this is released to npm the hosted
+endpoint and the local package behave differently, which is the split those
+changes existed to remove. npm versions are immutable, so the new server cannot
+ship under the old number.
+
+The version the server reports at initialization is now pinned to
+`mcp/package.json` by a test, since a stale value there breaks nothing visibly
+and only misreports the server to clients.
+
+
 ### Added
 
 - **Tests for the Next app.** The root project had no test runner, so the
