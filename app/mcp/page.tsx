@@ -90,7 +90,7 @@ export default function MCPPage() {
               <h3 className={H3}>One server, four different top-level keys</h3>
               <p className="text-clouddrove-light mb-4 text-sm">
                 Getting the key wrong is a silent no-op: the client starts, the server never loads, and nothing
-                tells you why. Each block below leads with its key.
+                tells you why. Open your client below for the exact key and file.
               </p>
               <div className="overflow-x-auto mb-6">
                 <table className="w-full text-sm">
@@ -127,12 +127,32 @@ export default function MCPPage() {
                 </table>
               </div>
 
-              <h3 className={H3}>Claude Code</h3>
+              <details open className="group">
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3 py-4 border-t border-clouddrove-light/20 text-lg font-semibold text-clouddrove-dark hover:text-clouddrove-light marker:hidden"
+                >
+                  <span>Claude Code</span>
+                  <span aria-hidden="true" className="text-clouddrove-light transition-transform group-open:rotate-90">
+                    &#9656;
+                  </span>
+                </summary>
+                <div className="pb-4">
               <pre className={PRE + ' mb-6'}>
 {`claude mcp add vanisec -- npx -y @clouddrove/vanisec-mcp`}
               </pre>
 
-              <h3 className={H3}>Claude Desktop</h3>
+                </div>
+              </details>
+              <details className="group">
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3 py-4 border-t border-clouddrove-light/20 text-lg font-semibold text-clouddrove-dark hover:text-clouddrove-light marker:hidden"
+                >
+                  <span>Claude Desktop</span>
+                  <span aria-hidden="true" className="text-clouddrove-light transition-transform group-open:rotate-90">
+                    &#9656;
+                  </span>
+                </summary>
+                <div className="pb-4">
               <p className="text-clouddrove-light mb-3 text-sm">
                 Settings, Developer, Edit Config opens{' '}
                 <code className="font-mono">claude_desktop_config.json</code>, at{' '}
@@ -157,7 +177,18 @@ export default function MCPPage() {
                 </a>
               </p>
 
-              <h3 className={H3}>Cursor</h3>
+                </div>
+              </details>
+              <details className="group">
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3 py-4 border-t border-clouddrove-light/20 text-lg font-semibold text-clouddrove-dark hover:text-clouddrove-light marker:hidden"
+                >
+                  <span>Cursor</span>
+                  <span aria-hidden="true" className="text-clouddrove-light transition-transform group-open:rotate-90">
+                    &#9656;
+                  </span>
+                </summary>
+                <div className="pb-4">
               <p className="text-clouddrove-light mb-3 text-sm">
                 <code className="font-mono">.cursor/mcp.json</code> for one project,{' '}
                 <code className="font-mono">~/.cursor/mcp.json</code> for every project, project config winning. Key{' '}
@@ -197,7 +228,18 @@ export default function MCPPage() {
                 </a>
               </p>
 
-              <h3 className={H3}>VS Code with GitHub Copilot</h3>
+                </div>
+              </details>
+              <details className="group">
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3 py-4 border-t border-clouddrove-light/20 text-lg font-semibold text-clouddrove-dark hover:text-clouddrove-light marker:hidden"
+                >
+                  <span>VS Code with GitHub Copilot</span>
+                  <span aria-hidden="true" className="text-clouddrove-light transition-transform group-open:rotate-90">
+                    &#9656;
+                  </span>
+                </summary>
+                <div className="pb-4">
               <p className="text-clouddrove-light mb-3 text-sm">
                 The key is <code className="font-mono">servers</code>.{' '}
                 <code className="font-mono">mcpServers</code> is not accepted in{' '}
@@ -258,7 +300,18 @@ export default function MCPPage() {
                 </a>
               </p>
 
-              <h3 className={H3}>GitHub Copilot, other surfaces</h3>
+                </div>
+              </details>
+              <details className="group">
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3 py-4 border-t border-clouddrove-light/20 text-lg font-semibold text-clouddrove-dark hover:text-clouddrove-light marker:hidden"
+                >
+                  <span>GitHub Copilot, other surfaces</span>
+                  <span aria-hidden="true" className="text-clouddrove-light transition-transform group-open:rotate-90">
+                    &#9656;
+                  </span>
+                </summary>
+                <div className="pb-4">
               <p className="text-clouddrove-light mb-3 text-sm">
                 <strong className="text-clouddrove-dark">Start here.</strong> The organization and enterprise policy{' '}
                 <code className="font-mono">MCP servers in Copilot</code> is disabled by default for Copilot
@@ -384,7 +437,18 @@ copilot mcp add --transport http vanisec https://vanisec.clouddrove.com/api/mcp`
                 MCP server that cannot be changed.
               </p>
 
-              <h3 className={H3}>Codex</h3>
+                </div>
+              </details>
+              <details className="group">
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3 py-4 border-t border-clouddrove-light/20 text-lg font-semibold text-clouddrove-dark hover:text-clouddrove-light marker:hidden"
+                >
+                  <span>Codex</span>
+                  <span aria-hidden="true" className="text-clouddrove-light transition-transform group-open:rotate-90">
+                    &#9656;
+                  </span>
+                </summary>
+                <div className="pb-4">
               <p className="text-clouddrove-light mb-3 text-sm">
                 <code className="font-mono">~/.codex/config.toml</code> for you,{' '}
                 <code className="font-mono">.codex/config.toml</code> for a project, and the project file is read
@@ -429,7 +493,18 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                 </a>
               </p>
 
-              <h3 className={H3}>Windsurf and Devin</h3>
+                </div>
+              </details>
+              <details className="group">
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3 py-4 border-t border-clouddrove-light/20 text-lg font-semibold text-clouddrove-dark hover:text-clouddrove-light marker:hidden"
+                >
+                  <span>Windsurf and Devin</span>
+                  <span aria-hidden="true" className="text-clouddrove-light transition-transform group-open:rotate-90">
+                    &#9656;
+                  </span>
+                </summary>
+                <div className="pb-4">
               <p className="text-clouddrove-light mb-3 text-sm">
                 The Devin rebrand split the config in two, so the file depends on the surface. Legacy Cascade uses{' '}
                 <code className="font-mono">~/.codeium/windsurf/mcp_config.json</code>, the Windsurf plugin for VS
@@ -479,7 +554,18 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                 </a>
               </p>
 
-              <h3 className={H3}>Zed</h3>
+                </div>
+              </details>
+              <details className="group">
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3 py-4 border-t border-clouddrove-light/20 text-lg font-semibold text-clouddrove-dark hover:text-clouddrove-light marker:hidden"
+                >
+                  <span>Zed</span>
+                  <span aria-hidden="true" className="text-clouddrove-light transition-transform group-open:rotate-90">
+                    &#9656;
+                  </span>
+                </summary>
+                <div className="pb-4">
               <p className="text-clouddrove-light mb-3 text-sm">
                 <code className="font-mono">~/.config/zed/settings.json</code>, key{' '}
                 <code className="font-mono">context_servers</code>. Add it from Settings, AI, MCP Servers, Add
@@ -518,6 +604,8 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                   zed.dev/docs/ai/mcp
                 </a>
               </p>
+                </div>
+              </details>
             </div>
           </section>
 
