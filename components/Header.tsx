@@ -12,6 +12,9 @@ export default function Header() {
 
   const navLinks = [
     { href: '/', label: 'Home' },
+    // For someone who reached the site before their code, rather than typing
+    // /c straight in as the sending device tells them to.
+    { href: '/c', label: 'Enter Code' },
     { href: '/about', label: 'About' },
     { href: '/security', label: 'Security' },
     { href: '/docs', label: 'Documentation' },
