@@ -17,7 +17,9 @@ test('generate never puts the secret or the password in the result', async () =>
     { createSecret: ok, copyToClipboard: async (v: string) => void (copied = v) }
   )
   const text = JSON.stringify(res)
-  assert.ok(copied && copied.length >= 12)
+  if (!copied || copied.length < 12) {
+    throw new Error('expected copyToClipboard to receive a generated password of at least 12 characters')
+  }
   assert.ok(!text.includes(copied), 'link password leaked into the tool result')
   assert.match(text, /clipboard/i)
 })
