@@ -71,13 +71,76 @@ export default function MCPPage() {
           <section>
             <h2 className={H2}>Install</h2>
             <div className={CARD}>
-              <p className="text-clouddrove-light mb-6">Requires Node 22 or newer.</p>
+              <p className="text-clouddrove-light mb-4">
+                Two ways to run this, and they are not equivalent.
+              </p>
+              <p className="text-clouddrove-light mb-3">
+                <strong className="text-clouddrove-dark">stdio</strong> runs{' '}
+                <code className="font-mono text-sm">npx -y @clouddrove/vanisec-mcp</code> on your own machine. You
+                get both tools, and encryption happens locally, so Vanisec only ever receives ciphertext. Requires
+                Node 22 or newer.
+              </p>
+              <p className="text-clouddrove-light mb-6">
+                <strong className="text-clouddrove-dark">Hosted</strong> points a client at{' '}
+                <code className="font-mono text-sm">https://vanisec.clouddrove.com/api/mcp</code>. It encrypts
+                server side and offers <code className="font-mono text-sm">vanisec_create_secret</code> only. Use it
+                only when the client cannot run a local process, and read the hosted endpoint section below first.
+              </p>
+
+              <h3 className={H3}>One server, four different top-level keys</h3>
+              <p className="text-clouddrove-light mb-4 text-sm">
+                Getting the key wrong is a silent no-op: the client starts, the server never loads, and nothing
+                tells you why. Each block below leads with its key.
+              </p>
+              <div className="overflow-x-auto mb-6">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b-2 border-clouddrove-light/30 text-left">
+                      <th className="py-2 pr-4 font-semibold text-clouddrove-dark">Client</th>
+                      <th className="py-2 pr-4 font-semibold text-clouddrove-dark">Config file</th>
+                      <th className="py-2 font-semibold text-clouddrove-dark">Top-level key</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-clouddrove-light">
+                    {[
+                      ['Claude Code', 'written by claude mcp add', 'not edited by hand'],
+                      ['Claude Desktop', 'claude_desktop_config.json', 'mcpServers'],
+                      ['Cursor', '.cursor/mcp.json, ~/.cursor/mcp.json', 'mcpServers'],
+                      ['VS Code with Copilot', '.vscode/mcp.json', 'servers'],
+                      ['Copilot Agent Host', '.mcp.json, ~/.copilot/mcp-config.json', 'mcpServers'],
+                      ['Copilot CLI', '~/.copilot/mcp-config.json, .mcp.json, .github/mcp.json', 'mcpServers'],
+                      ['Copilot cloud agent, code review', 'repository settings, not a file', 'mcpServers'],
+                      ['Copilot JetBrains, Visual Studio, Xcode, Eclipse', 'not documented, add through the UI', 'servers'],
+                      ['Codex', '~/.codex/config.toml, .codex/config.toml', '[mcp_servers.vanisec]'],
+                      ['Windsurf Cascade', '~/.codeium/windsurf/mcp_config.json', 'mcpServers'],
+                      ['Windsurf plugin for VS Code and JetBrains', '~/.codeium/mcp_config.json', 'mcpServers'],
+                      ['Devin Local', '~/.config/devin/mcp_config.json, .devin/mcp_config.json', 'mcpServers'],
+                      ['Zed', '~/.config/zed/settings.json', 'context_servers'],
+                    ].map(([client, file, key]) => (
+                      <tr key={client} className="border-b border-clouddrove-light/20 align-top">
+                        <td className="py-2 pr-4">{client}</td>
+                        <td className="py-2 pr-4 font-mono text-xs">{file}</td>
+                        <td className="py-2 font-mono text-xs">{key}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className={H3}>Claude Code</h3>
+              <pre className={PRE + ' mb-6'}>
+{`claude mcp add vanisec -- npx -y @clouddrove/vanisec-mcp`}
+              </pre>
 
               <h3 className={H3}>Claude Desktop</h3>
               <p className="text-clouddrove-light mb-3 text-sm">
-                Add this to <code className="font-mono">claude_desktop_config.json</code>:
+                Settings, Developer, Edit Config opens{' '}
+                <code className="font-mono">claude_desktop_config.json</code>, at{' '}
+                <code className="font-mono">~/Library/Application Support/Claude/claude_desktop_config.json</code> on
+                macOS and <code className="font-mono">%APPDATA%\Claude\claude_desktop_config.json</code> on Windows.
+                Key <code className="font-mono">mcpServers</code>.
               </p>
-              <pre className={PRE + ' mb-6'}>
+              <pre className={PRE + ' mb-2'}>
 {`{
   "mcpServers": {
     "vanisec": {
@@ -87,11 +150,374 @@ export default function MCPPage() {
   }
 }`}
               </pre>
+              <p className="text-clouddrove-light mb-6 text-xs">
+                Docs:{' '}
+                <a className="underline" href="https://modelcontextprotocol.io/docs/develop/connect-local-servers">
+                  modelcontextprotocol.io
+                </a>
+              </p>
 
-              <h3 className={H3}>Claude Code</h3>
-              <pre className={PRE}>
-{`claude mcp add vanisec -- npx -y @clouddrove/vanisec-mcp`}
+              <h3 className={H3}>Cursor</h3>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                <code className="font-mono">.cursor/mcp.json</code> for one project,{' '}
+                <code className="font-mono">~/.cursor/mcp.json</code> for every project, project config winning. Key{' '}
+                <code className="font-mono">mcpServers</code>. Turn the server on from Customize in the sidebar.
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`{
+  "mcpServers": {
+    "vanisec": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@clouddrove/vanisec-mcp"]
+    }
+  }
+}`}
               </pre>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                Cursor&apos;s field table marks <code className="font-mono">type</code> as required for stdio while
+                none of its examples include it. Including it is harmless. For the hosted endpoint, which is server
+                side encryption and <code className="font-mono">vanisec_create_secret</code> only, leave{' '}
+                <code className="font-mono">type</code> out, because Cursor documents no allowed values for it on a
+                remote server.
+              </p>
+              <pre className={PRE + ' mb-2'}>
+{`{
+  "mcpServers": {
+    "vanisec": {
+      "url": "https://vanisec.clouddrove.com/api/mcp"
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-6 text-xs">
+                Docs:{' '}
+                <a className="underline" href="https://cursor.com/docs/context/mcp">
+                  cursor.com/docs/context/mcp
+                </a>
+              </p>
+
+              <h3 className={H3}>VS Code with GitHub Copilot</h3>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                The key is <code className="font-mono">servers</code>.{' '}
+                <code className="font-mono">mcpServers</code> is not accepted in{' '}
+                <code className="font-mono">.vscode/mcp.json</code>. On a Copilot Business or Enterprise seat, read
+                the org policy note below first, because nothing works until an admin acts.{' '}
+                <code className="font-mono">.vscode/mcp.json</code> covers the workspace; for a user level file run{' '}
+                <code className="font-mono">MCP: Open User Configuration</code> from the command palette, since VS
+                Code publishes no path for it. <code className="font-mono">settings.json</code> is no longer the
+                mechanism.
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`{
+  "servers": {
+    "vanisec": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@clouddrove/vanisec-mcp"]
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                Hosted, which is server side encryption and{' '}
+                <code className="font-mono">vanisec_create_secret</code> only. Use{' '}
+                <code className="font-mono">type: &quot;http&quot;</code>, since{' '}
+                <code className="font-mono">sse</code> is legacy.
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`{
+  "servers": {
+    "vanisec": {
+      "type": "http",
+      "url": "https://vanisec.clouddrove.com/api/mcp"
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                From a terminal, where a <code className="font-mono">name</code> key appears that does not exist
+                inside <code className="font-mono">mcp.json</code>:
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`code --add-mcp "{\\"name\\":\\"vanisec\\",\\"command\\":\\"npx\\",\\"args\\":[\\"-y\\",\\"@clouddrove/vanisec-mcp\\"]}"`}
+              </pre>
+              <p className="text-clouddrove-light mb-2 text-sm">
+                Agent Host does not read <code className="font-mono">.vscode/mcp.json</code>. Its portable config is
+                a workspace <code className="font-mono">.mcp.json</code> or{' '}
+                <code className="font-mono">~/.copilot/mcp-config.json</code>, both keyed{' '}
+                <code className="font-mono">mcpServers</code>.
+              </p>
+              <p className="text-clouddrove-light mb-6 text-xs">
+                Docs:{' '}
+                <a
+                  className="underline"
+                  href="https://code.visualstudio.com/docs/agents/reference/mcp-configuration"
+                >
+                  code.visualstudio.com
+                </a>
+              </p>
+
+              <h3 className={H3}>GitHub Copilot, other surfaces</h3>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                <strong className="text-clouddrove-dark">Start here.</strong> The organization and enterprise policy{' '}
+                <code className="font-mono">MCP servers in Copilot</code> is disabled by default for Copilot
+                Business and Enterprise seats. Until an admin enables it, nothing below works in any Copilot
+                surface, including VS Code, and the failure does not explain itself. It does not apply to Free, Pro,
+                Pro+ or Max.{' '}
+                <a
+                  className="underline"
+                  href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies"
+                >
+                  Policy docs
+                </a>
+                .
+              </p>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                <strong className="text-clouddrove-dark">Cloud agent and code review.</strong> Configured under
+                repository Settings, Copilot, MCP servers, not in a file. Key{' '}
+                <code className="font-mono">mcpServers</code>, with{' '}
+                <code className="font-mono">tools</code> and <code className="font-mono">type</code> both required.
+                There is no local process here, so it is the hosted endpoint or nothing: server side encryption and{' '}
+                <code className="font-mono">vanisec_create_secret</code> only, on a surface where the secrets being
+                handled are rarely trivial. It also runs MCP tools without approval prompts, the opposite of every
+                interactive client, so allowlist the specific tool rather than{' '}
+                <code className="font-mono">&quot;*&quot;</code>. Naming the one tool we expose costs nothing and
+                keeps the allowlist from silently widening later.
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`{
+  "mcpServers": {
+    "vanisec": {
+      "type": "http",
+      "url": "https://vanisec.clouddrove.com/api/mcp",
+      "tools": ["vanisec_create_secret"]
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-6 text-sm">
+                GitHub states the cloud agent supports tools only, not resources or prompts. OAuth remote servers
+                are not supported, so use a static header if you need auth. Secrets must be Agents secrets named
+                with a <code className="font-mono">COPILOT_MCP_</code> prefix.{' '}
+                <a
+                  className="underline"
+                  href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/extend-coding-agent-with-mcp"
+                >
+                  Docs
+                </a>
+                .
+              </p>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                <strong className="text-clouddrove-dark">Copilot CLI.</strong> Key{' '}
+                <code className="font-mono">mcpServers</code>, in{' '}
+                <code className="font-mono">~/.copilot/mcp-config.json</code>,{' '}
+                <code className="font-mono">.mcp.json</code> or{' '}
+                <code className="font-mono">.github/mcp.json</code>. It does not read{' '}
+                <code className="font-mono">.vscode/mcp.json</code> and reports an unsupported top-level key{' '}
+                <code className="font-mono">servers</code> if you point it there. Every MCP tool call needs explicit
+                permission, even read-only ones, which is the opposite of the cloud agent.
+              </p>
+              <pre className={PRE + ' mb-2'}>
+{`jq '{mcpServers: .servers}' .vscode/mcp.json > .mcp.json
+
+copilot mcp add vanisec -- npx -y @clouddrove/vanisec-mcp
+copilot mcp add --transport http vanisec https://vanisec.clouddrove.com/api/mcp`}
+              </pre>
+              <p className="text-clouddrove-light mb-6 text-xs">
+                The last line is the hosted endpoint: server side encryption,{' '}
+                <code className="font-mono">vanisec_create_secret</code> only.{' '}
+                <a
+                  className="underline"
+                  href="https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers"
+                >
+                  Docs
+                </a>
+                .
+              </p>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                <strong className="text-clouddrove-dark">JetBrains, Visual Studio, Xcode, Eclipse.</strong> All
+                supported, all keyed <code className="font-mono">servers</code>. GitHub never publishes a path for
+                these files, saying only that it varies by IDE, so add the server through the UI. In JetBrains:
+                Copilot icon, Open Chat, Agent mode, tools icon, Add MCP Tools. Minimum versions: JetBrains plugin
+                1.5.53 or newer for remote servers, Visual Studio 2022 17.14, Xcode 0.41.0, Eclipse plug-in 0.10.0.
+                The block below is the hosted endpoint, so server side encryption and{' '}
+                <code className="font-mono">vanisec_create_secret</code> only. Install the package with stdio
+                instead if the IDE can run a local process.
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`{
+  "servers": {
+    "vanisec": {
+      "url": "https://vanisec.clouddrove.com/api/mcp"
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                If you need to send a header, JetBrains, Xcode and Eclipse nest it under{' '}
+                <code className="font-mono">requestInit</code>, not a top level{' '}
+                <code className="font-mono">headers</code> key. Visual Studio uses a plain{' '}
+                <code className="font-mono">url</code> with OAuth instead.
+              </p>
+              <pre className={PRE + ' mb-2'}>
+{`{
+  "servers": {
+    "vanisec": {
+      "url": "https://vanisec.clouddrove.com/api/mcp",
+      "requestInit": {
+        "headers": { "Authorization": "Bearer TOKEN" }
+      }
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-6 text-xs">
+                Docs:{' '}
+                <a
+                  className="underline"
+                  href="https://docs.github.com/en/copilot/how-tos/context/use-mcp/extend-copilot-chat-with-mcp"
+                >
+                  docs.github.com
+                </a>
+                . github.com web chat and Copilot Spaces are not supported at all: both use a preconfigured GitHub
+                MCP server that cannot be changed.
+              </p>
+
+              <h3 className={H3}>Codex</h3>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                <code className="font-mono">~/.codex/config.toml</code> for you,{' '}
+                <code className="font-mono">.codex/config.toml</code> for a project, and the project file is read
+                only when the project is trusted. The table name is{' '}
+                <code className="font-mono">[mcp_servers.vanisec]</code>, snake_case, not{' '}
+                <code className="font-mono">mcpServers</code>. The IDE extension reads the same file.
+              </p>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                <strong className="text-clouddrove-dark">
+                  Set <code className="font-mono">startup_timeout_sec = 30</code>.
+                </strong>{' '}
+                The default is 10 seconds and an <code className="font-mono">npx -y</code> cold start routinely
+                exceeds it. The symptom is the server failing to start with no useful explanation, and it is the
+                single most common way this install goes wrong.
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`[mcp_servers.vanisec]
+command = "npx"
+args = ["-y", "@clouddrove/vanisec-mcp"]
+startup_timeout_sec = 30`}
+              </pre>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                Hosted, which is server side encryption and{' '}
+                <code className="font-mono">vanisec_create_secret</code> only:
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`[mcp_servers.vanisec]
+url = "https://vanisec.clouddrove.com/api/mcp"
+startup_timeout_sec = 30`}
+              </pre>
+              <pre className={PRE + ' mb-2'}>
+{`codex mcp add vanisec -- npx -y @clouddrove/vanisec-mcp
+codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
+              </pre>
+              <p className="text-clouddrove-light mb-6 text-xs">
+                Inline <code className="font-mono">bearer_token</code> is gone, replaced by{' '}
+                <code className="font-mono">bearer_token_env_var</code>, and{' '}
+                <code className="font-mono">experimental_use_rmcp_client</code> is unnecessary now that streamable
+                HTTP is first-class. Docs:{' '}
+                <a className="underline" href="https://learn.chatgpt.com/docs/codex/cli">
+                  learn.chatgpt.com/docs/codex/cli
+                </a>
+              </p>
+
+              <h3 className={H3}>Windsurf and Devin</h3>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                The Devin rebrand split the config in two, so the file depends on the surface. Legacy Cascade uses{' '}
+                <code className="font-mono">~/.codeium/windsurf/mcp_config.json</code>, the Windsurf plugin for VS
+                Code and JetBrains uses <code className="font-mono">~/.codeium/mcp_config.json</code>, and Devin
+                Local uses <code className="font-mono">~/.config/devin/mcp_config.json</code> or{' '}
+                <code className="font-mono">.devin/mcp_config.json</code>. All four use{' '}
+                <code className="font-mono">mcpServers</code>, and stdio is identical in all of them.
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`{
+  "mcpServers": {
+    "vanisec": {
+      "command": "npx",
+      "args": ["-y", "@clouddrove/vanisec-mcp"]
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                The remote form differs, and both are the hosted endpoint: server side encryption,{' '}
+                <code className="font-mono">vanisec_create_secret</code> only. Cascade uses{' '}
+                <code className="font-mono">serverUrl</code> and takes no transport key. Devin Local uses{' '}
+                <code className="font-mono">url</code> with an optional{' '}
+                <code className="font-mono">transport</code>, defaulting to{' '}
+                <code className="font-mono">http</code>.
+              </p>
+              <pre className={PRE + ' mb-2'}>
+{`{
+  "mcpServers": {
+    "vanisec": { "serverUrl": "https://vanisec.clouddrove.com/api/mcp" }
+  }
+}
+
+{
+  "mcpServers": {
+    "vanisec": {
+      "url": "https://vanisec.clouddrove.com/api/mcp",
+      "transport": "http"
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-6 text-xs">
+                Cascade caps out at 100 tools across all servers. Docs:{' '}
+                <a className="underline" href="https://docs.devin.ai/work-with-devin/mcp">
+                  docs.devin.ai
+                </a>
+              </p>
+
+              <h3 className={H3}>Zed</h3>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                <code className="font-mono">~/.config/zed/settings.json</code>, key{' '}
+                <code className="font-mono">context_servers</code>. Add it from Settings, AI, MCP Servers, Add
+                Server. The old <code className="font-mono">&quot;source&quot;: &quot;custom&quot;</code>{' '}
+                discriminator is gone, and a project level{' '}
+                <code className="font-mono">.zed/settings.json</code> for context servers is not documented, so use
+                the user file.
+              </p>
+              <pre className={PRE + ' mb-3'}>
+{`{
+  "context_servers": {
+    "vanisec": {
+      "command": "npx",
+      "args": ["-y", "@clouddrove/vanisec-mcp"],
+      "env": {}
+    }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-3 text-sm">
+                Hosted, which is server side encryption and{' '}
+                <code className="font-mono">vanisec_create_secret</code> only. Zed accepts only{' '}
+                <code className="font-mono">url</code> and <code className="font-mono">headers</code> on a remote
+                server.
+              </p>
+              <pre className={PRE + ' mb-2'}>
+{`{
+  "context_servers": {
+    "vanisec": { "url": "https://vanisec.clouddrove.com/api/mcp" }
+  }
+}`}
+              </pre>
+              <p className="text-clouddrove-light text-xs">
+                Tool permissions are keyed <code className="font-mono">mcp:vanisec:&lt;tool_name&gt;</code>. Docs:{' '}
+                <a className="underline" href="https://zed.dev/docs/ai/mcp">
+                  zed.dev/docs/ai/mcp
+                </a>
+              </p>
             </div>
           </section>
 
@@ -150,6 +576,80 @@ export default function MCPPage() {
           </section>
 
           <section>
+            <h2 className={H2}>Prompts</h2>
+            <div className={CARD}>
+              <p className="text-clouddrove-light mb-4">
+                Two prompts ship with the server, for the cases where picking the wrong tool is the actual risk.{' '}
+                <code className="font-mono text-sm">share-credential</code> points at{' '}
+                <code className="font-mono text-sm">vanisec_generate_secret</code> when the credential does not
+                exist yet and falls back to <code className="font-mono text-sm">vanisec_create_secret</code> only
+                when it already exists elsewhere.{' '}
+                <code className="font-mono text-sm">rotate-and-share</code> adds the ordering: hand over the
+                replacement, wait for the recipient to confirm it works, revoke the old value only after that.
+              </p>
+              <h3 className={H3}>Which clients can reach them</h3>
+              <p className="text-clouddrove-light mb-4 text-sm">
+                Mostly none of them. Several vendors declare prompt support in a capability table and then document
+                no way for a user to invoke one. Rows below come from each vendor&apos;s own docs, checked
+                2026-08-20, and cover the clients in the install matrix above.
+              </p>
+              <div className="overflow-x-auto mb-4">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b-2 border-clouddrove-light/30 text-left">
+                      <th className="py-2 pr-4 font-semibold text-clouddrove-dark">Client</th>
+                      <th className="py-2 pr-4 font-semibold text-clouddrove-dark">Prompts</th>
+                      <th className="py-2 font-semibold text-clouddrove-dark">How you reach them</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-clouddrove-light">
+                    {[
+                      [
+                        'VS Code with Copilot',
+                        'yes',
+                        '/mcp.vanisec.share-credential, /mcp.vanisec.rotate-and-share',
+                      ],
+                      ['Cursor', 'declared supported', 'no documented surface'],
+                      ['Windsurf, Devin', 'declared supported', 'no documented surface'],
+                      ['Zed', 'declared supported', 'no documented surface'],
+                      [
+                        'Copilot cloud agent, code review',
+                        'no',
+                        'GitHub documents tools only, explicitly not prompts',
+                      ],
+                      [
+                        'Copilot JetBrains, Visual Studio, Xcode, Eclipse, CLI',
+                        'not documented',
+                        '',
+                      ],
+                      ['Codex', 'not documented', 'reads the server instructions field instead'],
+                    ].map(([client, support, how]) => (
+                      <tr key={client} className="border-b border-clouddrove-light/20 align-top">
+                        <td className="py-2 pr-4">{client}</td>
+                        <td className="py-2 pr-4">{support}</td>
+                        <td className="py-2 font-mono text-xs">{how}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-clouddrove-light mb-4 text-sm">
+                VS Code is the only client with a documented, user-reachable prompt surface. Declared supported
+                means the vendor lists prompts as a supported MCP feature but publishes no invocation surface, so
+                treat those three as unreachable until they document one.
+              </p>
+              <p className="text-clouddrove-light text-sm">
+                That is why the two tool descriptions repeat the guidance the prompts give: it is the only channel
+                every client reads. Tracking issue{' '}
+                <a className="underline" href="https://github.com/clouddrove/vanisec/issues/112">
+                  #112
+                </a>
+                .
+              </p>
+            </div>
+          </section>
+
+          <section>
             <h2 className={H2}>Hosted endpoint</h2>
             <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <p className="text-clouddrove-light mb-4">
@@ -172,6 +672,11 @@ export default function MCPPage() {
                 server&apos;s, so the password would have to travel back in the response and into your
                 conversation. Offering it here would defeat the reason it exists.
               </p>
+              <p className="text-clouddrove-light mb-4">
+                Because of both of those, the two forms are not interchangeable. Prefer stdio wherever it can run,
+                and pick the hosted endpoint only for a client that has no local process at all, such as
+                Copilot&apos;s cloud agent, knowing what you are giving up.
+              </p>
               <pre className={PRE}>
 {`{
   "mcpServers": {
@@ -181,6 +686,20 @@ export default function MCPPage() {
   }
 }`}
               </pre>
+              <p className="text-clouddrove-light mt-4 text-sm">
+                That block uses <code className="font-mono">mcpServers</code>. Four different top-level keys are in
+                play across clients, so check the install matrix above before copying it anywhere.
+              </p>
+              <p className="text-clouddrove-light mt-4 text-sm">
+                The remote form is also newer and less exercised than stdio. The endpoint pins MCP protocol
+                revision <code className="font-mono">2024-11-05</code>, two revisions behind the current{' '}
+                <code className="font-mono">2026-07-28</code> (tracking issue{' '}
+                <a className="underline" href="https://github.com/clouddrove/vanisec/issues/111">
+                  #111
+                </a>
+                ). Each remote block above follows the shape its vendor documents. We have not tested every client
+                against the endpoint.
+              </p>
               <p className="text-clouddrove-light mt-4 text-sm">
                 Rate limited to 20 calls per 10 minutes per IP, since server side key derivation is more expensive
                 than the browser path.

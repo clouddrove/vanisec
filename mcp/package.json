@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "vanisec-mcp": "./dist/index.js"
+    "vanisec-mcp": "dist/index.js"
   },
   "files": [
     "dist",

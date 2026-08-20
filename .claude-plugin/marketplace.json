@@ -1,0 +1,15 @@
+{
+  "name": "vanisec",
+  "owner": {
+    "name": "CloudDrove",
+    "email": "hello@clouddrove.com",
+    "url": "https://github.com/clouddrove"
+  },
+  "plugins": [
+    {
+      "name": "vanisec",
+      "source": "./",
+      "description": "One-time secret sharing skills plus the Vanisec MCP server."
+    }
+  ]
+}

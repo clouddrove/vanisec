@@ -70,6 +70,7 @@ Vanisec provides a production-grade, open-source solution for ephemeral secret s
   - [Docker Compose](#docker-compose)
   - [Local Development](#local-development)
   - [Kubernetes Deployment](#kubernetes-deployment)
+- [Use it from your AI client](#use-it-from-your-ai-client)
 - [Architecture](#architecture)
 - [Configuration](#configuration)
 - [Development](#development)
@@ -301,6 +302,59 @@ env:
   REDIS_URL: "redis://vanisec-redis:6379/3"
   REDIS_PASSWORD: "secure-redis-password"
 ```
+
+## Use it from your AI client
+
+Handing a credential to someone while working in an AI client usually means
+pasting it into the conversation, where the transcript keeps it. Vanisec ships an
+MCP server so you can create a one-time link instead, and a set of rules that
+tell the model which of the two tools to reach for.
+
+### The MCP server
+
+```bash
+claude mcp add vanisec -- npx -y @clouddrove/vanisec-mcp
+```
+
+Two tools. `vanisec_generate_secret` creates the value on your own machine and
+puts the link password on your clipboard, so neither ever enters the
+conversation. `vanisec_create_secret` takes a secret you already have, which
+means both it and the password stay in the transcript. Prefer the first wherever
+the secret does not exist yet.
+
+There is deliberately no retrieval tool. A retrieved secret would land in the
+transcript, and a one-time secret would stop being one-time in any useful sense.
+
+Requires Node 22 or newer. A hosted endpoint is also available at
+`/api/mcp` for clients that can only use remote servers, but it encrypts server
+side and is not zero-knowledge, so it is a fallback rather than the default.
+
+Install instructions for Cursor, VS Code with Copilot, the Copilot CLI and cloud
+agent, Codex, Windsurf, Zed and the JetBrains family are in
+[mcp/README.md](mcp/README.md). The top-level configuration key differs between
+clients and a wrong one fails silently, so use the block for your client rather
+than adapting another.
+
+### The rules
+
+The guidance lives in [skills/](skills/) as Agent Skills, which Claude Code,
+Cursor and Codex all load, since they share the same `SKILL.md` format.
+
+For clients that read something else, [integrations/](integrations/) carries the
+same rules as Cursor rules, GitHub Copilot instructions and prompt files, and
+`AGENTS.md`. Those files are meant to be copied into your own repository. They
+are not applied to Vanisec itself.
+
+### Everything at once
+
+```
+/plugin marketplace add clouddrove/vanisec
+/plugin install vanisec@vanisec
+```
+
+That installs the MCP server and the skills together in Claude Code.
+
+Browse it all at [vanisec.clouddrove.com/integrations](https://vanisec.clouddrove.com/integrations).
 
 ## Architecture
 

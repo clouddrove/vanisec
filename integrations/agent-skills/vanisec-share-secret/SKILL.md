@@ -1,0 +1,1 @@
+../../../skills/vanisec-share-secret/SKILL.md

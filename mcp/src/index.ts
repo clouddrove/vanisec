@@ -7,6 +7,12 @@ import { createSecret as realCreateSecret, baseUrl } from './vanisec.js'
 import { generateSecret, generatePassword, GENERATION_RULES, type SecretType } from './generate.js'
 import { copyToClipboard as realCopy, inlinePasswordAllowed } from './clipboard.js'
 import { validateExpiry } from './validate.js'
+import {
+  sharePrompt,
+  rotatePrompt,
+  SHARE_CREDENTIAL_ARGS,
+  ROTATE_AND_SHARE_ARGS,
+} from './prompts.js'
 
 type ToolResult = { content: { type: 'text'; text: string }[]; isError?: boolean }
 
@@ -61,7 +67,9 @@ export async function handleGenerate(
       : `\n\nThe link password is on your clipboard. It is not shown here and is not in this conversation.`
 
     return text(
-      `Generated a ${args.type} and shared it as a one-time link.\n\n${url}\n\nExpires ${expiresAt}.` +
+      `Generated a ${args.type} and shared it as a one-time link.\n\n${url}\n\nExpires ${expiresAt}. ` +
+        `Opening it once destroys the secret. Send the link and its password through different channels; ` +
+        `together they grant access.` +
         tail
     )
   } catch (e) {
@@ -69,8 +77,33 @@ export async function handleGenerate(
   }
 }
 
+// Server-wide guidance, returned at initialization and treated by clients such
+// as Codex as standing instructions for the whole session.
+//
+// This carries the same rule as the prompts, because prompts turn out to be
+// close to unreachable in practice: only VS Code with Copilot exposes a way to
+// invoke one, the Copilot cloud agents state outright that they support tools
+// only, and the Codex docs never mention the primitive. Instructions and tool
+// descriptions are the surfaces that actually reach a model.
+//
+// Codex advises that the first 512 characters be self-contained, since that is
+// what a client is guaranteed to keep. The first four entries below are 505
+// characters together and hold every rule that changes what the model does; the
+// rest is detail that can be truncated without making the guidance wrong.
+const INSTRUCTIONS = [
+  'If the secret does not exist yet, use vanisec_generate_secret. It creates the value locally and puts the link password on the system clipboard, so neither enters the conversation.',
+  'Use vanisec_create_secret only when the secret already exists and you have it. Anything passed to it stays in the transcript for good.',
+  'Send the link and its password to the recipient through different channels; together they grant access.',
+  'Opening the link once destroys the secret. There is deliberately no retrieval tool.',
+  // Everything below this point is outside the 512-character budget.
+  'Expiry is 1, 6, 24, 72 or 168 hours and defaults to 24. Encryption happens on this machine, so Vanisec only ever receives ciphertext.',
+  'vanisec_generate_secret needs a working clipboard. Without one it fails rather than printing the password.',
+  'Do not read a generated value or a link password back to the user, and do not ask for a secret to be pasted in when it can be generated instead.',
+].join('\n\n')
+
 export function buildServer(): McpServer {
-  const server = new McpServer({ name: 'vanisec', version: '0.1.0' })
+  // instructions is a server option, not part of the implementation object.
+  const server = new McpServer({ name: 'vanisec', version: '0.1.0' }, { instructions: INSTRUCTIONS })
 
   server.registerTool(
     'vanisec_create_secret',
@@ -100,7 +133,8 @@ export function buildServer(): McpServer {
         'Generates a password, token or hex string on this machine, shares it as a one-time Vanisec link, and puts ' +
         'the link password on the system clipboard. Neither the generated value nor the password appears in this ' +
         'conversation, so prefer this over vanisec_create_secret whenever the secret does not already exist. ' +
-        'Requires a clipboard; it fails rather than revealing the password if none is available.',
+        'Requires a clipboard; it fails rather than revealing the password if none is available. The link and ' +
+        'the clipboard password must reach the recipient through different channels.',
       inputSchema: {
         type: z.enum(['password', 'token', 'hex']).describe('What kind of credential to generate'),
         length: z
@@ -118,6 +152,36 @@ export function buildServer(): McpServer {
       },
     },
     (args) => handleGenerate(args)
+  )
+
+  // Prompt arguments are strings on the wire, so every schema here is a string
+  // schema rather than the richer types the tool inputSchemas use.
+  server.registerPrompt(
+    'share-credential',
+    {
+      title: 'Share a credential',
+      description:
+        'Works out which Vanisec tool fits the situation, and what to do with the link and its password afterwards.',
+      argsSchema: {
+        what: z.string().optional().describe(SHARE_CREDENTIAL_ARGS.what),
+        alreadyExists: z.string().optional().describe(SHARE_CREDENTIAL_ARGS.alreadyExists),
+      },
+    },
+    (args) => sharePrompt(args)
+  )
+
+  server.registerPrompt(
+    'rotate-and-share',
+    {
+      title: 'Rotate a credential and hand the new one over',
+      description:
+        'Replaces an existing credential and gets the new one to its recipient, in an order that never leaves the recipient without a working credential.',
+      argsSchema: {
+        credential: z.string().min(1).describe(ROTATE_AND_SHARE_ARGS.credential),
+        recipient: z.string().optional().describe(ROTATE_AND_SHARE_ARGS.recipient),
+      },
+    },
+    (args) => rotatePrompt(args)
   )
 
   return server
