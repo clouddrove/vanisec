@@ -42,16 +42,18 @@ Publishing runs in CI, triggered by a tag. There is no manual `npm publish`.
 3. Tag the commit and push the tag:
 
 ```
-git tag mcp-v0.2.0
-git push origin mcp-v0.2.0
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
-The tag prefix is `mcp-v` rather than `v`, because plain `v*` tags build the
-container image for the site and a site release should not push a package to
-the registry.
+The same tag also builds the container image, so one tag releases whatever is
+ready. The site and this package carry separate version numbers, so a tag only
+publishes the package when it matches `mcp/package.json`. A site release tagged
+`v2.1.0` runs the workflow, finds no match, and stops before publishing rather
+than failing.
 
-The workflow refuses to publish if the tag disagrees with `package.json`, or if
-that version already exists on the registry, since npm versions are immutable.
+The workflow also refuses a version that already exists on the registry, since
+npm versions are immutable.
 It typechecks, tests and builds before publishing, and attaches a provenance
 attestation so the registry records which workflow and commit produced the
 tarball.

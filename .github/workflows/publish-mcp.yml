@@ -1,12 +1,16 @@
 name: Publish MCP Package
 
-# The npm package is versioned separately from the site, so it gets its own tag
-# prefix. build-and-push.yml already claims 'v*' for container images, and a
-# site release should not push a package to the registry.
+# Releases are tagged v<version>. build-and-push.yml listens to the same tags
+# for container images, so one tag releases whatever is ready.
+#
+# The site and the package carry separate version numbers, so a tag is only a
+# package release when it matches mcp/package.json. A site release tagged
+# v2.1.0 runs this workflow, finds no match, and stops before publishing
+# instead of failing.
 on:
   push:
     tags:
-      - 'mcp-v*'
+      - 'v*'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -40,24 +44,32 @@ jobs:
         working-directory: mcp
         run: npm ci
 
-      # A mistyped tag must not publish the wrong number. The tag is the
-      # release; package.json is what actually gets published, so they have to
-      # agree before anything leaves the runner.
-      - name: Check the tag matches mcp/package.json
-        if: startsWith(github.ref, 'refs/tags/')
+      # Decides whether this tag is a package release at all. The site and the
+      # package version independently, so v2.1.0 releasing the site must not
+      # try, and fail, to publish the package as 2.1.0.
+      - name: Is this tag a package release?
+        id: gate
         working-directory: mcp
         run: |
-          TAG="${GITHUB_REF_NAME#mcp-v}"
           PKG="$(node -p "require('./package.json').version")"
+          if [ "${{ github.event_name }}" != "push" ]; then
+            echo "manual run, treating $PKG as the candidate"
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          TAG="${GITHUB_REF_NAME#v}"
           echo "tag=$TAG package.json=$PKG"
-          if [ "$TAG" != "$PKG" ]; then
-            echo "::error::Tag mcp-v$TAG does not match mcp/package.json $PKG. Fix one of them and retag."
-            exit 1
+          if [ "$TAG" = "$PKG" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Tag v$TAG is not a release of @clouddrove/vanisec-mcp, which is at $PKG. Nothing to publish."
           fi
 
       # Refuse to republish an existing version rather than failing halfway
       # through with a registry error. npm versions are immutable.
       - name: Check the version is not already published
+        if: steps.gate.outputs.publish == 'true'
         working-directory: mcp
         run: |
           PKG="$(node -p "require('./package.json').version")"
@@ -67,25 +79,29 @@ jobs:
           fi
 
       - name: Typecheck
+        if: steps.gate.outputs.publish == 'true'
         working-directory: mcp
         run: npm run typecheck
 
       # prepublishOnly runs build and test again, but this repo should not
       # depend on that hook staying correct to know whether the package works.
       - name: Test
+        if: steps.gate.outputs.publish == 'true'
         working-directory: mcp
         run: npm test
 
       - name: Build
+        if: steps.gate.outputs.publish == 'true'
         working-directory: mcp
         run: npm run build
 
       - name: Show what would ship
+        if: steps.gate.outputs.publish == 'true'
         working-directory: mcp
         run: npm pack --dry-run
 
       - name: Publish to npm
-        if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+        if: ${{ steps.gate.outputs.publish == 'true' && (github.event_name == 'push' || inputs.dry_run == false) }}
         working-directory: mcp
         run: npm publish --access public --provenance
         env:
