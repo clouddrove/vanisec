@@ -530,7 +530,7 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                 exists somewhere, such as an API key you are handing off.
               </p>
               <pre className={PRE + ' mb-3'}>
-{`vanisec_create_secret(text, password, expiresIn?)`}
+{`vanisec_create_secret(text, password, expiresIn?, pairingCode?)`}
               </pre>
               <ul className="space-y-1 text-clouddrove-light mb-6 text-sm">
                 <li>
@@ -541,6 +541,11 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                 </li>
                 <li>
                   <code className="font-mono">expiresIn</code>: hours, one of 1, 6, 24, 72, 168, default 24
+                </li>
+                <li>
+                  <code className="font-mono">pairingCode</code>: also return a short code to type at{' '}
+                  <code className="font-mono">/c</code> on another device, such as your phone. Lasts five
+                  minutes, works once, and the password is still needed. Off by default
                 </li>
               </ul>
               <p className="text-clouddrove-light mb-6 text-sm italic">
@@ -554,7 +559,7 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                 hand-offs.
               </p>
               <pre className={PRE + ' mb-3'}>
-{`vanisec_generate_secret(type, length?, expiresIn?)`}
+{`vanisec_generate_secret(type, length?, expiresIn?, pairingCode?)`}
               </pre>
               <ul className="space-y-1 text-clouddrove-light mb-6 text-sm">
                 <li>
@@ -568,9 +573,14 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                 <li>
                   <code className="font-mono">expiresIn</code>: hours, one of 1, 6, 24, 72, 168, default 24
                 </li>
+                <li>
+                  <code className="font-mono">pairingCode</code>: also return a short code to type at{' '}
+                  <code className="font-mono">/c</code> on another device, such as your phone. Lasts five
+                  minutes, works once, and the password is still needed. Off by default
+                </li>
               </ul>
               <p className="text-clouddrove-light text-sm italic">
-                Example prompt: &quot;Generate a 32 character token and give me a one-time link.&quot;
+                Example prompt: &quot;Generate a 32 character token and put a pairing code on screen for my phone.&quot;
               </p>
             </div>
           </section>

@@ -66,3 +66,12 @@ test('the not zero-knowledge caveat survives somewhere in the hosted instruction
     'naming the safer path is useless without saying how to install it'
   )
 })
+
+test('the hosted endpoint explains pairing codes, outside the kept prefix', async () => {
+  const instructions = await hostedInstructions()
+  assert.match(instructions, /pairingCode/, 'the option is invisible unless the instructions name it')
+  assert.ok(
+    instructions.indexOf('pairingCode') > BUDGET,
+    'pairing is a convenience and must not crowd out the rules that change what a model does'
+  )
+})

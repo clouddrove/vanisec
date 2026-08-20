@@ -497,6 +497,7 @@ Docs: https://zed.dev/docs/ai/mcp
 | `text` | yes | The secret to share. |
 | `password` | yes | Protects the link. Send it to the recipient separately. |
 | `expiresIn` | no | Hours. One of 1, 6, 24, 72, 168. Defaults to 24. |
+| `pairingCode` | no | Also return a short code to type at `/c` on another device, for example a phone. Lasts five minutes, used once, and the password is still needed. Off by default: it is the wrong tool for a recipient who will read your message later. |
 
 ### `vanisec_generate_secret`
 
@@ -505,6 +506,7 @@ Docs: https://zed.dev/docs/ai/mcp
 | `type` | yes | `password`, `token` or `hex`. |
 | `length` | no | See the table below. |
 | `expiresIn` | no | As above. |
+| `pairingCode` | no | As above. |
 
 | `type` | Default length | Allowed range |
 |--------|----------------|---------------|

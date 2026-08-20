@@ -495,3 +495,61 @@ test('tools/call is capped per IP and answers 429 with Retry-After', async () =>
   const body = await jsonBody<RpcError>(response)
   assert.equal(body.error.code, -32000)
 })
+
+// --- pairing codes ---
+//
+// The hosted endpoint mints in-process rather than over HTTP, but the rule is
+// the same one the published package follows: the secret is already live and
+// single-use by the time a code is requested, so nothing about pairing may cost
+// the caller the url.
+
+type ToolCall = { result: { content: { type: string; text: string }[]; isError?: boolean } }
+
+async function callCreate(args: Record<string, unknown>) {
+  const { body } = await rpc<ToolCall>('tools/call', {
+    name: 'vanisec_create_secret',
+    arguments: args,
+  })
+  return body.result
+}
+
+test('the create tool advertises pairingCode as an optional boolean', async () => {
+  const { body } = await rpc<{ result: { tools: { name: string; inputSchema: any }[] } }>(
+    'tools/list'
+  )
+  const create = body.result.tools.find((t) => t.name === 'vanisec_create_secret')!
+  assert.equal(create.inputSchema.properties.pairingCode.type, 'boolean')
+  assert.ok(
+    !create.inputSchema.required.includes('pairingCode'),
+    'pairing is a convenience and must not become a required argument'
+  )
+})
+
+test('a create with pairingCode returns a typeable code and where to type it', async () => {
+  const result = await callCreate({ text: 'x', password: 'pw', pairingCode: true })
+  assert.ok(!result.isError)
+  assert.match(result.content[0].text, /Pairing code: [0-9A-Z]{4}-[0-9A-Z]{4}/)
+  assert.match(result.content[0].text, /5 minutes/)
+  assert.match(result.content[0].text, /\/c\b/)
+})
+
+test('a create without pairingCode says nothing about pairing', async () => {
+  const result = await callCreate({ text: 'x', password: 'pw' })
+  assert.ok(!/pairing code/i.test(result.content[0].text))
+})
+
+test('the pairing code from a create actually redeems to that secret', async () => {
+  const result = await callCreate({ text: 'x', password: 'pw', pairingCode: true })
+  const code = /Pairing code: ([0-9A-Z-]+)/.exec(result.content[0].text)![1]
+  const url = /\/secret\/([0-9a-f-]+)/.exec(result.content[0].text)![1]
+
+  const { redeemCode } = await import('@/lib/pairing')
+  assert.equal(await redeemCode(code), url, 'the code shown must open the secret it was shown with')
+})
+
+test('a non-boolean pairingCode is rejected before anything is stored', async () => {
+  const result = await callCreate({ text: 'x', password: 'pw', pairingCode: 'yes' })
+  assert.ok(result.isError)
+  assert.match(result.content[0].text, /pairingCode/)
+  assert.equal((await getRedisClient().keys('secret:*')).length, 0)
+})

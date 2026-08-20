@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSecret } from '@/lib/secrets'
+import { mintCode } from '@/lib/pairing'
+import { formatCode } from '@/lib/pairingCode'
 import { hashVerifier } from '@/lib/serverCrypto'
 import { encryptWithPassword } from '@/lib/clientCrypto'
 import { rateLimit, clientIp } from '@/lib/rateLimit'
@@ -178,6 +180,13 @@ const CREATE_TOOL = {
         type: 'number',
         description: `Hours until expiry. One of ${ALLOWED_EXPIRY_HOURS.join(', ')}. Defaults to ${DEFAULT_EXPIRY_HOURS}.`,
       },
+      pairingCode: {
+        type: 'boolean',
+        description:
+          'Also return a short pairing code the recipient can type by hand on another device, for example ' +
+          'moving a credential to a phone. The code lasts five minutes and is used once. Leave this off when ' +
+          'the recipient will read the message later.',
+      },
     },
     required: ['text', 'password'],
     additionalProperties: false,
@@ -249,6 +258,9 @@ const INSTRUCTIONS = [
     'once destroys the secret.',
   // Everything below this point is outside the 512-character budget.
   'There is deliberately no retrieval tool. Expiry is 1, 6, 24, 72 or 168 hours and defaults to 24.',
+  'Set pairingCode when the secret is going to another device the user is holding, such as their phone. It ' +
+    'returns a short code to type at /c, lasts five minutes, and is wrong for a recipient who will read the ' +
+    'message later.',
   "vanisec_generate_secret cannot run over HTTP, because the clipboard would be the server's. Install the " +
     'local package with npx -y @clouddrove/vanisec-mcp. It encrypts on your own machine, so Vanisec only ' +
     'ever receives ciphertext; this hosted endpoint encrypts server side and is not zero-knowledge, so it ' +
@@ -339,6 +351,9 @@ async function handleCreate(
   if (typeof expiresIn !== 'number' || !ALLOWED_EXPIRY_HOURS.includes(expiresIn)) {
     return toolText(`expiresIn must be one of ${ALLOWED_EXPIRY_HOURS.join(', ')} hours`, true)
   }
+  if (args.pairingCode !== undefined && typeof args.pairingCode !== 'boolean') {
+    return toolText('pairingCode must be a boolean', true)
+  }
 
   // The same envelope the browser builds, so a secret created here renders on
   // the website exactly like any other.
@@ -359,9 +374,27 @@ async function handleCreate(
   const url = `${baseUrl(request)}/secret/${id}`
   const expiresAt = new Date(Date.now() + expiresIn * 3600_000).toISOString()
 
+  // Best effort, and deliberately so. The secret is already live and
+  // single-use, so failing the whole call over a missing convenience would
+  // orphan it: stored, unreadable a second time, with nobody holding the link.
+  let pairing = ''
+  if (args.pairingCode === true) {
+    try {
+      const minted = await mintCode(id)
+      if (minted) {
+        pairing =
+          `\n\nPairing code: ${formatCode(minted.code)} (valid ${Math.round(minted.expiresIn / 60)} minutes)\n` +
+          `Enter it at ${baseUrl(request)}/c on the other device. It works once, and the password is still needed.`
+      }
+    } catch {
+      // Fall through with no code.
+    }
+  }
+
   return toolText(
     `One-time link created.\n\n${url}\n\nExpires ${expiresAt}. Opening it once destroys the secret. ` +
-      `The recipient needs the password you chose; send it through a different channel.`
+      `The recipient needs the password you chose; send it through a different channel.` +
+      pairing
   )
 }
 
