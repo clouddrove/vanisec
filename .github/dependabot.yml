@@ -30,6 +30,18 @@ updates:
       # Ignore major version updates (review manually)
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      # eslint must stay on 9.x. eslint-config-next 16 declares a peer of
+      # eslint >=9.0.0 but pulls eslint-plugin-react, whose own peer range
+      # stops at ^9.7. Under eslint 10 that plugin crashes on the removed
+      # legacy context API:
+      #   TypeError: Error while loading rule 'react/display-name':
+      #   contextOrFilename.getFilename is not a function
+      # 7.37.5 is the latest release, so there is no working eslint 10 path
+      # yet. Listed explicitly, and not only under the wildcard above, so the
+      # constraint survives if that rule is ever relaxed. Revisit once
+      # eslint-plugin-react ships eslint 10 support.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
