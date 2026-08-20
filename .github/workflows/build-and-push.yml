@@ -138,6 +138,10 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # Distinguishes images built from different commits even when nothing
+          # in the runtime changed. See the note in the Dockerfile and #125.
+          build-args: |
+            GIT_SHA=${{ github.sha }}
           # Build only for linux/amd64 (single platform for speed)
           platforms: linux/amd64
           # Use GitHub Actions cache for faster builds

@@ -44,6 +44,17 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# The commit this image was built from. Beyond being useful to read out of a
+# running container, it makes each commit produce a distinct final layer.
+#
+# Without it a commit that changes only CI or docs rebuilds entirely from cache
+# and reproduces a byte-identical image config, timestamp included. Argo CD
+# Image Updater orders candidates by build date, so identical timestamps leave
+# it unable to tell which image is newer and production silently stops rolling
+# with no error to notice. See issue #125.
+ARG GIT_SHA=unknown
+ENV GIT_SHA=$GIT_SHA
+
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
