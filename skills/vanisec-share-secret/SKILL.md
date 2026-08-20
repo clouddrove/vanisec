@@ -56,6 +56,7 @@ holding only a URL, which is useless on its own.
 | `type` | yes | `password`, `token` or `hex` |
 | `length` | no | see the table below |
 | `expiresIn` | no | hours, one of 1, 6, 24, 72, 168, defaults to 24 |
+| `pairingCode` | no | also return a short code for another device, see below. Off by default |
 
 | `type` | Default length | Allowed range |
 |--------|----------------|---------------|
@@ -97,6 +98,7 @@ protection the tool exists to provide.
 | `text` | yes | the secret to share |
 | `password` | yes | protects the link, sent to the recipient separately |
 | `expiresIn` | no | hours, one of 1, 6, 24, 72, 168, defaults to 24 |
+| `pairingCode` | no | also return a short code for another device, see below. Off by default |
 
 The password must be a real password, not a hint and not something guessable
 from the surrounding conversation. Anyone who gets the link and guesses the
@@ -116,6 +118,29 @@ before the request leaves the machine. Omitting it gives 24.
 
 Shorter is better. The link is destroyed on first open, so expiry only bounds
 how long an unopened link stays live.
+
+## Moving a secret to a device in the room
+
+Set `pairingCode: true` when the destination is a device the user is holding
+rather than a person somewhere else. The usual case is a credential generated on
+a laptop that has to end up on a phone: an SSH key, a recovery code, a TOTP
+seed.
+
+The tool then also returns a short code such as `4F2K-9QX1`, typed at
+`/c` on the other device. It saves retyping a UUID by hand, which is the
+only reason it exists.
+
+**It expires in five minutes and works once.** That is deliberate and not
+configurable: a code is far shorter than a link, and the short life is what
+makes up the difference. So it is the wrong choice whenever the recipient will
+read your message later. A code sent to someone in Slack is almost always dead
+before they open it, which looks like a broken feature rather than a misuse.
+
+The password is still required after the code is entered. A pairing code
+replaces the link, not the password, so the two-channel rule below still
+applies in full.
+
+Leave it off unless the handoff is happening right now, in front of you.
 
 ## Getting the link and the password to the recipient
 

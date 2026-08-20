@@ -69,6 +69,11 @@ override `length` when the receiving system enforces its own limit, and never
 downward for convenience. Set `expiresIn` short (1 or 6 hours) when the
 recipient is waiting, since a rotation handover is usually time boxed anyway.
 
+If the new credential is going onto a device you are holding rather than to
+another person, `pairingCode: true` returns a short code to type at `/c` instead
+of a full link. It lasts five minutes, so it fits a handover you are doing right
+now and nothing else. See the share skill.
+
 The tool puts the link password on the system clipboard and returns only the
 URL. If it reports that no clipboard is available, do not fall back to pasting
 the credential into the conversation. See the share skill for the options.
