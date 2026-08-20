@@ -62,6 +62,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/mcp" className="text-clouddrove-light hover:text-clouddrove-dark transition-colors">
+                  MCP
+                </Link>
+              </li>
+              <li>
                 <Link href="/faq" className="text-clouddrove-light hover:text-clouddrove-dark transition-colors">
                   FAQ
                 </Link>

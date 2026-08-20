@@ -55,6 +55,17 @@ export default function Features() {
         </div>
       ),
     },
+    {
+      title: 'Use it from Claude',
+      description: 'Share a secret straight from your AI client with the Vanisec MCP server. Generated credentials never enter the conversation.',
+      icon: (
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l-3 3 3 3m8-6l3 3-3 3M14 4l-4 16" />
+          </svg>
+        </div>
+      ),
+    },
   ]
 
   return (
