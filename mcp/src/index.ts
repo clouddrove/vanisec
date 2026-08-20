@@ -101,9 +101,13 @@ const INSTRUCTIONS = [
   'Do not read a generated value or a link password back to the user, and do not ask for a secret to be pasted in when it can be generated instead.',
 ].join('\n\n')
 
+export const VERSION = '0.2.0'
+
 export function buildServer(): McpServer {
   // instructions is a server option, not part of the implementation object.
-  const server = new McpServer({ name: 'vanisec', version: '0.1.0' }, { instructions: INSTRUCTIONS })
+  // Kept in step with mcp/package.json by a test, because a stale version here
+  // is invisible: the server still works and only misreports itself to clients.
+  const server = new McpServer({ name: 'vanisec', version: VERSION }, { instructions: INSTRUCTIONS })
 
   server.registerTool(
     'vanisec_create_secret',
