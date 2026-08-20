@@ -125,6 +125,32 @@ const PROMPTS = [
   },
 ]
 
+// Server-wide guidance, returned from initialize. Clients such as Codex read
+// this and treat it as standing instructions, which matters because prompts are
+// close to unreachable outside VS Code and the tool descriptions are otherwise
+// the only surface that reaches a model.
+//
+// Codex advises that the first 512 characters be self-contained. The first
+// three entries below are 500 characters together and hold every rule that
+// changes what the model does. The install instructions and the zero-knowledge
+// caveat follow, because they are context rather than something to act on, and
+// the first entry already says the generating tool is not offered here.
+const INSTRUCTIONS = [
+  'Only vanisec_create_secret is available here. Anything passed to it stays in the transcript for good and ' +
+    'reaches this server in plaintext.',
+  'If the secret does not exist yet, prefer vanisec_generate_secret in the local @clouddrove/vanisec-mcp ' +
+    'package: it creates the value on your machine and puts the link password on your clipboard, so neither ' +
+    'enters the conversation.',
+  'Send the link and its password through different channels; together they grant access. Opening the link ' +
+    'once destroys the secret.',
+  // Everything below this point is outside the 512-character budget.
+  'There is deliberately no retrieval tool. Expiry is 1, 6, 24, 72 or 168 hours and defaults to 24.',
+  "vanisec_generate_secret cannot run over HTTP, because the clipboard would be the server's. Install the " +
+    'local package with npx -y @clouddrove/vanisec-mcp. It encrypts on your own machine, so Vanisec only ' +
+    'ever receives ciphertext; this hosted endpoint encrypts server side and is not zero-knowledge, so it ' +
+    'should be the fallback rather than the default.',
+].join('\n\n')
+
 function promptMessages(description: string, text: string) {
   return { description, messages: [{ role: 'user', content: { type: 'text', text } }] }
 }
@@ -260,10 +286,7 @@ export async function POST(request: NextRequest) {
         protocolVersion: PROTOCOL_VERSION,
         capabilities: { tools: {}, prompts: {} },
         serverInfo: { name: 'vanisec-hosted', version: '0.1.0' },
-        instructions:
-          'This hosted endpoint encrypts server side and is not zero-knowledge. Prefer the local ' +
-          '@clouddrove/vanisec-mcp package, which encrypts on your machine and can also generate ' +
-          'credentials without them entering the conversation.',
+        instructions: INSTRUCTIONS,
       })
 
     // Notifications carry no id and expect no result.
