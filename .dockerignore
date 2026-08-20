@@ -50,6 +50,9 @@ docker-compose.*.yml
 helm
 _infra
 
+# MCP server (published to npm, not part of the web image)
+mcp
+
 # Logs
 *.log
 logs
