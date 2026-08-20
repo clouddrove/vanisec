@@ -10,18 +10,19 @@ export default function Header() {
 
   const isActive = (path: string) => pathname === path
 
+  // Kept deliberately short. Every link dropped from here is still in the
+  // footer, which already groups Company (About, Security, Contact) and
+  // Resources (Docs, API, MCP, Integrations, FAQ), so a flat nine-item bar was
+  // duplicating the footer rather than adding anything.
+  //
+  // Home is absent because the logo to its left already goes there.
+  // Enter Code sits last, next to the Contact button, so the two things a
+  // visitor might actually click read as one group.
   const navLinks = [
-    { href: '/', label: 'Home' },
-    // For someone who reached the site before their code, rather than typing
-    // /c straight in as the sending device tells them to.
-    { href: '/c', label: 'Enter Code' },
-    { href: '/about', label: 'About' },
-    { href: '/security', label: 'Security' },
     { href: '/docs', label: 'Documentation' },
-    { href: '/api', label: 'API' },
     { href: '/mcp', label: 'MCP' },
-    { href: '/integrations', label: 'Integrations' },
-    { href: '/faq', label: 'FAQ' },
+    { href: '/security', label: 'Security' },
+    { href: '/c', label: 'Enter Code' },
   ]
 
   return (

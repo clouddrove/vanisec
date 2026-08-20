@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import RedeemForm from './RedeemForm'
 
 // The path is /c rather than something descriptive because it gets typed by
 // hand, on a phone, next to the domain.
+//
+// Header and Footer come from app/layout.tsx, which also supplies the <main>
+// wrapper. Rendering them here too would duplicate the nav.
 
 export const metadata: Metadata = {
   title: 'Enter a pairing code | Vanisec',
@@ -16,20 +17,16 @@ export const metadata: Metadata = {
 
 export default function PairingPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-clouddrove-dark mb-3">Enter your code</h1>
-            <p className="text-clouddrove-light">
-              Type the code shown on your other device. You will still need the password.
-            </p>
-          </div>
-          <RedeemForm />
+    <div className="min-h-screen py-16 px-4">
+      <div className="max-w-md mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-clouddrove-dark mb-4">Enter your code</h1>
+          <p className="text-lg text-clouddrove-light">
+            Type the code shown on your other device.
+          </p>
         </div>
-      </main>
-      <Footer />
+        <RedeemForm />
+      </div>
     </div>
   )
 }
