@@ -16,6 +16,7 @@ export default function Header() {
     { href: '/security', label: 'Security' },
     { href: '/docs', label: 'Documentation' },
     { href: '/api', label: 'API' },
+    { href: '/mcp', label: 'MCP' },
     { href: '/faq', label: 'FAQ' },
   ]
 

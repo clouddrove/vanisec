@@ -1,0 +1,33 @@
+{
+  "name": "@clouddrove/vanisec-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for creating Vanisec one-time secrets. Encrypts locally; the server only ever receives ciphertext.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "vanisec-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:integration": "node --import tsx --test test/integration/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.12",
+    "typescript": "^5.2.2"
+  }
+}
