@@ -1,4 +1,5 @@
 import { pathToFileURL } from 'node:url'
+import { realpathSync } from 'node:fs'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
@@ -129,11 +130,24 @@ async function main() {
   await server.connect(new StdioServerTransport())
 }
 
-// Only run when executed directly, so tests can import the handlers. Compare
-// as file URLs, not raw strings: a plain `file://${process.argv[1]}` never
-// matches a path with spaces or other characters needing percent-encoding,
-// and never matches at all on Windows (backslashes, drive letter).
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+// True when this file is the entry point, rather than imported by a test.
+//
+// Two traps here, both of which produced a server that started and exited
+// silently. Comparing raw strings fails for any path needing percent-encoding
+// and never matches on Windows, so compare file URLs. And npm installs the bin
+// as a symlink, while Node reports the resolved real path in import.meta.url,
+// so argv[1] must be resolved before comparing or every npx install is dead.
+function isEntryPoint(): boolean {
+  const invoked = process.argv[1]
+  if (!invoked) return false
+  try {
+    return import.meta.url === pathToFileURL(realpathSync(invoked)).href
+  } catch {
+    return false
+  }
+}
+
+if (isEntryPoint()) {
   main().catch((e) => {
     console.error(e)
     process.exit(1)
