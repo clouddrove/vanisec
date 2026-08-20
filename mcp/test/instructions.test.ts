@@ -11,7 +11,8 @@
 // here. Importing it pulls in next/server, ioredis and uuid, which live in the
 // root install rather than this package's, so this suite would only pass where
 // the whole app happens to be installed alongside it. This package has to build
-// and test on its own. See issue #115 for covering the hosted route.
+// and test on its own. The hosted half lives in the root suite instead, in
+// test/hosted-instructions.test.ts.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'

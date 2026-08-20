@@ -37,6 +37,30 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The Next app's own suite. It runs the API route handlers directly
+      # against an in-memory Redis stand-in, so it needs no service container.
+      # test/integration needs Docker and is excluded from `npm test`.
+      - name: Run tests
+        run: npm test
+
   mcp:
     runs-on: ubuntu-latest
     permissions:
