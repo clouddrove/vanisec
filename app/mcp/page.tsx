@@ -691,14 +691,17 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                 play across clients, so check the install matrix above before copying it anywhere.
               </p>
               <p className="text-clouddrove-light mt-4 text-sm">
-                The remote form is also newer and less exercised than stdio. The endpoint pins MCP protocol
-                revision <code className="font-mono">2024-11-05</code>, two revisions behind the current{' '}
-                <code className="font-mono">2026-07-28</code> (tracking issue{' '}
-                <a className="underline" href="https://github.com/clouddrove/vanisec/issues/111">
-                  #111
-                </a>
-                ). Each remote block above follows the shape its vendor documents. We have not tested every client
-                against the endpoint.
+                The remote form is also newer and less exercised than stdio. The endpoint negotiates the protocol
+                revision rather than pinning one: ask for <code className="font-mono">2025-11-25</code>,{' '}
+                <code className="font-mono">2025-06-18</code>, <code className="font-mono">2025-03-26</code> or{' '}
+                <code className="font-mono">2024-11-05</code> and you get that same revision back, and anything
+                else is answered with <code className="font-mono">2025-11-25</code>. It does not speak{' '}
+                <code className="font-mono">2026-07-28</code>, the current revision, which replaced the initialize
+                handshake with per-request metadata and a mandatory{' '}
+                <code className="font-mono">server/discover</code>. It runs the Streamable HTTP JSON mode, so a{' '}
+                <code className="font-mono">GET</code> for an SSE stream is declined with{' '}
+                <code className="font-mono">405</code>, which that transport allows. Each remote block above
+                follows the shape its vendor documents. We have not tested every client against the endpoint.
               </p>
               <p className="text-clouddrove-light mt-4 text-sm">
                 Rate limited to 20 calls per 10 minutes per IP, since server side key derivation is more expensive
