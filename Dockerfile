@@ -19,22 +19,15 @@ WORKDIR /app
 # Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 
-# Copy package files
-COPY package.json package-lock.json* ./
-
-# Copy Next.js config and other config files first (better caching)
-COPY next.config.js tsconfig.json tailwind.config.js postcss.config.js ./
-
-# middleware.ts must be present at build time. Next compiles it into the
-# standalone output; without it the app builds and starts normally but silently
-# serves no middleware, which drops the nonce-based CSP on /secret.
-COPY middleware.ts ./
-
-# Copy source code (this layer changes most often)
-COPY app ./app
-COPY components ./components
-COPY lib ./lib
-COPY public ./public
+# Copy the whole source tree, minus whatever .dockerignore excludes.
+#
+# This used to enumerate each path, which meant a new root-level source file was
+# silently left out of the image. middleware.ts was missed that way: Next builds
+# and starts happily without it, just serving no middleware, so the build stayed
+# green while /secret lost its nonce-based CSP in production. Copying everything
+# makes that failure mode impossible; .dockerignore is the single place that
+# decides what stays out.
+COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production

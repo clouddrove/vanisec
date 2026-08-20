@@ -48,6 +48,7 @@ docker-compose.*.yml
 
 # Helm
 helm
+_infra
 
 # Logs
 *.log
