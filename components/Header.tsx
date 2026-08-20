@@ -16,13 +16,15 @@ export default function Header() {
   // duplicating the footer rather than adding anything.
   //
   // Home is absent because the logo to its left already goes there.
-  // Enter Code sits last, next to the Contact button, so the two things a
-  // visitor might actually click read as one group.
+  //
+  // /c is not here on purpose: it is where a pairing code gets typed, and the
+  // device showing that code already tells you the URL. The clipboard is the
+  // entry point people arrive looking for, so it leads.
   const navLinks = [
+    { href: '/clipboard', label: 'Clipboard' },
     { href: '/docs', label: 'Documentation' },
     { href: '/mcp', label: 'MCP' },
     { href: '/security', label: 'Security' },
-    { href: '/c', label: 'Enter Code' },
   ]
 
   return (
