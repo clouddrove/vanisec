@@ -18,12 +18,46 @@ export interface CreateSecretOptions {
   text: string
   password: string
   expiresIn?: number
+  // Also ask for a short code that can be typed into another device by hand.
+  pairingCode?: boolean
   fetchImpl?: typeof fetch
 }
 
-export async function createSecret(
-  opts: CreateSecretOptions
-): Promise<{ url: string; expiresAt: string }> {
+export interface CreatedSecret {
+  url: string
+  expiresAt: string
+  // Absent when not asked for, and also when minting failed. See mintPairingCode.
+  pairingCode?: string
+  pairingCodeExpiresIn?: number
+}
+
+// Pairing codes are minted after the secret exists, so this can only ever run
+// once there is a live one-time link the caller has not been told about yet.
+//
+// That is why every failure here is swallowed. Throwing would lose the url and
+// leave the secret orphaned: sitting in Redis, single-use, with nobody holding
+// the link. A missing code costs the caller a convenience; a lost url costs
+// them the secret. Same reasoning as the no-retry rule on the create itself.
+async function mintPairingCode(
+  id: string,
+  doFetch: typeof fetch
+): Promise<{ code: string; expiresIn: number } | null> {
+  try {
+    const res = await doFetch(`${baseUrl()}/api/pair`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    })
+    if (!res.ok) return null
+    const { code, expiresIn } = (await res.json()) as { code?: string; expiresIn?: number }
+    if (!code || typeof expiresIn !== 'number') return null
+    return { code, expiresIn }
+  } catch {
+    return null
+  }
+}
+
+export async function createSecret(opts: CreateSecretOptions): Promise<CreatedSecret> {
   const text = validateNonEmpty(opts.text, 'text')
   const password = validateNonEmpty(opts.password, 'password')
   const expiresIn = validateExpiry(opts.expiresIn)
@@ -76,8 +110,18 @@ export async function createSecret(
   const { id } = (await res.json()) as { id?: string }
   if (!id) throw new VanisecApiError('Vanisec accepted the secret but returned no id.')
 
-  return {
+  const created: CreatedSecret = {
     url: `${baseUrl()}/secret/${id}`,
     expiresAt: new Date(Date.now() + expiresIn * 3600_000).toISOString(),
   }
+
+  if (opts.pairingCode) {
+    const minted = await mintPairingCode(id, doFetch)
+    if (minted) {
+      created.pairingCode = minted.code
+      created.pairingCodeExpiresIn = minted.expiresIn
+    }
+  }
+
+  return created
 }

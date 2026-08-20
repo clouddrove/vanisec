@@ -66,3 +66,12 @@ test('stdio puts the tool-choice rule ahead of the tool it steers away from', as
     'the caveat about the pasting tool is useless if it falls outside the kept prefix'
   )
 })
+
+test('stdio explains pairing codes, outside the kept prefix', async () => {
+  const instructions = (await stdioInstructions())!
+  assert.match(instructions, /pairingCode/, 'the option is invisible unless the instructions name it')
+  assert.ok(
+    instructions.indexOf('pairingCode') > BUDGET,
+    'pairing is a convenience and must not crowd out the rules that change what a model does'
+  )
+})

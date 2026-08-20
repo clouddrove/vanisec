@@ -21,20 +21,42 @@ const text = (t: string, isError = false): ToolResult => ({
   ...(isError ? { isError: true } : {}),
 })
 
+// Off by default. The usual job here is handing a credential to someone who
+// reads it in Slack an hour from now, and a five minute code would be dead
+// before they got to it, so minting one every time would mostly produce dead
+// codes and teach callers to ignore the line.
+const PAIRING_CODE_DESCRIPTION =
+  'Also return a short pairing code the recipient can type by hand on another device, ' +
+  'for example moving a credential from this machine to a phone. The code lasts five minutes ' +
+  'and is used once. Leave this off when the recipient will read the message later.'
+
+// Rendered only when a code was asked for and minting succeeded. A silent
+// absence is deliberate: the mint is best-effort, and the link is what matters.
+function pairingLine(created: { pairingCode?: string; pairingCodeExpiresIn?: number }): string {
+  if (!created.pairingCode) return ''
+  const minutes = Math.round((created.pairingCodeExpiresIn ?? 0) / 60)
+  return (
+    `\n\nPairing code: ${created.pairingCode} (valid ${minutes} minutes)\n` +
+    `Enter it at ${baseUrl()}/c on the other device. It works once, and the password is still needed.`
+  )
+}
+
 export async function handleCreate(
-  args: { text: string; password: string; expiresIn?: number },
+  args: { text: string; password: string; expiresIn?: number; pairingCode?: boolean },
   deps: { createSecret?: typeof realCreateSecret } = {}
 ): Promise<ToolResult> {
   const create = deps.createSecret ?? realCreateSecret
   try {
-    const { url, expiresAt } = await create({
+    const created = await create({
       text: args.text,
       password: args.password,
       expiresIn: args.expiresIn,
+      pairingCode: args.pairingCode,
     })
     return text(
-      `One-time link created.\n\n${url}\n\nExpires ${expiresAt}. Opening it once destroys the secret. ` +
-        `The recipient needs the password you chose; send it through a different channel.`
+      `One-time link created.\n\n${created.url}\n\nExpires ${created.expiresAt}. Opening it once destroys the secret. ` +
+        `The recipient needs the password you chose; send it through a different channel.` +
+        pairingLine(created)
     )
   } catch (e) {
     return text(`Could not create the secret: ${(e as Error).message}`, true)
@@ -42,7 +64,7 @@ export async function handleCreate(
 }
 
 export async function handleGenerate(
-  args: { type: SecretType; length?: number; expiresIn?: number },
+  args: { type: SecretType; length?: number; expiresIn?: number; pairingCode?: boolean },
   deps: {
     createSecret?: typeof realCreateSecret
     copyToClipboard?: (v: string) => Promise<void>
@@ -60,16 +82,22 @@ export async function handleGenerate(
     // clipboard is unavailable there is then no orphaned live link.
     if (!inlinePasswordAllowed()) await copy(password)
 
-    const { url, expiresAt } = await create({ text: value, password, expiresIn: args.expiresIn })
+    const created = await create({
+      text: value,
+      password,
+      expiresIn: args.expiresIn,
+      pairingCode: args.pairingCode,
+    })
 
     const tail = inlinePasswordAllowed()
       ? `\n\nPassword: ${password}\n(VANISEC_ALLOW_INLINE_PASSWORD is set, so it appears here.)`
       : `\n\nThe link password is on your clipboard. It is not shown here and is not in this conversation.`
 
     return text(
-      `Generated a ${args.type} and shared it as a one-time link.\n\n${url}\n\nExpires ${expiresAt}. ` +
+      `Generated a ${args.type} and shared it as a one-time link.\n\n${created.url}\n\nExpires ${created.expiresAt}. ` +
         `Opening it once destroys the secret. Send the link and its password through different channels; ` +
         `together they grant access.` +
+        pairingLine(created) +
         tail
     )
   } catch (e) {
@@ -99,9 +127,10 @@ const INSTRUCTIONS = [
   'Expiry is 1, 6, 24, 72 or 168 hours and defaults to 24. Encryption happens on this machine, so Vanisec only ever receives ciphertext.',
   'vanisec_generate_secret needs a working clipboard. Without one it fails rather than printing the password.',
   'Do not read a generated value or a link password back to the user, and do not ask for a secret to be pasted in when it can be generated instead.',
+  'Set pairingCode when the secret is going to another device the user is holding, such as their phone. It returns a short code to type at /c, lasts five minutes, and is wrong for a recipient who will read the message later.',
 ].join('\n\n')
 
-export const VERSION = '0.2.0'
+export const VERSION = '0.3.0'
 
 export function buildServer(): McpServer {
   // instructions is a server option, not part of the implementation object.
@@ -124,6 +153,7 @@ export function buildServer(): McpServer {
           .number()
           .optional()
           .describe('Hours until expiry. One of 1, 6, 24, 72, 168. Defaults to 24.'),
+        pairingCode: z.boolean().optional().describe(PAIRING_CODE_DESCRIPTION),
       },
     },
     (args) => handleCreate(args)
@@ -153,6 +183,7 @@ export function buildServer(): McpServer {
           .number()
           .optional()
           .describe('Hours until expiry. One of 1, 6, 24, 72, 168. Defaults to 24.'),
+        pairingCode: z.boolean().optional().describe(PAIRING_CODE_DESCRIPTION),
       },
     },
     (args) => handleGenerate(args)

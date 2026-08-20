@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { encryptWithPassword } from '@/lib/clientCrypto'
+import PairingCode from './PairingCode'
 
 type Mode = 'text' | 'file'
 
@@ -26,6 +27,8 @@ export default function SecretForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [shareLink, setShareLink] = useState('')
+  // Kept alongside the link because minting a pairing code needs the bare id.
+  const [secretId, setSecretId] = useState('')
   const [copied, setCopied] = useState(false)
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -97,6 +100,7 @@ export default function SecretForm() {
 
       const fullUrl = `${window.location.origin}/secret/${data.id}`
       setShareLink(fullUrl)
+      setSecretId(data.id)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
     } finally {
@@ -338,6 +342,8 @@ export default function SecretForm() {
             </div>
           </div>
 
+          {secretId && <PairingCode key={secretId} secretId={secretId} />}
+
           <div className="bg-amber-50/80 border-2 border-amber-200/50 text-amber-800 px-5 py-4 rounded-xl backdrop-blur-sm">
             <div className="flex items-start gap-3">
               <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -353,6 +359,7 @@ export default function SecretForm() {
           <button
             onClick={() => {
               setShareLink('')
+              setSecretId('')
               setSecret('')
               setPassword('')
               setExpiresIn('24')

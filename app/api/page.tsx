@@ -215,6 +215,89 @@ Encoding     base64url, unpadded, for every binary field`}
           </section>
 
           <section>
+            <h2 className={H2}>Create a pairing code</h2>
+            <div className={CARD}>
+              <div className="mb-4">
+                <span className={VERB}>POST</span>
+                <span className="ml-3 font-mono text-clouddrove-dark">/api/pair</span>
+              </div>
+              <p className="text-clouddrove-light mb-6">
+                Issues a short code that resolves to an existing secret id, for moving a secret onto a device
+                where a full link cannot reasonably be typed. The code carries the id and nothing else: the
+                password still gates retrieval, so a code grants strictly less than the link does.
+              </p>
+
+              <h3 className={H3}>Request body</h3>
+              <pre className={PRE + ' mb-6'}>
+{`{
+  "id": "31c3e8d4-43a8-4e72-aac7-b38a00b46a50"
+}`}
+              </pre>
+
+              <h3 className={H3}>Response</h3>
+              <pre className={PRE + ' mb-6'}>
+{`{
+  "code":      "4F2K-9QX1",
+  "expiresIn":  300
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-6 text-sm">
+                Codes live five minutes, or until the secret expires if that comes first, and are usable once.
+                The short life is what stands in for the entropy a code gives up against a full id, so it is not
+                configurable. Returns 404 when the secret is missing or has expired.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className={H2}>Redeem a pairing code</h2>
+            <div className={CARD}>
+              <div className="mb-4">
+                <span className={VERB}>POST</span>
+                <span className="ml-3 font-mono text-clouddrove-dark">/api/pair/redeem</span>
+              </div>
+              <p className="text-clouddrove-light mb-6">
+                Exchanges a code for the secret id, then continues through the normal retrieval endpoints above.
+                POST rather than GET so a live code never reaches an access log or a{' '}
+                <code className="font-mono text-sm">Referer</code> header.
+              </p>
+
+              <h3 className={H3}>Request body</h3>
+              <pre className={PRE + ' mb-6'}>
+{`{
+  "code": "4f2k-9qx1"
+}`}
+              </pre>
+              <p className="text-clouddrove-light mb-6 text-sm">
+                Case, dashes and spaces are all ignored. Because the alphabet omits{' '}
+                <code className="font-mono">I</code>, <code className="font-mono">L</code>,{' '}
+                <code className="font-mono">O</code> and <code className="font-mono">U</code>, a typed{' '}
+                <code className="font-mono">I</code> or <code className="font-mono">L</code> is read as{' '}
+                <code className="font-mono">1</code> and <code className="font-mono">O</code> as{' '}
+                <code className="font-mono">0</code>.
+              </p>
+
+              <h3 className={H3}>Response: 200</h3>
+              <pre className={PRE + ' mb-6'}>
+{`{
+  "id": "31c3e8d4-43a8-4e72-aac7-b38a00b46a50"
+}`}
+              </pre>
+
+              <h3 className={H3}>Response: 404</h3>
+              <pre className={PRE}>
+{`{
+  "error": "That code has expired or has already been used"
+}`}
+              </pre>
+              <p className="text-clouddrove-light mt-6 text-sm">
+                Unknown, malformed, expired and already-redeemed codes all answer identically, so a wrong guess
+                reveals nothing. Redemption is rate limited per address.
+              </p>
+            </div>
+          </section>
+
+          <section>
             <h2 className={H2}>Complete example</h2>
             <div className={CARD}>
               <p className="text-clouddrove-light mb-4">
