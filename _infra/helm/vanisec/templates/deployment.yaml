@@ -1,3 +1,10 @@
+{{- /* Stops the render if the values file describes a credential two ways at
+       once, rather than silently choosing one of them. */ -}}
+{{- include "vanisec.validateSecrets" . -}}
+{{- /* Empty map unless something is configured to come from a Secret, so the
+       whole secret path below collapses to nothing by default. */ -}}
+{{- $secretKeys := include "vanisec.secretEnvKeys" . | fromYaml -}}
+{{- $secretName := include "vanisec.secretName" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,6 +21,13 @@ spec:
   template:
     metadata:
       annotations:
+        {{- /* Rolls the pods when the chart-created Secret changes. Without it a
+               rotated password sits in the Secret unread until something else
+               happens to restart the pod. An existing Secret is not ours to
+               checksum, so that path relies on the operator's own tooling. */}}
+        {{- if and .Values.secrets.create $secretKeys }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -39,10 +53,23 @@ spec:
           containerPort: 3000
           protocol: TCP
         env:
+        {{- /* Secret-sourced variables come first and every plain-value block
+               below skips a name that appears here, so a value is never in the
+               pod spec in clear and in a Secret at the same time. */}}
+        {{- range $name, $key := $secretKeys }}
+        - name: {{ $name }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ $secretName }}
+              key: {{ $key }}
+        {{- end }}
         - name: NODE_ENV
           value: {{ .Values.env.NODE_ENV | quote }}
+        {{- if not (hasKey $secretKeys "REDIS_URL") }}
         - name: REDIS_URL
           value: {{ .Values.env.REDIS_URL | quote }}
+        {{- end }}
+        {{- if not (hasKey $secretKeys "REDIS_PASSWORD") }}
         {{- /* env.REDIS_PASSWORD wins, so an external Redis can differ from the
                embedded one. Falling back to redis.password matters because that
                value is what puts --requirepass on the embedded server: setting
@@ -52,6 +79,13 @@ spec:
         - name: REDIS_PASSWORD
           value: {{ $redisPassword | quote }}
         {{- end }}
+        {{- end }}
+        {{- /* Rendered unconditionally: which entry of X-Forwarded-For is read
+               as the client address decides what rate limiting buckets on, so
+               an operator debugging it should be able to read the value out of
+               the pod spec rather than infer it from the image default. */}}
+        - name: TRUSTED_PROXY_HOPS
+          value: {{ .Values.env.TRUSTED_PROXY_HOPS | default 1 | quote }}
         {{- if .Values.env.NEXT_PUBLIC_BASE_URL }}
         - name: NEXT_PUBLIC_BASE_URL
           value: {{ .Values.env.NEXT_PUBLIC_BASE_URL | quote }}
@@ -96,5 +130,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
-

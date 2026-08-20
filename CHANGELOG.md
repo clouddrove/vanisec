@@ -31,6 +31,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   JetBrains family, Codex, Windsurf and Devin Local, and Zed. The top-level
   configuration key differs four ways between them and a wrong one fails
   silently, so each client gets its own verified block.
+- **Helm: sensitive values can be sourced from a Kubernetes Secret.**
+  `secrets.create` has the chart render one from `secrets.data`, and
+  `secrets.existingSecret` points it at a Secret you manage yourself with
+  sealed-secrets, external-secrets or vault. Anything listed in `secrets.keys`
+  is delivered with `secretKeyRef` and left out of the Deployment's plain `env`,
+  so a value is never rendered in both forms, and a values file that says both
+  stops the render instead of picking a winner. The embedded Redis reads the
+  same Secret, so its password no longer sits in the pod spec either. Off by
+  default: an existing values file that sets `env.REDIS_PASSWORD` keeps working
+  and upgrading needs no change.
 
 ### Changed
 
@@ -59,6 +69,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   embedded Redis while the app read `REDIS_PASSWORD` only from
   `env.REDIS_PASSWORD`, so setting it alone locked the app out of its own Redis.
   `env.REDIS_PASSWORD` still wins where both are set.
+- **Helm: `TRUSTED_PROXY_HOPS` is now templated.** It was in neither
+  `values.yaml` nor the Deployment, so a chart install always ran on the value
+  baked into the image with no way to change it through values. The setting
+  decides which entry of `X-Forwarded-For` rate limiting treats as the client
+  address: too high and that entry is one the caller supplied, so a single
+  client can forge unlimited identities and rate limiting stops applying; too
+  low and everyone behind the proxy shares one bucket, so one noisy client can
+  rate-limit every other user. It defaults to `1`, the value the app already
+  assumed, so nothing changes for an existing install.
 - The published `bin` path no longer carries a leading `./`.
 
 ## [2.0.0] - 2026-08-19
