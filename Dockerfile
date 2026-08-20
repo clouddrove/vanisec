@@ -25,6 +25,11 @@ COPY package.json package-lock.json* ./
 # Copy Next.js config and other config files first (better caching)
 COPY next.config.js tsconfig.json tailwind.config.js postcss.config.js ./
 
+# middleware.ts must be present at build time. Next compiles it into the
+# standalone output; without it the app builds and starts normally but silently
+# serves no middleware, which drops the nonce-based CSP on /secret.
+COPY middleware.ts ./
+
 # Copy source code (this layer changes most often)
 COPY app ./app
 COPY components ./components
