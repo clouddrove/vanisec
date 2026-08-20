@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vanisec": {
+      "command": "npx",
+      "args": ["-y", "@clouddrove/vanisec-mcp"]
+    }
+  }
+}
