@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'API Documentation',
   description:
-    'Vanisec REST API reference — create and retrieve end-to-end encrypted one-time secrets. Encryption happens in your client; the server only ever stores ciphertext.',
+    'Vanisec REST API reference: create and retrieve end-to-end encrypted one-time secrets. Encryption happens in your client; the server only ever stores ciphertext.',
   alternates: { canonical: '/api' },
 }
 
@@ -30,7 +30,7 @@ export default function APIPage() {
               <h2 className="text-xl font-bold text-clouddrove-dark mb-3">Your client does the encryption</h2>
               <p className="text-clouddrove-light mb-3">
                 Vanisec is zero-knowledge. The server never receives your plaintext, your password, or your
-                encryption key — it stores ciphertext and nothing else. That means the API does not accept a
+                encryption key. It stores ciphertext and nothing else. That means the API does not accept a
                 secret directly. You encrypt first, then upload the result.
               </p>
               <p className="text-clouddrove-light">
@@ -50,12 +50,12 @@ export default function APIPage() {
               </p>
               <ul className="space-y-3 text-clouddrove-light mb-6">
                 <li>
-                  <strong className="text-clouddrove-dark">Encryption key</strong> — derived with{' '}
+                  <strong className="text-clouddrove-dark">Encryption key</strong>, derived with{' '}
                   <code className="font-mono text-sm">encSalt</code>, 256 bits, used as an AES-256-GCM key with a
                   random 12-byte IV. This key never leaves your client.
                 </li>
                 <li>
-                  <strong className="text-clouddrove-dark">Verifier</strong> — derived with{' '}
+                  <strong className="text-clouddrove-dark">Verifier</strong>, derived with{' '}
                   <code className="font-mono text-sm">authSalt</code>, 256 bits, sent to the server to prove you
                   know the password. The server stores only its SHA-256 hash and compares in constant time, so it
                   cannot recover the verifier, let alone the password or the key.
@@ -127,7 +127,7 @@ Encoding     base64url, unpadded, for every binary field`}
 }`}
               </pre>
               <p className="text-clouddrove-light mb-6 text-sm">
-                <code className="font-mono">passwordProtected</code> must be true — every secret requires a
+                <code className="font-mono">passwordProtected</code> must be true. Every secret requires a
                 password. <code className="font-mono">iterations</code> must be at least 600000.{' '}
                 <code className="font-mono">expiresIn</code> is in hours and must be one of 1, 6, 24, 72 or 168.
                 The request body itself is capped at 16 MB.
@@ -156,7 +156,7 @@ Encoding     base64url, unpadded, for every binary field`}
                 <code className="font-mono text-sm">401</code>, which is expected, not an error.
               </p>
 
-              <h3 className={H3}>Response — 401</h3>
+              <h3 className={H3}>Response: 401</h3>
               <pre className={PRE}>
 {`{
   "requiresPassword": true,
@@ -166,7 +166,7 @@ Encoding     base64url, unpadded, for every binary field`}
               </pre>
               <p className="text-clouddrove-light mt-4 text-sm">
                 Always use the returned <code className="font-mono">iterations</code> rather than assuming the
-                current default — secrets created before the work factor was raised carry the older value.
+                current default. Secrets created before the work factor was raised carry the older value.
               </p>
             </div>
           </section>
@@ -190,7 +190,7 @@ Encoding     base64url, unpadded, for every binary field`}
 }`}
               </pre>
 
-              <h3 className={H3}>Response — 200</h3>
+              <h3 className={H3}>Response: 200</h3>
               <pre className={PRE + ' mb-6'}>
 {`{
   "ciphertext": "string (base64url)",
@@ -204,7 +204,7 @@ Encoding     base64url, unpadded, for every binary field`}
                 <code className="font-mono">encSalt</code>, decrypt, then parse the envelope.
               </p>
 
-              <h3 className={H3}>Response — 401</h3>
+              <h3 className={H3}>Response: 401</h3>
               <pre className={PRE}>
 {`{
   "error": "Invalid password",
@@ -218,7 +218,7 @@ Encoding     base64url, unpadded, for every binary field`}
             <h2 className={H2}>Complete example</h2>
             <div className={CARD}>
               <p className="text-clouddrove-light mb-4">
-                Node.js 18 or newer, no dependencies — it uses the built-in Web Crypto API. The same code runs in
+                Node.js 18 or newer, no dependencies. It uses the built-in Web Crypto API. The same code runs in
                 a browser unchanged apart from the base64 helpers.
               </p>
               <pre className={PRE}>
@@ -298,7 +298,7 @@ async function readSecret(url, password) {
 const url = await createSecret('deploy key: abc123', 'hunter2')
 console.log('created:', url)
 console.log('read back:', await readSecret(url, 'hunter2'))
-// a second read fails — the secret is gone`}
+// a second read fails, the secret is gone`}
               </pre>
             </div>
           </section>
@@ -355,13 +355,13 @@ console.log('read back:', await readSecret(url, 'hunter2'))
               </p>
               <ul className="space-y-2 text-clouddrove-light">
                 <li>
-                  <strong className="text-clouddrove-dark">Creating secrets</strong> — 30 per 10 minutes per IP
+                  <strong className="text-clouddrove-dark">Creating secrets</strong>: 30 per 10 minutes per IP
                 </li>
                 <li>
-                  <strong className="text-clouddrove-dark">Reading metadata</strong> — 120 per 15 minutes per IP
+                  <strong className="text-clouddrove-dark">Reading metadata</strong>: 120 per 15 minutes per IP
                 </li>
                 <li>
-                  <strong className="text-clouddrove-dark">Password attempts</strong> — 60 per 15 minutes per IP,
+                  <strong className="text-clouddrove-dark">Password attempts</strong>: 60 per 15 minutes per IP,
                   and 10 per 15 minutes per secret
                 </li>
               </ul>
@@ -376,7 +376,7 @@ console.log('read back:', await readSecret(url, 'hunter2'))
             <h2 className={H2}>Self-Hosting</h2>
             <div className="bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30 text-center">
               <p className="text-clouddrove-light mb-4">
-                Vanisec is fully open source. Run your own instance on your own infrastructure — Docker and
+                Vanisec is fully open source. Run your own instance on your own infrastructure. Docker and
                 docker-compose configs are included.
               </p>
               <a

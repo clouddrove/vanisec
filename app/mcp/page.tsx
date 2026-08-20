@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'MCP Server',
   description:
-    'Vanisec MCP server — share secrets from Claude and other AI clients without pasting them into chat. Covers what reaches the conversation, install, tools, and self-hosting.',
+    'Vanisec MCP server: share secrets from Claude and other AI clients without pasting them into chat. Covers what reaches the conversation, install, tools, and self-hosting.',
   alternates: { canonical: '/mcp' },
 }
 
@@ -11,7 +11,6 @@ const CARD = 'bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30'
 const PRE = 'bg-clouddrove-light/10 rounded-lg p-4 overflow-x-auto text-xs md:text-sm'
 const H2 = 'text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4'
 const H3 = 'text-lg font-semibold text-clouddrove-dark mb-2'
-const VERB = 'inline-block bg-clouddrove-dark text-white px-3 py-1 rounded text-sm font-mono'
 
 export default function MCPPage() {
   return (
@@ -109,13 +108,13 @@ export default function MCPPage() {
               </pre>
               <ul className="space-y-1 text-clouddrove-light mb-6 text-sm">
                 <li>
-                  <code className="font-mono">text</code> — the secret content
+                  <code className="font-mono">text</code>: the secret content
                 </li>
                 <li>
-                  <code className="font-mono">password</code> — required, chosen by the caller
+                  <code className="font-mono">password</code>: required, chosen by the caller
                 </li>
                 <li>
-                  <code className="font-mono">expiresIn</code> — hours, one of 1, 6, 24, 72, 168, default 24
+                  <code className="font-mono">expiresIn</code>: hours, one of 1, 6, 24, 72, 168, default 24
                 </li>
               </ul>
               <p className="text-clouddrove-light mb-6 text-sm italic">
@@ -133,15 +132,15 @@ export default function MCPPage() {
               </pre>
               <ul className="space-y-1 text-clouddrove-light mb-6 text-sm">
                 <li>
-                  <code className="font-mono">type</code> — <code className="font-mono">password</code>,{' '}
+                  <code className="font-mono">type</code>: <code className="font-mono">password</code>,{' '}
                   <code className="font-mono">token</code>, or <code className="font-mono">hex</code>
                 </li>
                 <li>
-                  <code className="font-mono">length</code> — password: default 24, range 12 to 128. token: default
-                  32, range 16 to 128. hex: default 64, range 16 to 256, even lengths only
+                  <code className="font-mono">length</code>: password default is 24, range 12 to 128; token
+                  default is 32, range 16 to 128; hex default is 64, range 16 to 256, even lengths only
                 </li>
                 <li>
-                  <code className="font-mono">expiresIn</code> — hours, one of 1, 6, 24, 72, 168, default 24
+                  <code className="font-mono">expiresIn</code>: hours, one of 1, 6, 24, 72, 168, default 24
                 </li>
               </ul>
               <p className="text-clouddrove-light text-sm italic">
