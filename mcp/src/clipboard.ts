@@ -5,12 +5,18 @@ export class ClipboardUnavailableError extends Error {
     super(
       'No clipboard is available on this machine, which is normal over SSH or in a container. ' +
         'The link password would otherwise have to be returned in this conversation, so this tool ' +
-        'stops here instead. Use vanisec_create_secret with a password you choose, or set ' +
-        'VANISEC_ALLOW_INLINE_PASSWORD=1 to accept the password appearing in the conversation.'
+        'stops here instead. Use vanisec_create_secret with a password you choose, so the password ' +
+        'never needs to go through the clipboard.'
     )
     this.name = 'ClipboardUnavailableError'
   }
 }
+
+// A human operator can opt into the password appearing in the conversation
+// by setting VANISEC_ALLOW_INLINE_PASSWORD=1. This is intentionally not
+// mentioned in the error message above: naming it there would hand the
+// model its own bypass for a fail-closed security control. See the /mcp
+// page for the documented, human-facing description of this variable.
 
 function commandExists(cmd: string): boolean {
   const probe = process.platform === 'win32' ? 'where' : 'which'
@@ -47,6 +53,9 @@ export async function copyToClipboard(value: string): Promise<void> {
     child.on('close', (code) =>
       code === 0 ? resolve() : reject(new Error(`${cmd} exited with code ${code}`))
     )
+    // Without this, a child that dies between spawn and write raises an
+    // unhandled EPIPE on the stdin stream and takes down the process.
+    child.stdin.on('error', reject)
     child.stdin.end(value)
   })
 }

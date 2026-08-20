@@ -26,14 +26,20 @@ test('returns null when nothing is available', () => {
 
 test('inline password is disallowed unless explicitly opted in', () => {
   delete process.env.VANISEC_ALLOW_INLINE_PASSWORD
-  assert.equal(inlinePasswordAllowed(), false)
-  process.env.VANISEC_ALLOW_INLINE_PASSWORD = '1'
-  assert.equal(inlinePasswordAllowed(), true)
-  delete process.env.VANISEC_ALLOW_INLINE_PASSWORD
+  try {
+    assert.equal(inlinePasswordAllowed(), false)
+    process.env.VANISEC_ALLOW_INLINE_PASSWORD = '1'
+    assert.equal(inlinePasswordAllowed(), true)
+  } finally {
+    delete process.env.VANISEC_ALLOW_INLINE_PASSWORD
+  }
 })
 
 test('a value other than 1 does not enable the opt-in', () => {
   process.env.VANISEC_ALLOW_INLINE_PASSWORD = 'maybe'
-  assert.equal(inlinePasswordAllowed(), false)
-  delete process.env.VANISEC_ALLOW_INLINE_PASSWORD
+  try {
+    assert.equal(inlinePasswordAllowed(), false)
+  } finally {
+    delete process.env.VANISEC_ALLOW_INLINE_PASSWORD
+  }
 })

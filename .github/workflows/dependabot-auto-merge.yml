@@ -24,7 +24,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.9.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          check-regexp: '^(lint|build-and-push)$'
+          check-regexp: '^(lint|mcp|build-and-push)$'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           timeout: 600

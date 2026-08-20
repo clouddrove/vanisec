@@ -37,6 +37,34 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+  mcp:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mcp/package-lock.json
+
+      - name: Install dependencies
+        working-directory: mcp
+        run: npm ci
+
+      - name: Run typecheck
+        working-directory: mcp
+        run: npm run typecheck
+
+      - name: Run tests
+        working-directory: mcp
+        run: npm test
+
   build-and-push:
     runs-on: ubuntu-latest
     permissions:

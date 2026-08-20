@@ -1,9 +1,11 @@
+import { pathToFileURL } from 'node:url'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
 import { createSecret as realCreateSecret, baseUrl } from './vanisec.js'
 import { generateSecret, generatePassword, GENERATION_RULES, type SecretType } from './generate.js'
 import { copyToClipboard as realCopy, inlinePasswordAllowed } from './clipboard.js'
+import { validateExpiry } from './validate.js'
 
 type ToolResult = { content: { type: 'text'; text: string }[]; isError?: boolean }
 
@@ -42,6 +44,8 @@ export async function handleGenerate(
   const create = deps.createSecret ?? realCreateSecret
   const copy = deps.copyToClipboard ?? realCopy
   try {
+    validateExpiry(args.expiresIn)
+
     const value = generateSecret(args.type, args.length)
     const password = generatePassword()
 
@@ -125,8 +129,11 @@ async function main() {
   await server.connect(new StdioServerTransport())
 }
 
-// Only run when executed directly, so tests can import the handlers.
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Only run when executed directly, so tests can import the handlers. Compare
+// as file URLs, not raw strings: a plain `file://${process.argv[1]}` never
+// matches a path with spaces or other characters needing percent-encoding,
+// and never matches at all on Windows (backslashes, drive letter).
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((e) => {
     console.error(e)
     process.exit(1)

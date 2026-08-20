@@ -17,7 +17,8 @@
     "build": "tsup",
     "test": "node --import tsx --test test/*.test.ts",
     "test:integration": "node --import tsx --test test/integration/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
