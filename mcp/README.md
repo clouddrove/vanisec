@@ -543,7 +543,14 @@ it is the only channel every client reads. Tracking issue
 [#112](https://github.com/clouddrove/vanisec/issues/112).
 
 The same guidance is also packaged as Claude Agent Skills under `skills/` in the
-repository, for clients that load skills rather than MCP prompts.
+repository, for clients that load skills rather than MCP prompts. Cursor and
+Codex read that format too. For clients that read something else, `integrations/`
+carries the same rules as Cursor rules, GitHub Copilot instructions and prompt
+files, and `AGENTS.md`. All of it is rendered at
+[vanisec.clouddrove.com/integrations](https://vanisec.clouddrove.com/integrations).
+
+Since #112 the server also returns these rules in the MCP `instructions` field
+at initialization, which reaches clients that ignore prompts entirely.
 
 ## Clipboard requirement
 

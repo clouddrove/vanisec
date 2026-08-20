@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Agent Skills.** `skills/` carries the rules for handling secrets from an AI
+  client: which of the two MCP tools to reach for and why, rotating a credential
+  without causing an outage, and self-hosting. The format is shared by Claude
+  Code, Cursor and Codex, so the same files load in all three.
+- **Rules for other clients.** `integrations/` carries the same guidance as
+  Cursor rules, GitHub Copilot instructions and prompt files, and `AGENTS.md`.
+  These are meant to be copied into your own repository and are inert here.
+- **MCP prompts.** `share-credential` and `rotate-and-share`, on both the stdio
+  server and the hosted endpoint.
+- **MCP instructions.** Both transports now return server-wide guidance at
+  initialization, carrying the tool-choice rule. Prompts turned out to be
+  reachable only in VS Code, so this is how the rule gets to everyone else.
+- **Claude Code plugin.** `/plugin marketplace add clouddrove/vanisec` then
+  `/plugin install vanisec@vanisec` installs the MCP server and the skills
+  together.
+- **`/integrations` page**, rendered from the files in `skills/` and
+  `integrations/` rather than a copy of them.
+- **Install instructions for every MCP client**, in `mcp/README.md` and on
+  `/mcp`: Cursor, VS Code with Copilot, the Copilot CLI and cloud agent, the
+  JetBrains family, Codex, Windsurf and Devin Local, and Zed. The top-level
+  configuration key differs four ways between them and a wrong one fails
+  silently, so each client gets its own verified block.
+
+### Changed
+
+- `vanisec_generate_secret` now states that the link and its password must
+  travel through different channels, in both its description and its result. It
+  has no password parameter, so unlike `vanisec_create_secret` it had nowhere to
+  carry that rule.
+
+### Fixed
+
+- The published `bin` path no longer carries a leading `./`.
+
 ## [2.0.0] - 2026-08-19
 
 Zero-knowledge rewrite plus a security hardening pass. The server no longer sees
