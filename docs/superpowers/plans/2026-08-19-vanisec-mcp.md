@@ -8,7 +8,7 @@
 
 **Tech Stack:** TypeScript, `@modelcontextprotocol/sdk` 1.30.0, `zod` 4.4.3, `tsup` 8.5.1 for bundling, `tsx` 4.23.12 with the built-in `node:test` runner. Node 22+.
 
-**Spec:** `docs/superpowers/specs/2026-08-19-vanisec-mcp-design.md`
+**Spec:** kept outside the repository. The design rationale that the reviews depend on is restated in the Global Constraints below and in the tracking issues (#87 and its task issues).
 
 ## Global Constraints
 
