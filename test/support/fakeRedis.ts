@@ -1,5 +1,6 @@
 // In-memory stand-in for the ioredis client, covering only the commands lib/
-// actually issues: INCR, EXPIRE, TTL, SETEX, GET, GETDEL and DEL.
+// actually issues: INCR, EXPIRE, TTL, SETEX, SET (with EX/NX), GET, GETDEL
+// and DEL.
 //
 // test/support/redisHooks.mjs redirects every `ioredis` import to this file, so
 // lib/redis.ts, lib/rateLimit.ts and lib/secrets.ts run unmodified against it.
@@ -58,8 +59,21 @@ export default class FakeRedis {
     return 'OK'
   }
 
-  async set(key: string, value: string): Promise<'OK'> {
-    this.store.set(key, { value, expiresAtMs: null })
+  // lib/pairing.ts issues SET key value EX <ttl> NX. ioredis takes those as
+  // trailing variadic arguments, and NX must return null (not 'OK') when the
+  // key already exists, because that is how a code collision is detected.
+  async set(key: string, value: string, ...args: (string | number)[]): Promise<'OK' | null> {
+    const tokens = args.map((a) => String(a))
+    const nx = tokens.some((t) => t.toUpperCase() === 'NX')
+    const exIndex = tokens.findIndex((t) => t.toUpperCase() === 'EX')
+    const seconds = exIndex >= 0 ? Number(tokens[exIndex + 1]) : null
+
+    if (nx && this.live(key)) return null
+
+    this.store.set(key, {
+      value,
+      expiresAtMs: seconds === null ? null : Date.now() + seconds * 1000,
+    })
     return 'OK'
   }
 
