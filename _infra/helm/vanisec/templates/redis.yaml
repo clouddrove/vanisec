@@ -1,4 +1,10 @@
 {{- if .Values.redis.enabled -}}
+{{- /* When REDIS_PASSWORD comes from a Secret, the embedded server has to read
+       it from the same place. Otherwise it would start with no password while
+       the app kept sending AUTH, and every connection would be refused. */ -}}
+{{- $secretKeys := include "vanisec.secretEnvKeys" . | fromYaml -}}
+{{- $secretName := include "vanisec.secretName" . -}}
+{{- $redisPasswordKey := index $secretKeys "REDIS_PASSWORD" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,6 +20,12 @@ spec:
       app.kubernetes.io/component: redis
   template:
     metadata:
+      {{- /* Rotating the password in the chart-created Secret has to restart the
+             server as well as the app, or the two disagree about it. */}}
+      {{- if and .Values.secrets.create $redisPasswordKey }}
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- end }}
       labels:
         {{- include "vanisec.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: redis
@@ -25,17 +37,34 @@ spec:
         - name: redis
           containerPort: 6379
           protocol: TCP
+        {{- if $redisPasswordKey }}
+        {{- /* Kubernetes expands $(VAR) in command and args from the container's
+               own env, so the password reaches redis-server without ever being
+               written into the pod spec or into the process arguments. redis-cli
+               reads the same value from REDISCLI_AUTH, which is why the probes
+               below pass no flag. */}}
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $secretName }}
+              key: {{ $redisPasswordKey }}
+        - name: REDISCLI_AUTH
+          valueFrom:
+            secretKeyRef:
+              name: {{ $secretName }}
+              key: {{ $redisPasswordKey }}
+        {{- end }}
         command:
-        {{- if .Values.redis.password }}
         - redis-server
         - --appendonly
         - "yes"
+        {{- if $redisPasswordKey }}
+        - --requirepass
+        - "$(REDIS_PASSWORD)"
+        {{- else if .Values.redis.password }}
         - --requirepass
         - {{ .Values.redis.password | quote }}
-        {{- else }}
-        - redis-server
-        - --appendonly
-        - "yes"
         {{- end }}
         volumeMounts:
         - name: redis-data
@@ -45,29 +74,23 @@ spec:
         livenessProbe:
           exec:
             command:
-            {{- if .Values.redis.password }}
             - redis-cli
+            {{- if and .Values.redis.password (not $redisPasswordKey) }}
             - -a
             - {{ .Values.redis.password | quote }}
-            - ping
-            {{- else }}
-            - redis-cli
-            - ping
             {{- end }}
+            - ping
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           exec:
             command:
-            {{- if .Values.redis.password }}
             - redis-cli
+            {{- if and .Values.redis.password (not $redisPasswordKey) }}
             - -a
             - {{ .Values.redis.password | quote }}
-            - ping
-            {{- else }}
-            - redis-cli
-            - ping
             {{- end }}
+            - ping
           initialDelaySeconds: 5
           periodSeconds: 5
       volumes:
@@ -117,5 +140,3 @@ spec:
   {{- end }}
 {{- end }}
 {{- end }}
-
-

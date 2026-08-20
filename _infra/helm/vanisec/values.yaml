@@ -83,13 +83,83 @@ env:
   # Optional: Redis password (if Redis requires authentication)
   # This will be used if REDIS_URL doesn't include password
   # Only needed if password is not included in REDIS_URL
+  # Set here, the value is rendered into the Deployment spec in clear text. See
+  # the secrets block below to deliver it from a Kubernetes Secret instead.
   REDIS_PASSWORD: ""
+  # Number of reverse proxies in front of the app.
+  #
+  # Rate limiting identifies a client by IP, taken from X-Forwarded-For. Every
+  # proxy appends the address it received the request from, so only the
+  # rightmost entries were written by infrastructure you control. Anything
+  # further left arrived from the caller and can be forged. The app reads the
+  # Nth entry from the right, where N is this value.
+  #
+  # To work out your own number, count the proxies between the internet and the
+  # pod that append to X-Forwarded-For:
+  #   1  a single ingress controller or cloud load balancer (the common case)
+  #   2  a CDN in front of an ingress, for example Cloudflare then nginx
+  #   1  no proxy at all, the app exposed directly
+  # If you are not sure, log the header the app actually receives for a request
+  # you made yourself: your own address is the entry immediately to the left of
+  # the first address you recognise as your own infrastructure, and N is how
+  # many entries sit to the right of it, plus one.
+  #
+  # Too high is the dangerous direction. The entry read is then one the caller
+  # supplied, so a single client can forge an unlimited number of identities and
+  # rate limiting stops applying at all. Too low is merely disruptive: everyone
+  # behind the proxy shares one address, so one noisy client can rate-limit
+  # every other user. Start at 1, which is the app's own default, and raise it
+  # only for a hop you can name.
+  TRUSTED_PROXY_HOPS: 1
   # Base URL for the application (e.g., https://vanisec.clouddrove.com)
   # Protocol (https://) is optional - will be added automatically if missing
   NEXT_PUBLIC_BASE_URL: ""
   # Google Analytics: set GA_ID for runtime (no rebuild needed), or NEXT_PUBLIC_GA_ID at build time
   GA_ID: ""
   NEXT_PUBLIC_GA_ID: ""
+
+# Sensitive values delivered from a Kubernetes Secret instead of plain
+# Deployment env values.
+#
+# Off by default, so a values file that sets env.REDIS_PASSWORD keeps working
+# exactly as before and an upgrade needs no change. Turn on one of the two
+# sources, never both:
+#
+#   secrets.create: true    the chart renders a Secret from secrets.data
+#   secrets.existingSecret  the chart reads a Secret you manage yourself, which
+#                           is the path for sealed-secrets, external-secrets,
+#                           vault and anything else that writes Secrets outside
+#                           of Helm
+#
+# Every variable listed in secrets.keys is delivered with secretKeyRef and is
+# left out of the Deployment's plain env, so no value is ever rendered in both
+# forms. Setting the same variable in .Values.env as well (or redis.password,
+# for REDIS_PASSWORD) stops the render with a message instead of quietly
+# preferring one of them.
+secrets:
+  # Let the chart create and own the Secret.
+  create: false
+  # Name of a Secret that already exists in the release namespace. Mutually
+  # exclusive with create.
+  existingSecret: ""
+  # Environment variable name to the key that holds it inside the Secret. The
+  # default covers the one credential the chart ships with; REDIS_URL is the
+  # only other name accepted here, for URLs that embed the password.
+  keys:
+    REDIS_PASSWORD: REDIS_PASSWORD
+  # Values for the Secret the chart creates. Read only when create is true, and
+  # an empty value means "not managed here", leaving that variable on its normal
+  # plain-value path.
+  #
+  # Be clear about what this buys you. The value leaves the Deployment spec, so
+  # it is no longer readable by anyone who can only get or describe Deployments,
+  # and it no longer shows up in a rendered manifest committed to a GitOps repo.
+  # It still passes through this values file, through `helm get values`, and
+  # through the release Secret that Helm writes, so it is not a way to keep a
+  # credential out of git or out of your CI logs. If you need that, use
+  # existingSecret and keep the value out of Helm's hands entirely.
+  data:
+    REDIS_PASSWORD: ""
 
 resources:
   requests:

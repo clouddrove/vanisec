@@ -22,11 +22,11 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy the whole source tree, minus whatever .dockerignore excludes.
 #
 # This used to enumerate each path, which meant a new root-level source file was
-# silently left out of the image. middleware.ts was missed that way: Next builds
-# and starts happily without it, just serving no middleware, so the build stayed
-# green while /secret lost its nonce-based CSP in production. Copying everything
-# makes that failure mode impossible; .dockerignore is the single place that
-# decides what stays out.
+# silently left out of the image. proxy.ts (then named middleware.ts) was missed
+# that way: Next builds and starts happily without it, just serving no proxy, so
+# the build stayed green while /secret lost its nonce-based CSP in production.
+# Copying everything makes that failure mode impossible; .dockerignore is the
+# single place that decides what stays out.
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
