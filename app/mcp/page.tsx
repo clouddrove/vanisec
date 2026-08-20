@@ -580,7 +580,7 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
                 </li>
               </ul>
               <p className="text-clouddrove-light text-sm italic">
-                Example prompt: &quot;Generate a 32 character token and put a pairing code on screen for my phone.&quot;
+                Example prompt: &quot;Generate a 32 character token and give me a one-time link.&quot;
               </p>
             </div>
           </section>
