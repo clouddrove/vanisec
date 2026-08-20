@@ -25,7 +25,7 @@ const csp = [
 ].join('; ')
 
 // Applied everywhere. CSP is kept separate because /secret gets a stricter,
-// nonce-based policy from middleware.ts and must not receive two policies.
+// nonce-based policy from proxy.ts and must not receive two policies.
 const securityHeaders = [
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -48,7 +48,7 @@ const nextConfig = {
         headers: securityHeaders,
       },
       {
-        // Everything except /secret/*, which middleware.ts covers with a
+        // Everything except /secret/*, which proxy.ts covers with a
         // nonce-based policy. Two CSP headers on one response would have to be
         // satisfied simultaneously, so they are kept mutually exclusive.
         source: '/((?!secret/).*)',
