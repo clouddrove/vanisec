@@ -22,7 +22,7 @@ export default function PairingPage() {
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-clouddrove-dark mb-4">Enter your code</h1>
           <p className="text-lg text-clouddrove-light">
-            Type the code shown on your other device. You will still need the password.
+            Type the code shown on your other device.
           </p>
         </div>
         <RedeemForm />
