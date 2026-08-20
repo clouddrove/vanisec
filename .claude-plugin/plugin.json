@@ -1,0 +1,29 @@
+{
+  "name": "vanisec",
+  "displayName": "Vanisec",
+  "version": "0.1.0",
+  "description": "Share secrets as one-time links from your AI client, without pasting them into the conversation.",
+  "author": {
+    "name": "CloudDrove",
+    "email": "hello@clouddrove.com",
+    "url": "https://clouddrove.com"
+  },
+  "homepage": "https://vanisec.clouddrove.com/integrations",
+  "repository": "https://github.com/clouddrove/vanisec",
+  "license": "MIT",
+  "keywords": [
+    "secrets",
+    "one-time-secret",
+    "zero-knowledge",
+    "encryption",
+    "credentials",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": {
+    "vanisec": {
+      "command": "npx",
+      "args": ["-y", "@clouddrove/vanisec-mcp"]
+    }
+  }
+}
