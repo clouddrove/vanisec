@@ -8,7 +8,9 @@
     "vanisec-mcp": "./dist/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=22"
@@ -29,5 +31,24 @@
     "tsup": "^8.5.1",
     "tsx": "^4.23.12",
     "typescript": "^5.2.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clouddrove/vanisec.git",
+    "directory": "mcp"
+  },
+  "homepage": "https://vanisec.clouddrove.com/mcp",
+  "bugs": {
+    "url": "https://github.com/clouddrove/vanisec/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "vanisec",
+    "secrets",
+    "one-time-secret",
+    "encryption",
+    "zero-knowledge",
+    "claude"
+  ]
 }
