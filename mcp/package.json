@@ -4,9 +4,15 @@
   "description": "MCP server for creating Vanisec one-time secrets. Encrypts locally; the server only ever receives ciphertext.",
   "license": "MIT",
   "type": "module",
-  "bin": { "vanisec-mcp": "./dist/index.js" },
-  "files": ["dist"],
-  "engines": { "node": ">=18" },
+  "bin": {
+    "vanisec-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "tsup",
     "test": "node --import tsx --test test/*.test.ts",

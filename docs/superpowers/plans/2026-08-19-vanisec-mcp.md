@@ -6,13 +6,13 @@
 
 **Architecture:** A standalone npm package under `mcp/` in this repo. It imports `lib/clientCrypto.ts` directly rather than reimplementing the key derivation, encrypts on the user's machine, and POSTs ciphertext to the existing `/api/secrets` endpoint. Two tools: one shares a secret the caller already has, one generates a credential locally and puts the link password on the system clipboard so neither the secret nor the password reaches the model.
 
-**Tech Stack:** TypeScript, `@modelcontextprotocol/sdk` 1.30.0, `zod` 4.4.3, `tsup` 8.5.1 for bundling, `tsx` 4.23.12 with the built-in `node:test` runner. Node 18+.
+**Tech Stack:** TypeScript, `@modelcontextprotocol/sdk` 1.30.0, `zod` 4.4.3, `tsup` 8.5.1 for bundling, `tsx` 4.23.12 with the built-in `node:test` runner. Node 22+.
 
 **Spec:** `docs/superpowers/specs/2026-08-19-vanisec-mcp-design.md`
 
 ## Global Constraints
 
-- Node `>=18` (Web Crypto, `btoa`/`atob`, `TextEncoder` all required at runtime).
+- Node `>=22` (Web Crypto, `btoa`/`atob`, `TextEncoder` all required at runtime). 18 and 20 are past end of life; 22 is the oldest maintained LTS.
 - PBKDF2 iterations must be at least `600000`. Import `PBKDF2_ITERATIONS` from `lib/kdfParams.ts`; never hardcode the number.
 - `expiresIn` must be one of `1, 6, 24, 72, 168`. Anything else is rejected before a network call.
 - Never reimplement encryption. Import from `lib/clientCrypto.ts`.
@@ -20,7 +20,7 @@
 - No retry on a failed create. A retry that already succeeded leaves two live one-time links for one secret.
 - Writing style: no em dashes, no double hyphens in prose, no filler words (delve, leverage, robust, seamless, utilize, foster, elevate, unlock). Never use the word "scaffold".
 - Commit messages carry no AI attribution and no `Co-Authored-By` trailer.
-- Do not push this branch or open a pull request for it. Local commits only.
+- Branch ships normally: push, open a PR linking the tracking issues, merge once CI is green.
 
 ---
 
