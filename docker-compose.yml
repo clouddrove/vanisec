@@ -36,7 +36,7 @@ services:
       # Optional: Uncomment if Redis requires password authentication
       # - REDIS_PASSWORD=${REDIS_PASSWORD:-}
       # Google Analytics: set GA_ID for runtime (or NEXT_PUBLIC_GA_ID at build time)
-      - GA_ID=${GA_ID:-G-ZKMHV8DGC8}
+      - GA_ID=${GA_ID:-}
       # - NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID:-}
     depends_on:
       redis:

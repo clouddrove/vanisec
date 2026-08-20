@@ -41,6 +41,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Self-hosted builds no longer report analytics to CloudDrove.** `.env` was
+  committed with `NEXT_PUBLIC_GA_ID` set to our own measurement ID, and Next
+  inlines `NEXT_PUBLIC_*` into the client bundle at build time, so every build
+  made from this repository shipped it. Setting `GA_ID` at run time did not help,
+  because a build-time id takes precedence in `GoogleAnalytics.tsx`. The values
+  in `.env` are now empty and `docker-compose.yml` no longer defaults `GA_ID`.
+  Anyone running their own instance should rebuild. Analytics is now off unless
+  the operator sets an id.
+- **Helm: the app Service no longer matches the embedded Redis pods.** It
+  selected on name and instance only, which the Redis pods also carry, so with
+  `redis.enabled: true` a share of HTTP traffic was routed to a pod that does not
+  speak HTTP. App pods now carry `app.kubernetes.io/component: app` and the
+  Service selects on it. The Deployment's own selector is unchanged, so this
+  upgrades in place.
+- **Helm: `redis.password` now reaches the app.** It put `--requirepass` on the
+  embedded Redis while the app read `REDIS_PASSWORD` only from
+  `env.REDIS_PASSWORD`, so setting it alone locked the app out of its own Redis.
+  `env.REDIS_PASSWORD` still wins where both are set.
 - The published `bin` path no longer carries a leading `./`.
 
 ## [2.0.0] - 2026-08-19

@@ -13,5 +13,9 @@ spec:
       name: http
   selector:
     {{- include "vanisec.selectorLabels" . | nindent 4 }}
+    {{- /* Without this the selector also matches the embedded Redis pods, which
+           carry the same name and instance labels, and a share of HTTP traffic
+           lands on a pod that does not speak HTTP. */}}
+    app.kubernetes.io/component: app
 
 
