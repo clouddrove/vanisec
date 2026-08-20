@@ -7,6 +7,12 @@ import { createSecret as realCreateSecret, baseUrl } from './vanisec.js'
 import { generateSecret, generatePassword, GENERATION_RULES, type SecretType } from './generate.js'
 import { copyToClipboard as realCopy, inlinePasswordAllowed } from './clipboard.js'
 import { validateExpiry } from './validate.js'
+import {
+  sharePrompt,
+  rotatePrompt,
+  SHARE_CREDENTIAL_ARGS,
+  ROTATE_AND_SHARE_ARGS,
+} from './prompts.js'
 
 type ToolResult = { content: { type: 'text'; text: string }[]; isError?: boolean }
 
@@ -118,6 +124,36 @@ export function buildServer(): McpServer {
       },
     },
     (args) => handleGenerate(args)
+  )
+
+  // Prompt arguments are strings on the wire, so every schema here is a string
+  // schema rather than the richer types the tool inputSchemas use.
+  server.registerPrompt(
+    'share-credential',
+    {
+      title: 'Share a credential',
+      description:
+        'Works out which Vanisec tool fits the situation, and what to do with the link and its password afterwards.',
+      argsSchema: {
+        what: z.string().optional().describe(SHARE_CREDENTIAL_ARGS.what),
+        alreadyExists: z.string().optional().describe(SHARE_CREDENTIAL_ARGS.alreadyExists),
+      },
+    },
+    (args) => sharePrompt(args)
+  )
+
+  server.registerPrompt(
+    'rotate-and-share',
+    {
+      title: 'Rotate a credential and hand the new one over',
+      description:
+        'Replaces an existing credential and gets the new one to its recipient, in an order that never leaves the recipient without a working credential.',
+      argsSchema: {
+        credential: z.string().min(1).describe(ROTATE_AND_SHARE_ARGS.credential),
+        recipient: z.string().optional().describe(ROTATE_AND_SHARE_ARGS.recipient),
+      },
+    },
+    (args) => rotatePrompt(args)
   )
 
   return server

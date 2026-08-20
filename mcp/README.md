@@ -82,6 +82,43 @@ The link password is written to your clipboard and is not returned.
 
 Try: "Generate a 32 character token and give me a one-time link."
 
+## Prompts
+
+Two prompts, for the cases where picking the wrong tool is the actual risk.
+
+### `share-credential`
+
+| Argument | Required | Notes |
+|----------|----------|-------|
+| `what` | no | What needs sharing, such as a database password or an API key. |
+| `alreadyExists` | no | `yes` if the credential already exists somewhere else and you have the value in hand. Leave it out if it still has to be created. |
+
+Points at `vanisec_generate_secret` when the credential does not exist yet, since
+that keeps both the value and the link password out of the conversation, and
+falls back to `vanisec_create_secret` only when the secret already exists
+elsewhere. It also covers the two rules that are easy to forget: the link
+password travels to the recipient through a different channel than the link, and
+opening the link once destroys the secret.
+
+### `rotate-and-share`
+
+| Argument | Required | Notes |
+|----------|----------|-------|
+| `credential` | yes | The kind of credential being rotated, such as a Postgres password or an AWS access key. |
+| `recipient` | no | Who receives the new credential. |
+
+The same push toward `vanisec_generate_secret`, plus the ordering. Generate the
+replacement and hand it over, wait for the recipient to confirm it works, and
+revoke the old credential only after that. Revoking first locks out everything
+still using the old value, and leaves nothing working if the handover fails.
+
+The hosted endpoint at `https://vanisec.clouddrove.com/api/mcp` serves both
+prompts as well, worded for that path, where `vanisec_generate_secret` cannot
+run.
+
+The same guidance is also packaged as Claude Agent Skills under `skills/` in the
+repository, for clients that load skills rather than MCP prompts.
+
 ## Clipboard requirement
 
 `vanisec_generate_secret` needs a clipboard: `pbcopy` on macOS, `wl-copy` or
