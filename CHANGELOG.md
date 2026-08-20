@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Pairing codes
+
+A Vanisec link is a 122-bit UUID in a URL, which is the right shape for sending a
+secret to someone and the wrong shape for moving one onto the phone in your other
+hand. Doing that meant messaging yourself the link, which puts it somewhere
+neither one-time nor encrypted.
+
+A pairing code is a short code, `4F2K-9QX1`, entered at `/c` on the other device.
+It resolves to the secret id and nothing else: the password still gates retrieval
+and still derives the key in the browser, so a code grants exactly what holding
+the link already grants.
+
+Codes are 8 characters of Crockford base32 (2^40), against 2^122 for the id.
+Three things stand in for the difference: a five minute life, which is why it is
+not configurable; single use, through the same atomic `GETDEL` that reads
+secrets; and a redeem budget of 10 per 15 minutes per address. Unknown,
+malformed, expired and already-redeemed codes all answer identically.
+
+The alphabet omits `I`, `L`, `O` and `U`, since the first three misread when a
+code is copied off one screen onto another. Because they cannot appear in a code,
+a typed `I` or `L` folds to `1` and `O` to `0`.
+
+Available on the website, on both MCP surfaces via an opt-in `pairingCode`
+argument, and over the API as `POST /api/pair` and `POST /api/pair/redeem`.
+
+Opt-in rather than automatic on MCP: the usual job there is handing a credential
+to someone who reads it in Slack an hour later, and a five minute code would be
+dead before they got to it.
+
+### MCP package 0.3.0
+
+`@clouddrove/vanisec-mcp` goes to 0.3.0 for the `pairingCode` argument on both
+tools. Until it is tagged and published, the local package has no pairing while
+the hosted endpoint does, which is the same local-versus-hosted split the 0.2.0
+release existed to close.
+
+`mcp/package-lock.json` had been left at 0.1.0 through the 0.2.0 release and is
+now back in step with `mcp/package.json`.
+
 ### MCP package 0.2.0
 
 `@clouddrove/vanisec-mcp` goes to 0.2.0. The published 0.1.0 predates the prompts
