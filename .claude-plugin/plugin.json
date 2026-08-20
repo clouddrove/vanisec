@@ -19,11 +19,5 @@
     "credentials",
     "mcp"
   ],
-  "skills": "./skills/",
-  "mcpServers": {
-    "vanisec": {
-      "command": "npx",
-      "args": ["-y", "@clouddrove/vanisec-mcp"]
-    }
-  }
+  "skills": "./skills/"
 }

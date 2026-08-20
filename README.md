@@ -474,6 +474,22 @@ Key configuration options in `_infra/helm/vanisec/values.yaml`:
   - `redis.enabled: false` - Use external Redis (set `REDIS_URL` accordingly)
 - **Ingress**: TLS termination and routing
 - **Autoscaling**: Horizontal Pod Autoscaler settings
+- **Secrets**: source sensitive values from a Kubernetes Secret rather than
+  plain Deployment env, either one the chart creates or one you already manage:
+  - `secrets.create: true` with `secrets.data.REDIS_PASSWORD` renders a Secret
+    from your values. The value still passes through the values file and
+    `helm get values`, so this keeps it out of the Deployment spec and out of a
+    GitOps repo, not out of Helm.
+  - `secrets.existingSecret: my-secret` references a Secret you manage yourself,
+    which is the option to use if the value must never reach Helm at all.
+  - The two are mutually exclusive, and a value is never rendered in both a
+    Secret and plain env. Conflicting configuration fails the render rather than
+    quietly picking one.
+  - The embedded Redis reads the same Secret, so it stays password protected.
+- **`TRUSTED_PROXY_HOPS`**: set it through `env.TRUSTED_PROXY_HOPS` to match the
+  number of proxies that append to `X-Forwarded-For` in front of the app. Too
+  high is the dangerous direction: it selects an entry the caller supplied, so
+  rate limiting can be bypassed. Too low only makes clients share a bucket.
 
 **Redis Deployment Modes:**
 
@@ -507,7 +523,14 @@ vanisec/
 │   └── Footer.tsx        # Site footer
 ├── lib/                   # Utility libraries
 │   ├── redis.ts          # Redis client
+│   ├── rateLimit.ts      # Client IP resolution and rate limiting
 │   └── secrets.ts        # Secret management
+├── proxy.ts               # Nonce-based CSP for /secret (Next 16 proxy convention)
+├── test/                  # Root test suite
+│   └── integration/      # Tests needing a real Redis, excluded by default
+├── mcp/                   # @clouddrove/vanisec-mcp, published separately
+├── skills/                # Agent Skills for AI clients
+├── integrations/          # The same rules for Cursor, Copilot and AGENTS.md
 ├── _infra/                # Infrastructure as Code
 │   └── helm/             # Kubernetes Helm charts
 │       └── vanisec/      # Helm chart
@@ -530,6 +553,9 @@ npm start
 
 # Linting
 npm run lint
+
+# Tests
+npm test
 ```
 
 ### Code Style
@@ -542,12 +568,28 @@ npm run lint
 ### Testing
 
 ```bash
-# Run linter
-npm run lint
+# Root suite: API routes, rate limiting, the hosted MCP endpoint
+npm test
 
-# Type checking (via TypeScript)
-npm run build
+# The published MCP package, which builds and tests on its own
+cd mcp && npm test
 ```
+
+The root suite needs no Redis. `ioredis` is redirected to an in-memory stand-in
+through a module resolve hook, so `lib/redis.ts`, `lib/rateLimit.ts` and
+`lib/secrets.ts` run unmodified.
+
+Tests that genuinely need a real Redis live in `test/integration/` and are
+excluded from `npm test`, since they require Docker:
+
+```bash
+npm run test:integration
+```
+
+`mcp/` is published to npm on its own and its CI job installs only that
+directory, so nothing under `mcp/` may import from the app. To check that still
+holds, copy the repository somewhere with no `node_modules`, run `npm ci` inside
+`mcp/` alone, then `npm run typecheck` and `npm test` there.
 
 ## Deployment
 
@@ -590,7 +632,7 @@ Contributions are essential for Vanisec's growth. See our [Contributing Guide](C
 1. Fork the repository to your account
 2. Create a feature branch: `git checkout -b feature/your-feature-name`
 3. Implement your changes
-4. Run validation: `npm run lint && npm run build`
+4. Run validation: `npm run lint && npm test && npm run build`
 5. Commit with descriptive messages: `git commit -m 'feat: Add new feature'`
 6. Push to your fork: `git push origin feature/your-feature-name`
 7. Submit a pull request with a clear description
