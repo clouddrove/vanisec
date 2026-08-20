@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Tests for the Next app.** The root project had no test runner, so the
+  hosted MCP endpoint and the secrets API were both uncovered. `npm test` runs
+  `node --test` through `tsx`, matching the mcp package. The suite calls the API
+  route handlers directly against an in-memory Redis stand-in, so it needs no
+  server, no Docker and no network, and it runs as its own CI job. Covered: the
+  JSON-RPC surface of `/api/mcp` including the deliberate absence of
+  `vanisec_generate_secret`, the hosted instructions, the PBKDF2 floor that
+  stops a modified client downgrading the key-derivation cost, the request body
+  the 2.0.0 rewrite introduced, and the one-time retrieval semantics.
+  `npm run test:integration` repeats the storage guarantees against a real
+  Redis in Docker.
 - **Agent Skills.** `skills/` carries the rules for handling secrets from an AI
   client: which of the two MCP tools to reach for and why, rotating a credential
   without causing an outage, and self-hosting. The format is shared by Claude
