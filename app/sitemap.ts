@@ -21,6 +21,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      // A primary entry point, second only to the homepage. /c and /r are
+      // deliberately absent: both are noindex, because a live code is a
+      // capability rather than a page worth finding in search.
+      url: `${baseUrl}/clipboard`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/about`,
       lastModified: now,
       changeFrequency: 'monthly',

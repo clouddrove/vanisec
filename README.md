@@ -46,6 +46,7 @@ Vanisec provides a production-grade, open-source solution for ephemeral secret s
 - **Configurable Expiration**: Set expiration times from 1 hour to 7 days (default: 24 hours)
 - **Automatic Cleanup**: Redis TTL ensures expired secrets are automatically removed
 - **Unique URLs**: Cryptographically secure, unguessable secret identifiers
+- **Clipboard**: Paste text or a file at `/clipboard`, get a short code, and open it on any other device. No password and no login: the code itself derives the encryption key in your browser and is never sent to the server
 - **Pairing Codes**: Hand a secret to your own phone by typing a short code at `/c` instead of retyping a URL. Codes last five minutes, work once, and still require the password
 
 ### Technical Features
@@ -376,6 +377,8 @@ Browse it all at [vanisec.clouddrove.com/integrations](https://vanisec.clouddrov
 │  │   - /api/secrets/[id]    │  │
 │  │   - /api/pair             │  │
 │  │   - /api/pair/redeem      │  │
+│  │   - /api/clip             │  │
+│  │   - /api/clip/open        │  │
 │  └───────────────────────────┘  │
 │  ┌───────────────────────────┐  │
 │  │   Secret Management       │  │

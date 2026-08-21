@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import SecretForm from '@/components/SecretForm'
 import Features from '@/components/Features'
 import HowItWorks from '@/components/HowItWorks'
@@ -55,6 +56,20 @@ export default function Home() {
 
           {/* Main Card */}
           <SecretForm />
+
+          {/* The other door. Someone who wants to move text between their own
+              devices does not need a password or a one-time link, and would
+              otherwise have to find the clipboard in the nav. */}
+          <p className="text-center text-sm text-clouddrove-light mt-6">
+            Just moving text between your own devices?{' '}
+            <Link
+              href="/clipboard"
+              className="font-semibold text-clouddrove-dark underline underline-offset-4 hover:text-clouddrove-light"
+            >
+              Use the clipboard
+            </Link>{' '}
+            instead. No password, just a short code.
+          </p>
         </div>
       </section>
 
