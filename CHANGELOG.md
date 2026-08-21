@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Clipboard
+
+Paste text or a file at `/clipboard`, get a short code, and open it on any other
+device. No login, no password, and it opens once.
+
+This exists because the two earlier attempts at the same problem both missed. A
+pairing code still asks for the password on the second device, and the
+passwordless handoff below needs the receiving device standing by before the
+sender can send. Neither is "paste this, send someone a code, they read it
+whenever".
+
+There is still nothing the server can read, because **the code is the key**. One
+PBKDF2 pass over a ten character code yields 512 bits: the first half is the id
+the server stores under, the second half is the AES-GCM key. The code never
+leaves the browser, so an id cannot be walked back to the code that produced it.
+
+Ten characters rather than the eight a pairing code uses, because a pairing code
+only locates a secret that a password still guards, while this one carries the
+whole burden: 2^50, and reversing an id means that many PBKDF2 passes at 600,000
+iterations.
+
+The derivation salt is fixed rather than per-clip. Per-secret salts stop one
+precomputation covering many secrets, which matters when the input is a
+human-chosen password drawn from a small space. Every code here is 50 random
+bits, so there is no small space to precompute, and a stored salt would only add
+a round trip before the browser could derive anything.
+
+The tradeoff worth stating: a code is a single string that grants access, so
+anyone who sees it in transit can read the clip. That is the price of dropping
+the password, and it is why a clip opens exactly once and expires.
+
+Exposed as `POST /api/clip` and `POST /api/clip/open`.
+
+### Passwordless device handoff
+
+`/r` shows a code and waits. The receiving device generates an ephemeral P-256
+keypair and publishes only the public half, so whatever arrives was sealed to a
+key that never left that browser. The sender enters the code at `/c` and types.
+
+Stronger than the password path rather than weaker: guessing a code lets someone
+*send* to a waiting device, never *read* what someone else sent.
+
+`/c` now takes either kind of code and works out which it was given, asking the
+non-destructive `/api/beam/peek` before the one-shot `/api/pair/redeem`.
+
 ### Pairing codes
 
 A Vanisec link is a 122-bit UUID in a URL, which is the right shape for sending a
