@@ -104,6 +104,27 @@ The password must be a real password, not a hint and not something guessable
 from the surrounding conversation. Anyone who gets the link and guesses the
 password gets the secret.
 
+## `vanisec_create_clip`
+
+| Parameter | Required | Notes |
+|-----------|----------|-------|
+| `text` | yes | the text to put on the clipboard |
+| `expiresIn` | no | hours, one of 1, 6, 24, 72, 168, defaults to 24 |
+
+A different job from the two tools above. There is no recipient and no password:
+this puts text on the Vanisec clipboard and returns a ten character code to type
+at `/clipboard` on another device. Reach for it when someone wants something on
+the phone in their hand, not when they want to send it to a person.
+
+The code is the decryption key, generated locally and never sent to Vanisec, so
+the server stores ciphertext it cannot read. **The code is shown in the
+conversation**, because a code nobody can read cannot be typed in. That makes
+this the wrong tool for a credential that must stay out of the transcript, where
+`vanisec_generate_secret` still applies. It is the right tool for a kubeconfig,
+a log excerpt, a block of YAML, or anything else that is awkward to retype.
+
+Clips open once and then are gone, same as everything else here.
+
 ## Choosing `expiresIn`
 
 Only 1, 6, 24, 72 and 168 hours are accepted. Any other number is rejected

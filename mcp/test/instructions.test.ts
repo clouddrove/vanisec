@@ -75,3 +75,12 @@ test('stdio explains pairing codes, outside the kept prefix', async () => {
     'pairing is a convenience and must not crowd out the rules that change what a model does'
   )
 })
+
+test('stdio explains the clip tool, outside the kept prefix', async () => {
+  const instructions = (await stdioInstructions())!
+  assert.match(instructions, /vanisec_create_clip/)
+  assert.ok(
+    instructions.indexOf('vanisec_create_clip') > BUDGET,
+    'the clip tool is a convenience and must not crowd out the rules that change what a model does'
+  )
+})

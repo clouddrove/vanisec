@@ -97,3 +97,37 @@ test('a mint that quietly failed leaves the link intact and mentions no code', a
   assert.match(res.content[0].text, /https:\/\/example\.com\/secret\/id/)
   assert.ok(!/pairing code/i.test(res.content[0].text))
 })
+
+// --- the clip tool ---
+
+test('the clip tool shows the code, because a code nobody can read cannot be typed', async () => {
+  const { handleClip } = await import('../src/index.js')
+  const res = await handleClip(
+    { text: 'x' },
+    {
+      createClip: async () => ({
+        code: '4F2K9-QX1B7',
+        url: 'https://example.com/clipboard',
+        expiresAt: '2026-01-01T00:00:00.000Z',
+      }),
+    }
+  )
+  assert.ok(!res.isError)
+  assert.match(res.content[0].text, /4F2K9-QX1B7/)
+  assert.match(res.content[0].text, /\/clipboard/)
+  // The caller has to understand that the code is the key, not a convenience.
+  assert.match(res.content[0].text, /no password|treat it like one/i)
+})
+
+test('a clip failure is reported as a tool error, not a success', async () => {
+  const { handleClip } = await import('../src/index.js')
+  const res = await handleClip(
+    { text: 'x' },
+    {
+      createClip: async () => {
+        throw new Error('nope')
+      },
+    }
+  )
+  assert.ok(res.isError)
+})

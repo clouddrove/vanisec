@@ -499,6 +499,24 @@ Docs: https://zed.dev/docs/ai/mcp
 | `expiresIn` | no | Hours. One of 1, 6, 24, 72, 168. Defaults to 24. |
 | `pairingCode` | no | Also return a short code to type at `/c` on another device, for example a phone. Lasts five minutes, used once, and the password is still needed. Off by default: it is the wrong tool for a recipient who will read your message later. |
 
+### `vanisec_create_clip`
+
+Puts plain text on the Vanisec clipboard and returns a short code to type at
+`/clipboard` on another device.
+
+| Parameter | Required | Notes |
+|-----------|----------|-------|
+| `text` | yes | The text to put on the clipboard. |
+| `expiresIn` | no | Hours. One of 1, 6, 24, 72, 168. Defaults to 24. |
+
+There is no password. The ten character code is generated on this machine and is
+itself the decryption key, so Vanisec stores ciphertext it cannot read.
+
+The code is shown in the conversation, because a code nobody can read cannot be
+typed into a phone. That makes this the wrong tool for a credential that must
+stay out of the transcript: use `vanisec_generate_secret` for those. It is the
+right tool for moving something onto a device you are holding right now.
+
 ### `vanisec_generate_secret`
 
 | Parameter | Required | Notes |
