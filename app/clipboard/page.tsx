@@ -15,7 +15,7 @@ export default function ClipboardPage() {
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-clouddrove-dark mb-3">Clipboard</h1>
           <p className="text-lg text-clouddrove-light">
-            Paste something, get a code, open it anywhere. No login, no password.
+            Paste something, get a four digit code, open it on any other device. Five minutes, one use, no login.
           </p>
         </div>
         <Clipboard />

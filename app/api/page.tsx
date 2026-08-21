@@ -301,24 +301,16 @@ Encoding     base64url, unpadded, for every binary field`}
             <h2 className={H2}>Clipboard</h2>
             <div className={CARD}>
               <p className="text-clouddrove-light mb-6">
-                The shortest path: store something, hand someone a code, they read it once. No password step,
-                and still nothing the server can open.
+                The shortest path: store something, hand someone a four digit code, they read it
+                once. Clips expire after five minutes.
               </p>
               <p className="text-clouddrove-light mb-6 text-sm">
-                The trick is that the code <em>is</em> the key. One PBKDF2 pass over a ten character code yields
-                512 bits: the first 256 are the id you store under, the second 256 are the AES-GCM key. The code
-                never leaves the client, so an id cannot be walked back to it.
-              </p>
-              <pre className={PRE + ' mb-6'}>
-{`// in the client, never on the wire
-material = PBKDF2(code, "vanisec-clip-v1", 600000, 512 bits)
-id       = base64url(material[0..32])
-key      = material[32..64]`}
-              </pre>
-              <p className="text-clouddrove-light mb-6 text-sm">
-                The salt is fixed on purpose. Per-secret salts stop one precomputation covering many secrets,
-                which matters for human-chosen passwords drawn from a small space. Every code here is 50 random
-                bits, so there is no small space to precompute.
+                <strong className="text-clouddrove-dark">Unlike the endpoints above, this one is
+                not zero-knowledge.</strong> Four digits is ten thousand possibilities, far too
+                few to derive a key from, so the key travels with the ciphertext and is stored
+                beside it. Vanisec can decrypt a clip while it exists, and the code space is
+                small enough to enumerate. The five minute lifetime and the single use are what
+                bound that, which is why neither is configurable.
               </p>
 
               <h3 className={H3}>Store</h3>
@@ -329,18 +321,18 @@ key      = material[32..64]`}
               <pre className={PRE + ' mb-6'}>
 {`// request
 {
-  "id":         "string (base64url, 43 chars)",
   "ciphertext": "string (base64url, max 12000000 chars)",
   "iv":         "string (base64url)",
-  "expiresIn":   24
+  "key":        "string (base64url, raw AES-GCM 256 key)"
 }
 
 // response
-{ "stored": true }`}
+{ "code": "4242", "expiresIn": 300 }`}
               </pre>
               <p className="text-clouddrove-light mb-6 text-sm">
-                <code className="font-mono">expiresIn</code> is in hours and must be one of 1, 6, 24, 72 or 168.
-                An id already in use returns 409 rather than being overwritten, so a collision loses nothing.
+                The server picks the code, so a client cannot claim one or probe for which are
+                free. If every code it tries is taken it answers 503 rather than evicting a live
+                clip.
               </p>
 
               <h3 className={H3}>Open</h3>
@@ -350,15 +342,16 @@ key      = material[32..64]`}
               </div>
               <pre className={PRE + ' mb-6'}>
 {`// request
-{ "id": "string (base64url)" }
+{ "code": "4242" }
 
 // response
-{ "ciphertext": "string (base64url)", "iv": "string (base64url)" }`}
+{ "ciphertext": "...", "iv": "...", "key": "..." }`}
               </pre>
               <p className="text-clouddrove-light text-sm">
-                Atomic fetch-and-delete, so a clip opens exactly once. Unknown, expired and already-opened all
-                return the same 404. A wrong code derives a different id and simply finds nothing, so there is no
-                password check to fail.
+                Atomic fetch-and-delete, so a clip opens exactly once. Unknown, expired and
+                already-opened all return the same 404. Spaces and dashes in the code are
+                ignored. Opening is rate limited per address, well below what walking the code
+                space would need.
               </p>
             </div>
           </section>

@@ -1,29 +1,27 @@
 'use client'
 
-import { useState } from 'react'
-import {
-  generateClipCode,
-  normalizeClipCode,
-  formatClipCode,
-  deriveClipMaterial,
-  sealClip,
-  openClip,
-} from '@/lib/clipCode'
+import { useEffect, useState } from 'react'
+import qrcode from 'qrcode-generator'
+import { normalizeClipCode, sealClip, openClip, CLIP_TTL_SECONDS } from '@/lib/clipCode'
 
 // One box, both directions. Type text and get a code, or type a code and get
 // text back. Deliberately a single page: the whole point is that this is faster
 // than thinking about it.
 //
-// The code never reaches the server. deriveClipMaterial turns it into an id and
-// an AES key here in the browser, and only the id is sent.
+// The code is four digits, so it cannot be the key: see lib/clipCode.ts. The
+// key travels to the server with the ciphertext, which means Vanisec can read a
+// clip while it exists. The page says so rather than leaving people to assume
+// otherwise from the rest of the site.
 
-const EXPIRY_OPTIONS = [
-  { value: 1, label: '1 hour' },
-  { value: 6, label: '6 hours' },
-  { value: 24, label: '24 hours' },
-  { value: 72, label: '3 days' },
-  { value: 168, label: '7 days' },
-]
+// The QR is the point of the short code: a phone scans it and types nothing.
+// Encoded as a fragment so the code never appears in a request line or a server
+// log when the page is opened.
+function qrSvg(text: string): string {
+  const qr = qrcode(0, 'M')
+  qr.addData(text)
+  qr.make()
+  return qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true })
+}
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024
 
@@ -53,9 +51,9 @@ interface ReceivedFile {
 export default function Clipboard() {
   const [text, setText] = useState('')
   const [file, setFile] = useState<File | null>(null)
-  const [expiresIn, setExpiresIn] = useState(24)
 
   const [code, setCode] = useState('')
+  const [remaining, setRemaining] = useState(0)
   const [codeInput, setCodeInput] = useState('')
 
   const [received, setReceived] = useState<ReceivedFile | null>(null)
@@ -76,19 +74,18 @@ export default function Clipboard() {
 
     setBusy('saving')
     try {
-      const fresh = generateClipCode()
       const envelope = JSON.stringify({
         text,
         file: file
           ? { name: file.name, type: file.type, data: await fileToBase64(file) }
           : null,
       })
-      const sealed = await sealClip(fresh, envelope)
+      const sealed = await sealClip(envelope)
 
       const response = await fetch('/api/clip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...sealed, expiresIn }),
+        body: JSON.stringify(sealed),
       })
 
       if (!response.ok) {
@@ -97,7 +94,9 @@ export default function Clipboard() {
         return
       }
 
-      setCode(formatClipCode(fresh))
+      const { code: fresh } = await response.json()
+      setCode(fresh)
+      setRemaining(CLIP_TTL_SECONDS)
     } catch {
       setError('Could not save. Your browser may not support this.')
     } finally {
@@ -112,14 +111,17 @@ export default function Clipboard() {
       setError('That does not look like a complete code')
       return
     }
+    await openWithCode(normalized)
+  }
 
+  const openWithCode = async (normalized: string) => {
+    setError('')
     setBusy('opening')
     try {
-      const { id } = await deriveClipMaterial(normalized)
       const response = await fetch('/api/clip/open', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ code: normalized }),
       })
 
       if (response.status === 429) {
@@ -138,7 +140,7 @@ export default function Clipboard() {
       }
 
       const data = await response.json()
-      const envelope = JSON.parse(await openClip(normalized, data))
+      const envelope = JSON.parse(await openClip(data))
 
       setText(envelope.text ?? '')
       setReceived(envelope.file ?? null)
@@ -152,6 +154,29 @@ export default function Clipboard() {
       setBusy('')
     }
   }
+
+  // A QR scan lands here with the code in the fragment. The fragment is cleared
+  // immediately: it is a live capability for five minutes, and leaving it in the
+  // address bar puts it in history and in anything the user later shares.
+  useEffect(() => {
+    const fromQr = normalizeClipCode(window.location.hash.replace('#', ''))
+    if (!fromQr) return
+    history.replaceState(null, '', window.location.pathname)
+    // Both of these reach state, but only after the effect has returned, so the
+    // cascading render the rule guards against does not happen. Runs once on
+    // mount by design: re-firing a scan on every render would spend the clip.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCodeInput(fromQr)
+    void openWithCode(fromQr)
+  }, [])
+
+  // A dead code left on screen looks usable, and five minutes is short enough
+  // that people will hit it.
+  useEffect(() => {
+    if (remaining <= 0) return
+    const timer = setInterval(() => setRemaining((n) => Math.max(0, n - 1)), 1000)
+    return () => clearInterval(timer)
+  }, [remaining])
 
   const copy = async (value: string, which: 'text' | 'code') => {
     try {
@@ -231,18 +256,6 @@ export default function Clipboard() {
             />
           </div>
 
-          <select
-            value={expiresIn}
-            onChange={(e) => setExpiresIn(Number(e.target.value))}
-            className="w-full bg-white/60 border-2 border-clouddrove-light/30 rounded-lg px-3 py-2 text-clouddrove-dark text-sm focus:outline-none focus:border-clouddrove-light min-h-[44px]"
-          >
-            {EXPIRY_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                Expires in {o.label}
-              </option>
-            ))}
-          </select>
-
           <button
             onClick={save}
             disabled={busy !== ''}
@@ -253,17 +266,41 @@ export default function Clipboard() {
 
           {code && (
             <div className="text-center pt-2">
-              <p className="text-xs text-clouddrove-light mb-1">Send this code</p>
+              <p className="text-xs text-clouddrove-light mb-1">Enter this on the other device</p>
               <button
                 onClick={() => copy(code, 'code')}
-                className="font-mono font-bold tracking-[0.15em] text-2xl md:text-3xl text-clouddrove-dark hover:text-clouddrove-light"
+                className={`font-mono font-bold tracking-[0.3em] text-5xl md:text-6xl ${
+                  remaining > 0
+                    ? 'text-clouddrove-dark hover:text-clouddrove-light'
+                    : 'text-clouddrove-light/40 line-through'
+                }`}
                 title="Copy the code"
               >
                 {copied === 'code' ? 'Copied' : code}
               </button>
-              <p className="text-xs text-clouddrove-light/80 mt-2">
-                Opens once, then it is gone.
-              </p>
+
+              {remaining > 0 ? (
+                <>
+                  <p className="text-xs text-clouddrove-light mt-2">
+                    Expires in {Math.floor(remaining / 60)}:
+                    {String(remaining % 60).padStart(2, '0')}, opens once
+                  </p>
+                  <div className="mt-4 flex flex-col items-center">
+                    <p className="text-xs text-clouddrove-light mb-2">or scan, no typing</p>
+                    <div
+                      className="w-40 h-40 [&>svg]:w-full [&>svg]:h-full"
+                      aria-label="QR code linking to this clip"
+                      dangerouslySetInnerHTML={{
+                        __html: qrSvg(`${window.location.origin}/clipboard#${code}`),
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <p className="text-xs text-clouddrove-light mt-2">
+                  That code expired. Save again for a new one.
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -277,12 +314,12 @@ export default function Clipboard() {
             onKeyDown={(e) => {
               if (e.key === 'Enter') open()
             }}
-            placeholder="XXXXX-XXXXX"
+            placeholder="1234"
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="characters"
             spellCheck={false}
-            inputMode="text"
+            inputMode="numeric"
             className="w-full bg-white/60 border-2 border-clouddrove-light/30 rounded-lg px-3 py-3 text-center font-mono font-bold tracking-[0.15em] text-lg text-clouddrove-dark placeholder:text-clouddrove-light/40 placeholder:tracking-normal placeholder:font-normal focus:outline-none focus:border-clouddrove-light min-h-[48px]"
           />
 
@@ -307,9 +344,10 @@ export default function Clipboard() {
       )}
 
       <p className="text-xs text-clouddrove-light/70 text-center">
-        The code is generated here and never sent to Vanisec. It is what decrypts your
-        text, so the server only ever holds a blob it cannot read. Anyone you give the
-        code to can read the clip once.
+        Four digits is short enough to read out loud, which means it is also short
+        enough to guess. Clips last five minutes, open once, and unlike one-time links
+        the key is held on the server, so treat the clipboard as convenience rather than
+        privacy. For anything sensitive, use a one-time link.
       </p>
     </div>
   )

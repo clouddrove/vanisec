@@ -35,22 +35,22 @@ export default function DocsPage() {
                 How to Use the Clipboard
               </h3>
               <p className="text-clouddrove-light mb-3">
-                For moving text or a file between your own devices, a one-time link is more
-                ceremony than the job needs. The{' '}
+                For moving ordinary text or a file between your own devices, a one-time link is
+                more ceremony than the job needs. The{' '}
                 <Link href="/clipboard" className="text-clouddrove-dark underline underline-offset-4">
                   clipboard
                 </Link>{' '}
-                skips the password entirely.
+                skips the password.
               </p>
               <ol className="list-decimal list-inside space-y-3 text-clouddrove-light">
                 <li>Paste your text, or attach a file, at <strong className="text-clouddrove-dark">/clipboard</strong></li>
-                <li>Choose an expiration time and click <strong className="text-clouddrove-dark">Save</strong></li>
-                <li>You get a ten character code such as <code className="font-mono text-sm">4F2K9-QX1B7</code></li>
-                <li>On the other device, open the same page, type the code and click <strong className="text-clouddrove-dark">Show</strong></li>
+                <li>Click <strong className="text-clouddrove-dark">Save</strong> and you get a four digit code</li>
+                <li>On the other device, open the same page and enter it, or scan the QR code shown beside it</li>
+                <li>Click <strong className="text-clouddrove-dark">Show</strong> and the text appears</li>
               </ol>
               <p className="text-clouddrove-light mt-3 text-sm">
-                It opens once, then it is gone. The code is generated in your browser and
-                never sent to us, because it is what derives the encryption key: see the
+                Clips expire after five minutes and open once. Because a four digit code is short
+                enough to guess, the clipboard is not the place for passwords or keys: see the
                 Clipboard feature below.
               </p>
             </div>
@@ -83,13 +83,19 @@ export default function DocsPage() {
               </div>
               <div className="bg-white rounded-xl p-6 border-2 border-clouddrove-light/30">
                 <h3 className="text-xl font-semibold text-clouddrove-dark mb-2">Clipboard</h3>
+                <p className="text-clouddrove-light mb-3">
+                  A four digit code instead of a link, and no password, for moving text or a
+                  file between devices. Scan the QR code instead and you type nothing at all.
+                  Clips last five minutes and open once.
+                </p>
                 <p className="text-clouddrove-light">
-                  A short code instead of a link, and no password, for moving text or a file
-                  between devices. Nothing is weakened to get there: the ten character code is
-                  itself the key. Your browser runs one PBKDF2 pass over it to produce both the
-                  id we store under and the AES key, and the code never leaves the page, so we
-                  hold a blob we cannot open. The tradeoff is that the code alone grants access,
-                  so treat it like a password and let it expire.
+                  <strong className="text-clouddrove-dark">This one is convenience, not
+                  privacy.</strong> Four digits is ten thousand possibilities, far too few to
+                  be an encryption key, so the key is held on our server: we can read a clip
+                  while it exists, and someone guessing codes could find one. The five minute
+                  life and the single use are what keep that bounded. Use it for ordinary text
+                  between your own devices, and use a one-time link for anything sensitive,
+                  where the password never leaves your browser.
                 </p>
               </div>
             </div>

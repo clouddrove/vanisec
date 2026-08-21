@@ -109,21 +109,25 @@ password gets the secret.
 | Parameter | Required | Notes |
 |-----------|----------|-------|
 | `text` | yes | the text to put on the clipboard |
-| `expiresIn` | no | hours, one of 1, 6, 24, 72, 168, defaults to 24 |
 
-A different job from the two tools above. There is no recipient and no password:
-this puts text on the Vanisec clipboard and returns a ten character code to type
-at `/clipboard` on another device. Reach for it when someone wants something on
-the phone in their hand, not when they want to send it to a person.
+A different job from the two tools above, and a different security tier. This
+puts text on the Vanisec clipboard and returns a **four digit code** to enter at
+`/clipboard` on another device. Clips expire after five minutes and open once.
 
-The code is the decryption key, generated locally and never sent to Vanisec, so
-the server stores ciphertext it cannot read. **The code is shown in the
-conversation**, because a code nobody can read cannot be typed in. That makes
-this the wrong tool for a credential that must stay out of the transcript, where
-`vanisec_generate_secret` still applies. It is the right tool for a kubeconfig,
-a log excerpt, a block of YAML, or anything else that is awkward to retype.
+**The clipboard is not private, and you must not treat it as though it were.**
+Four digits is ten thousand possibilities, far too few to be an encryption key,
+so the key is held on the server. Vanisec can read a clip while it exists, and
+somebody working through codes could find one before the intended person does.
 
-Clips open once and then are gone, same as everything else here.
+So: reach for it when a person wants ordinary text on the phone in their hand.
+A log excerpt, a block of YAML, an address, a command they are about to run.
+
+**Never use it for a credential.** Not a password, not an API key, not a token,
+not a private key, not a connection string. Those are what
+`vanisec_generate_secret` exists for, where the value never enters the
+conversation, the password goes to the clipboard rather than the transcript, and
+the server never holds the key. If someone asks you to put a credential on their
+phone, use a one-time link and let them open it there.
 
 ## Choosing `expiresIn`
 

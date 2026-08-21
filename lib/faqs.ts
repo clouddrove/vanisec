@@ -62,7 +62,7 @@ export const FAQS: Faq[] = [
   },
   {
     question: 'Is the password required?',
-    answer: 'Yes, for one-time secret links. Every secret is protected by a password, and it never leaves your browser: it derives the encryption key, and separately a one-way value that gates retrieval. Send it to the recipient through a different channel than the link, because either one alone is useless and the pair together is the secret. The clipboard is the exception and needs no password, because its code is the key.',
+    answer: 'Yes, for one-time secret links. Every secret is protected by a password, and it never leaves your browser: it derives the encryption key, and separately a one-way value that gates retrieval. Send it to the recipient through a different channel than the link, because either one alone is useless and the pair together is the secret. The clipboard is the exception: it uses a short code instead, and is convenience rather than privacy.',
   },
   {
     question: 'Do you store my secrets?',
@@ -71,19 +71,19 @@ export const FAQS: Faq[] = [
   },
   {
     question: 'Can I use Vanisec to move text between my own devices?',
-    answer: 'Yes, that is what the clipboard is for. Paste text or attach a file at /clipboard, click Save, and you get a ten character code such as 4F2K9-QX1B7. Open the same page on your other device, type the code, and the text appears. There is no password and no login, and it opens exactly once.',
+    answer: 'Yes, that is what the clipboard is for. Paste text or attach a file at /clipboard, click Save, and you get a four digit code. Open the same page on your other device and enter it, or scan the QR code shown next to it and type nothing at all. It expires after five minutes and opens exactly once.',
   },
   {
     question: 'What is the difference between a one-time link and the clipboard?',
-    answer: 'A one-time link is for handing something to another person: it has a password, and you send the link and the password through different channels. The clipboard is for moving something to a device you are holding: no password, just a short code you can read off one screen and type into another. Both encrypt in your browser, both open once, and both expire.',
+    answer: 'A one-time link is private: it has a password that never leaves your browser, so Vanisec cannot read the secret. Use it for anything sensitive. The clipboard is fast: a four digit code, no password, five minutes. Vanisec can read a clip while it exists, and a four digit code is guessable, so use it for moving ordinary text between your own devices, not for credentials.',
   },
   {
     question: 'Is the clipboard less secure without a password?',
-    answer: 'It is a different tradeoff rather than a weaker one. The code is the key: your browser runs one PBKDF2 pass over the ten character code to produce both the id we store under and the AES key, and the code itself is never sent to us, so we hold ciphertext we cannot open. What you do give up is that the code alone grants access, so anyone who sees it can read the clip. Treat it like a password, and let it expire.',
+    answer: 'Yes, and deliberately so. A four digit code is only ten thousand possibilities, which is far too few to be an encryption key, so the key is held on our server instead. That means Vanisec can read a clip while it exists, and someone guessing codes could find one. What limits it is time: a clip lives five minutes and opens once, so a code that has been used is already dead. Use the clipboard for moving ordinary text between your own devices. For a password, an API key or anything else sensitive, use a one-time link, where the password never leaves your browser and we genuinely cannot read it.',
   },
   {
     question: 'Can I share a file through the clipboard?',
-    answer: 'Yes, up to 5MB. The file is encrypted in your browser alongside any text, and the recipient gets a download link after entering the code. Same rules apply: it opens once and then it is gone.',
+    answer: 'Yes, up to 5MB. The file is encrypted in your browser alongside any text, and whoever enters the code gets a download link. Same rules apply: five minutes, opens once, and not the place for a sensitive file.',
   },
   {
     question: 'Can I use Vanisec commercially?',

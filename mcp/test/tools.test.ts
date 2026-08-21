@@ -100,23 +100,26 @@ test('a mint that quietly failed leaves the link intact and mentions no code', a
 
 // --- the clip tool ---
 
-test('the clip tool shows the code, because a code nobody can read cannot be typed', async () => {
+test('the clip tool shows the code and states what it does not protect', async () => {
   const { handleClip } = await import('../src/index.js')
   const res = await handleClip(
     { text: 'x' },
     {
       createClip: async () => ({
-        code: '4F2K9-QX1B7',
+        code: '4242',
         url: 'https://example.com/clipboard',
-        expiresAt: '2026-01-01T00:00:00.000Z',
+        expiresInSeconds: 300,
       }),
     }
   )
   assert.ok(!res.isError)
-  assert.match(res.content[0].text, /4F2K9-QX1B7/)
+  assert.match(res.content[0].text, /4242/)
   assert.match(res.content[0].text, /\/clipboard/)
-  // The caller has to understand that the code is the key, not a convenience.
-  assert.match(res.content[0].text, /no password|treat it like one/i)
+  assert.match(res.content[0].text, /5 minutes/)
+  // A model reading this has to come away knowing the clipboard is not the
+  // place for a credential, so the output says it rather than implying it.
+  assert.match(res.content[0].text, /guessable|can read/i)
+  assert.match(res.content[0].text, /vanisec_generate_secret/)
 })
 
 test('a clip failure is reported as a tool error, not a success', async () => {
