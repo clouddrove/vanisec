@@ -186,42 +186,49 @@ test('still returns the link when the pairing response is malformed', async () =
 // worth pinning is that the code never reaches the wire: if it did, Vanisec
 // would be able to decrypt every clip and the design would be for nothing.
 
-test('a clip sends ciphertext and never the code or the plaintext', async () => {
+test('a clip sends ciphertext, not the plaintext', async () => {
   const { createClip } = await import('../src/clip.js')
   const cap: { body?: any } = {}
-  const res = await createClip({
+  await createClip({
     text: 'move me to the phone',
-    fetchImpl: stubFetch(200, { stored: true }, cap) as never,
+    fetchImpl: stubFetch(200, { code: '4242' }, cap) as never,
   })
 
   const sent = JSON.stringify(cap.body)
   assert.ok(!sent.includes('move me to the phone'), 'plaintext leaked to the wire')
-
-  const bare = res.code.replace('-', '')
-  assert.ok(!sent.includes(bare), 'the code leaked to the wire')
-  assert.ok(!sent.includes(res.code), 'the code leaked to the wire')
   assert.ok(cap.body.ciphertext.length > 0)
-  assert.ok(cap.body.id.length > 0)
+  // The key goes with it, which is the honest shape of a four digit code and
+  // the reason the clipboard is not zero-knowledge.
+  assert.ok(cap.body.key.length > 0)
 })
 
-test('the clip code is ten characters shown in two groups', async () => {
+test('the code comes from the server, not from this process', async () => {
   const { createClip } = await import('../src/clip.js')
-  const res = await createClip({ text: 'x', fetchImpl: stubFetch(200, { stored: true }) as never })
-  assert.match(res.code, /^[0-9A-Z]{5}-[0-9A-Z]{5}$/)
+  const res = await createClip({ text: 'x', fetchImpl: stubFetch(200, { code: '0731' }) as never })
+  assert.equal(res.code, '0731')
   assert.match(res.url, /\/clipboard$/)
+  assert.equal(res.expiresInSeconds, 300)
+})
+
+test('a clip with no code back is an error, not a success with nothing to type', async () => {
+  const { createClip } = await import('../src/clip.js')
+  await assert.rejects(
+    () => createClip({ text: 'x', fetchImpl: stubFetch(200, {}) as never }),
+    (e: Error) => /returned no code/.test(e.message)
+  )
 })
 
 test('a clip round-trips through the shared seal and open helpers', async () => {
-  const { sealClip, openClip, generateClipCode } = await import('@lib/clipCode')
-  const code = generateClipCode()
-  const sealed = await sealClip(code, JSON.stringify({ text: 'hello', file: null }))
-  assert.deepEqual(JSON.parse(await openClip(code, sealed)), { text: 'hello', file: null })
+  const { sealClip, openClip } = await import('@lib/clipCode')
+  const sealed = await sealClip(JSON.stringify({ text: 'hello', file: null }))
+  assert.deepEqual(JSON.parse(await openClip(sealed)), { text: 'hello', file: null })
 })
 
-test('a clip sealed with one code does not open with another', async () => {
-  const { sealClip, openClip, generateClipCode } = await import('@lib/clipCode')
-  const sealed = await sealClip(generateClipCode(), 'secret')
-  await assert.rejects(() => openClip(generateClipCode(), sealed))
+test('a clip does not open with a different key', async () => {
+  const { sealClip, openClip } = await import('@lib/clipCode')
+  const sealed = await sealClip('secret')
+  const other = await sealClip('other')
+  await assert.rejects(() => openClip({ ...sealed, key: other.key }))
 })
 
 test('a clip is not retried on a network failure', async () => {
@@ -235,13 +242,13 @@ test('a clip is not retried on a network failure', async () => {
   assert.equal(calls, 1, 'a retry could leave a second clip nobody knows about')
 })
 
-test('a clip rejects an invalid expiry before making a request', async () => {
+test('a clip rejects empty text before making a request', async () => {
   const { createClip } = await import('../src/clip.js')
   let calls = 0
   const counting = async () => {
     calls++
     return new Response('{}', { status: 200 })
   }
-  await assert.rejects(() => createClip({ text: 'x', expiresIn: 5, fetchImpl: counting as never }))
+  await assert.rejects(() => createClip({ text: '   ', fetchImpl: counting as never }))
   assert.equal(calls, 0)
 })

@@ -1,46 +1,67 @@
-// The clipboard code: one string that is both where a clip lives and the key
-// that opens it.
+// Clipboard codes: four digits, alive for five minutes, used once.
 //
-// The other flows split those apart. A secret link carries a locator and asks
-// for a password; a pairing code carries a locator and still asks for the
-// password. That split exists so two people who share nothing can exchange a
-// secret. It is the wrong shape for "put this on my phone in ten seconds",
-// where the password is the entire friction.
+// READ THIS BEFORE CHANGING ANYTHING HERE.
 //
-// So there is no password here. A single high-entropy code is generated for
-// you, and one PBKDF2 pass over it produces 512 bits: the first half is the id
-// the server stores under, the second half is the AES key. **The code itself
-// never leaves the browser.** The server sees an id and ciphertext and cannot
-// walk back from one to the other.
+// An earlier version made the code itself the encryption key, which kept the
+// clipboard zero-knowledge with no password. That only worked because the code
+// was long: ten characters over a 32 symbol alphabet is 2^50, and deriving a
+// key from every possible code is not a computation anyone performs.
 //
-// That is what keeps this zero-knowledge without a password. It also means the
-// code is the whole secret: anyone who sees it in transit can read the clip,
-// exactly once. Same bargain as any link-based tool, and the reason clips
-// expire quickly.
-
-import { ALPHABET } from './pairingCode'
-
-// Ten characters over a 32-symbol alphabet: 2^50.
+// Four digits is 10,000 codes. Deriving the key for all of them takes under an
+// hour on one core, so a code that short cannot be a key: the first person to
+// build that table could read every clip ever written. The key therefore lives
+// on the server, and the consequences are:
 //
-// Longer than a pairing code (2^40) on purpose. A pairing code only locates a
-// secret that a password still guards, so its entropy is not the last line of
-// defence. This one is: the whole key derives from it. Reversing an id to its
-// code means 2^50 PBKDF2 passes at the iteration count below, which is not a
-// computation anyone is doing.
-export const CLIP_CODE_LENGTH = 10
-const GROUP_SIZE = 5
+//   1. Vanisec can decrypt a clip while it exists. The clipboard is NOT
+//      zero-knowledge. One-time links and pairing codes are unaffected, because
+//      their passwords never leave the browser.
+//   2. Ten thousand codes are enumerable. Somebody polling the whole space can
+//      harvest clips they were never given.
+//
+// What holds the risk down is time. A clip lives five minutes and opens once,
+// so the window for finding any particular one is small and closes for good the
+// moment it is read. That is why the lifetime is fixed here rather than offered
+// as a choice: it is a security parameter, not a preference.
+//
+// The product surfaces say this plainly. If the code is ever lengthened again,
+// the zero-knowledge design is in git history and worth restoring.
 
-// A fixed salt, deliberately. Per-clip salts exist to stop one precomputation
-// covering many secrets, which matters when the input is a human-chosen
-// password drawn from a small space. Here every code is 50 random bits, so
-// there is no small space to precompute and a stored salt would only be one
-// more round trip before the browser can derive anything.
-const ID_SALT = 'vanisec-clip-v1'
+export const CLIP_CODE_LENGTH = 4
 
-// Matches the floor used everywhere else in the app.
-const CLIP_ITERATIONS = 600_000
+// Fixed. See above: this is what bounds the exposure of a guessable code.
+export const CLIP_TTL_SECONDS = 300
 
-const DERIVED_BITS = 512
+// Uniform over 0000-9999. Math.random would make one code predictable from
+// another, which matters more here than usual because the space is small.
+export function generateClipCode(): string {
+  const bytes = new Uint32Array(1)
+  let value: number
+  // Rejection sampling: 2^32 is not a multiple of 10,000, so an unfiltered
+  // remainder would favour the lowest 967 codes.
+  const limit = Math.floor(0x100000000 / 10000) * 10000
+  do {
+    globalThis.crypto.getRandomValues(bytes)
+    value = bytes[0]
+  } while (value >= limit)
+  return String(value % 10000).padStart(CLIP_CODE_LENGTH, '0')
+}
+
+// Accepts what a person types: spaces, dashes and anything else non-numeric are
+// dropped, so "12 34" and "1234" are the same code. Returns null when the
+// result is not four digits, so callers never reach storage with junk.
+export function normalizeClipCode(input: string): string | null {
+  if (typeof input !== 'string') return null
+  const digits = input.replace(/\D/g, '')
+  return digits.length === CLIP_CODE_LENGTH ? digits : null
+}
+
+// Four digits read fine ungrouped.
+export function formatClipCode(code: string): string {
+  return code
+}
+
+const IV_BYTES = 12
+const KEY_BITS = 256
 
 function getSubtle(): SubtleCrypto {
   const c = globalThis.crypto
@@ -54,6 +75,12 @@ function bs(u: Uint8Array): BufferSource {
   return u as unknown as BufferSource
 }
 
+function toBase64Url(bytes: Uint8Array): string {
+  let bin = ''
+  for (let i = 0; i < bytes.length; i += 1) bin += String.fromCharCode(bytes[i])
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
 function fromBase64Url(s: string): Uint8Array {
   const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/'))
   const out = new Uint8Array(bin.length)
@@ -61,106 +88,25 @@ function fromBase64Url(s: string): Uint8Array {
   return out
 }
 
-function toBase64Url(bytes: Uint8Array): string {
-  let bin = ''
-  for (let i = 0; i < bytes.length; i += 1) bin += String.fromCharCode(bytes[i])
-  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+export interface SealedClip {
+  ciphertext: string
+  iv: string
+  // Travels to the server and is stored beside the ciphertext. That is the
+  // honest shape of the tradeoff above. Encrypting in the browser still keeps
+  // plaintext out of request bodies and out of anything that logs them, but it
+  // does not keep the clip from the server.
+  key: string
 }
 
-export function generateClipCode(): string {
-  const bytes = new Uint8Array(CLIP_CODE_LENGTH)
-  globalThis.crypto.getRandomValues(bytes)
-  let code = ''
-  // 32 divides 256, so a byte modulo the alphabet length is unbiased.
-  for (let i = 0; i < bytes.length; i += 1) code += ALPHABET[bytes[i] % ALPHABET.length]
-  return code
-}
-
-// Same folding as pairing codes: the alphabet omits I, L, O and U, so any of
-// those can only be a misread digit.
-export function normalizeClipCode(input: string): string | null {
-  if (typeof input !== 'string') return null
-  const folded = input
-    .toUpperCase()
-    .replace(/[\s-]/g, '')
-    .replace(/[IL]/g, '1')
-    .replace(/O/g, '0')
-
-  if (folded.length !== CLIP_CODE_LENGTH) return null
-  for (const char of folded) {
-    if (!ALPHABET.includes(char)) return null
-  }
-  return folded
-}
-
-export function formatClipCode(code: string): string {
-  const groups: string[] = []
-  for (let i = 0; i < code.length; i += GROUP_SIZE) {
-    groups.push(code.slice(i, i + GROUP_SIZE))
-  }
-  return groups.join('-')
-}
-
-export interface ClipMaterial {
-  // Safe to send. Derived through PBKDF2, so it does not lead back to the code.
-  id: string
-  // Never leaves the browser.
-  key: CryptoKey
-}
-
-// One PBKDF2 pass, split in half. Doing it twice would double the wait on a
-// phone for no gain: both halves come from the same code either way.
-export async function deriveClipMaterial(code: string): Promise<ClipMaterial> {
+export async function sealClip(plaintext: string): Promise<SealedClip> {
   const subtle = getSubtle()
-  const base = await subtle.importKey(
-    'raw',
-    bs(new TextEncoder().encode(code)),
-    'PBKDF2',
-    false,
-    ['deriveBits']
-  )
-  const derived = new Uint8Array(
-    await subtle.deriveBits(
-      {
-        name: 'PBKDF2',
-        salt: bs(new TextEncoder().encode(ID_SALT)),
-        iterations: CLIP_ITERATIONS,
-        hash: 'SHA-256',
-      },
-      base,
-      DERIVED_BITS
-    )
-  )
-
-  const idBytes = derived.slice(0, 32)
-  const keyBytes = derived.slice(32, 64)
-  const key = await subtle.importKey('raw', bs(keyBytes), { name: 'AES-GCM' }, false, [
+  const key = await subtle.generateKey({ name: 'AES-GCM', length: KEY_BITS }, true, [
     'encrypt',
     'decrypt',
   ])
-
-  return { id: toBase64Url(idBytes), key }
-}
-
-const IV_BYTES = 12
-
-export interface SealedClip {
-  id: string
-  ciphertext: string
-  iv: string
-}
-
-// Seal and open live here rather than in the page, because the MCP package
-// creates clips too and the two must agree byte for byte. A clip written by an
-// AI client has to open in a browser that never saw that code being generated,
-// so any drift between two copies of this would surface as "that code did not
-// work" with nothing to point at.
-export async function sealClip(code: string, plaintext: string): Promise<SealedClip> {
-  const subtle = getSubtle()
-  const { id, key } = await deriveClipMaterial(code)
-
   const iv = new Uint8Array(IV_BYTES)
   globalThis.crypto.getRandomValues(iv)
+
   const ciphertext = new Uint8Array(
     await subtle.encrypt(
       { name: 'AES-GCM', iv: bs(iv) },
@@ -168,18 +114,24 @@ export async function sealClip(code: string, plaintext: string): Promise<SealedC
       bs(new TextEncoder().encode(plaintext))
     )
   )
+  const raw = new Uint8Array(await subtle.exportKey('raw', key))
 
-  return { id, ciphertext: toBase64Url(ciphertext), iv: toBase64Url(iv) }
+  return {
+    ciphertext: toBase64Url(ciphertext),
+    iv: toBase64Url(iv),
+    key: toBase64Url(raw),
+  }
 }
 
-// Throws when the code is wrong, because AES-GCM rejects a key it was not
-// sealed with rather than returning something that looks like plaintext.
-export async function openClip(
-  code: string,
-  payload: { ciphertext: string; iv: string }
-): Promise<string> {
+export async function openClip(payload: SealedClip): Promise<string> {
   const subtle = getSubtle()
-  const { key } = await deriveClipMaterial(code)
+  const key = await subtle.importKey(
+    'raw',
+    bs(fromBase64Url(payload.key)),
+    { name: 'AES-GCM' },
+    false,
+    ['decrypt']
+  )
   const plain = await subtle.decrypt(
     { name: 'AES-GCM', iv: bs(fromBase64Url(payload.iv)) },
     key,

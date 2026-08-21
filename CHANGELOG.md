@@ -9,42 +9,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Clipboard
 
-Paste text or a file at `/clipboard`, get a short code, and open it on any other
-device. No login, no password, and it opens once.
+Paste text or a file at `/clipboard`, get a four digit code, and open it on any
+other device. Or scan the QR code shown beside it and type nothing at all. Clips
+expire after five minutes and open once. No login.
 
-This exists because the two earlier attempts at the same problem both missed. A
-pairing code still asks for the password on the second device, and the
-passwordless handoff below needs the receiving device standing by before the
-sender can send. Neither is "paste this, send someone a code, they read it
-whenever".
+**The clipboard is not zero-knowledge, and nothing else on the site changed.**
+One-time links and pairing codes still derive their keys from a password that
+never leaves the browser.
 
-There is still nothing the server can read, because **the code is the key**. One
-PBKDF2 pass over a ten character code yields 512 bits: the first half is the id
-the server stores under, the second half is the AES-GCM key. The code never
-leaves the browser, so an id cannot be walked back to the code that produced it.
+The first version of this made the code itself the key, which kept the whole
+thing zero-knowledge without a password. That worked because the code was ten
+characters over a 32 symbol alphabet: 2^50, and deriving a key from every
+possible code is not a computation anyone performs. It was also ten characters
+to type.
 
-Ten characters rather than the eight a pairing code uses, because a pairing code
-only locates a secret that a password still guards, while this one carries the
-whole burden: 2^50, and reversing an id means that many PBKDF2 passes at 600,000
-iterations.
+Four digits is ten thousand codes. Deriving the key for all of them takes under
+an hour on one core, so a code that short cannot be a key: whoever built that
+table first could read every clip ever written. The key is therefore held on the
+server, which means Vanisec can decrypt a clip while it exists, and ten thousand
+codes are enumerable by someone determined.
 
-The derivation salt is fixed rather than per-clip. Per-secret salts stop one
-precomputation covering many secrets, which matters when the input is a
-human-chosen password drawn from a small space. Every code here is 50 random
-bits, so there is no small space to precompute, and a stored salt would only add
-a round trip before the browser could derive anything.
+What bounds it is time. A clip lives five minutes and opens once, so the window
+for finding any particular one is small and shuts for good the moment it is
+read. Neither the lifetime nor the code length is configurable, because both are
+security parameters rather than preferences. The QR code exists so the short
+code does not have to be typed at all.
 
-The tradeoff worth stating: a code is a single string that grants access, so
-anyone who sees it in transit can read the clip. That is the price of dropping
-the password, and it is why a clip opens exactly once and expires.
+The product says this plainly: on the clipboard page itself, in the docs, in the
+FAQ, in the API reference and in the MCP tool description. A tool that quietly
+weakened its own guarantee would be worse than one that never claimed it.
 
 Exposed as `POST /api/clip` and `POST /api/clip/open`.
-
-A receiver-first variant was built first and removed before release. It had the
-receiving device publish an ephemeral public key under a code and wait, which is
-cryptographically neat but requires both devices online at once. The clipboard
-does the same job asynchronously, so keeping both meant three overlapping ways to
-move data and one more thing to explain.
 
 ### Pairing codes
 

@@ -642,29 +642,27 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
 
               <h3 className={H3}>vanisec_create_clip</h3>
               <p className="text-clouddrove-light mb-3">
-                Puts plain text on the clipboard and returns a short code to type at{' '}
+                Puts plain text on the clipboard and returns a four digit code to enter at{' '}
                 <code className="font-mono">/clipboard</code> on another device. Use it for moving
-                something onto a phone you are holding, rather than sending it to someone.
+                ordinary text onto a phone you are holding.
               </p>
               <pre className={PRE + ' mb-3'}>
-{`vanisec_create_clip(text, expiresIn?)`}
+{`vanisec_create_clip(text)`}
               </pre>
               <ul className="space-y-1 text-clouddrove-light mb-3 text-sm">
                 <li>
                   <code className="font-mono">text</code>: the text to put on the clipboard
                 </li>
-                <li>
-                  <code className="font-mono">expiresIn</code>: hours, one of 1, 6, 24, 72, 168, default 24
-                </li>
               </ul>
               <p className="text-clouddrove-light mb-3 text-sm">
-                No password. The ten character code is generated on your machine and is itself the
-                decryption key, so Vanisec stores ciphertext it cannot read. The code is shown in the
-                conversation, because a code nobody can read cannot be typed in, which makes this the
-                wrong tool for a credential that must stay out of the transcript entirely.
+                Clips expire after five minutes and open once. <strong className="text-clouddrove-dark">
+                Not a private channel:</strong> four digits is too small a space to be an
+                encryption key, so the key is held server side and Vanisec can read a clip while it
+                exists. Never use it for a credential; that is what{' '}
+                <code className="font-mono">vanisec_generate_secret</code> is for.
               </p>
               <p className="text-clouddrove-light mb-6 text-sm italic">
-                Example prompt: &quot;Put this kubeconfig on my phone.&quot;
+                Example prompt: &quot;Put this YAML block on my phone.&quot;
               </p>
 
               <h3 className={H3}>vanisec_generate_secret</h3>

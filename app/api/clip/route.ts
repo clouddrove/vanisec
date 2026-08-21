@@ -1,24 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import {
-  createClip,
-  ALLOWED_EXPIRY_HOURS,
-  MAX_CIPHERTEXT_CHARS,
-  MAX_ID_CHARS,
-} from '@/lib/clip'
+import { createClip, MAX_CIPHERTEXT_CHARS, MAX_FIELD_CHARS } from '@/lib/clip'
 import { rateLimit, clientIp } from '@/lib/rateLimit'
 
-// POST /api/clip stores one clipboard entry.
+// POST /api/clip stores one clipboard entry and returns its four digit code.
 //
-// The id arrives from the browser rather than being minted here, because it is
-// derived from a code this server is never given. That is the whole design: see
-// lib/clipCode.ts. Accepting a client-chosen id is safe because the id is not a
-// capability anyone can usefully forge, and a collision is refused rather than
-// overwritten.
+// The server mints the code, so a client cannot pick one, and cannot probe for
+// which codes are free by trying to claim them.
 const CREATE_LIMIT = 30
 const CREATE_WINDOW_SECONDS = 600
 
 const MAX_BODY_BYTES = 16_000_000
-const MAX_FIELD_CHARS = 1_000
 
 function isShortString(v: unknown, max: number): v is string {
   return typeof v === 'string' && v.length > 0 && v.length <= max
@@ -40,28 +31,27 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { id, ciphertext, iv, expiresIn } = await request.json()
+    const { ciphertext, iv, key } = await request.json()
 
-    if (!isShortString(id, MAX_ID_CHARS)) {
-      return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
-    }
-    if (!isShortString(ciphertext, MAX_CIPHERTEXT_CHARS) || !isShortString(iv, MAX_FIELD_CHARS)) {
+    if (!isShortString(ciphertext, MAX_CIPHERTEXT_CHARS)) {
       return NextResponse.json({ error: 'Invalid or oversized payload' }, { status: 400 })
     }
-    if (!ALLOWED_EXPIRY_HOURS.includes(expiresIn)) {
-      return NextResponse.json({ error: 'Invalid expiration time' }, { status: 400 })
+    if (!isShortString(iv, MAX_FIELD_CHARS) || !isShortString(key, MAX_FIELD_CHARS)) {
+      return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
     }
 
-    const written = await createClip({ id, ciphertext, iv, expiresIn })
-    if (!written) {
-      // Only reachable if two browsers drew the same code out of 2^50.
+    const created = await createClip({ ciphertext, iv, key })
+    if (!created) {
+      // Every code tried was taken. With 10,000 codes and a five minute life
+      // this needs a lot of traffic, and asking the caller to retry is better
+      // than evicting somebody else's clip.
       return NextResponse.json(
-        { error: 'That code is already in use. Please try again.' },
-        { status: 409 }
+        { error: 'Too many clips in flight. Please try again in a moment.' },
+        { status: 503 }
       )
     }
 
-    return NextResponse.json({ stored: true })
+    return NextResponse.json(created)
   } catch {
     return NextResponse.json({ error: 'Failed to save' }, { status: 500 })
   }
