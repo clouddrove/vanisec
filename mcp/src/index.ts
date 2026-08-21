@@ -4,6 +4,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
 import { createSecret as realCreateSecret, baseUrl } from './vanisec.js'
+import { createClip as realCreateClip } from './clip.js'
 import { generateSecret, generatePassword, GENERATION_RULES, type SecretType } from './generate.js'
 import { copyToClipboard as realCopy, inlinePasswordAllowed } from './clipboard.js'
 import { validateExpiry } from './validate.js'
@@ -105,6 +106,23 @@ export async function handleGenerate(
   }
 }
 
+export async function handleClip(
+  args: { text: string; expiresIn?: number },
+  deps: { createClip?: typeof realCreateClip } = {}
+): Promise<ToolResult> {
+  const create = deps.createClip ?? realCreateClip
+  try {
+    const { code, url, expiresAt } = await create({ text: args.text, expiresIn: args.expiresIn })
+    return text(
+      `Clip saved.\n\nCode: ${code}\n\nOpen ${url} on the other device, enter the code, and the text ` +
+        `appears. It opens once and expires ${expiresAt}. There is no password: the code is what decrypts ` +
+        `the clip, so treat it like one.`
+    )
+  } catch (e) {
+    return text(`Could not save the clip: ${(e as Error).message}`, true)
+  }
+}
+
 // Server-wide guidance, returned at initialization and treated by clients such
 // as Codex as standing instructions for the whole session.
 //
@@ -127,10 +145,11 @@ const INSTRUCTIONS = [
   'Expiry is 1, 6, 24, 72 or 168 hours and defaults to 24. Encryption happens on this machine, so Vanisec only ever receives ciphertext.',
   'vanisec_generate_secret needs a working clipboard. Without one it fails rather than printing the password.',
   'Do not read a generated value or a link password back to the user, and do not ask for a secret to be pasted in when it can be generated instead.',
+  'vanisec_create_clip is for moving plain text onto another device the user is holding, such as a phone. It has no password and returns a short code to type at /clipboard. The code is shown here and is the key, so it is not for a credential that must stay out of the transcript.',
   'Set pairingCode when the secret is going to another device the user is holding, such as their phone. It returns a short code to type at /c, lasts five minutes, and is wrong for a recipient who will read the message later.',
 ].join('\n\n')
 
-export const VERSION = '0.3.0'
+export const VERSION = '0.4.0'
 
 export function buildServer(): McpServer {
   // instructions is a server option, not part of the implementation object.
@@ -187,6 +206,28 @@ export function buildServer(): McpServer {
       },
     },
     (args) => handleGenerate(args)
+  )
+
+  server.registerTool(
+    'vanisec_create_clip',
+    {
+      title: 'Put text on the clipboard for another device',
+      description:
+        'Saves text to the Vanisec clipboard and returns a short code to type at /clipboard on another ' +
+        'device, such as a phone. There is no password: the code is generated here and is itself the ' +
+        'decryption key, so Vanisec stores ciphertext it cannot read. Use this for moving something onto a ' +
+        'device the user is holding. The code is shown in this conversation, because a code nobody can read ' +
+        'cannot be typed in, so for a credential that must stay out of the transcript entirely prefer ' +
+        'vanisec_generate_secret. The text passed in also stays in this conversation.',
+      inputSchema: {
+        text: z.string().min(1).describe('The text to put on the clipboard'),
+        expiresIn: z
+          .number()
+          .optional()
+          .describe('Hours until expiry. One of 1, 6, 24, 72, 168. Defaults to 24.'),
+      },
+    },
+    (args) => handleClip(args)
   )
 
   // Prompt arguments are strings on the wire, so every schema here is a string

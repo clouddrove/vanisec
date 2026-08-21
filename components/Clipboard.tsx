@@ -6,6 +6,8 @@ import {
   normalizeClipCode,
   formatClipCode,
   deriveClipMaterial,
+  sealClip,
+  openClip,
 } from '@/lib/clipCode'
 
 // One box, both directions. Type text and get a code, or type a code and get
@@ -42,19 +44,6 @@ function base64ToBlobUrl(b64: string, type: string): string {
   return URL.createObjectURL(new Blob([bytes], { type: type || 'application/octet-stream' }))
 }
 
-function toBase64Url(bytes: Uint8Array): string {
-  let bin = ''
-  for (let i = 0; i < bytes.length; i += 1) bin += String.fromCharCode(bytes[i])
-  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
-}
-
-function fromBase64Url(s: string): Uint8Array {
-  const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/'))
-  const out = new Uint8Array(bin.length)
-  for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i)
-  return out
-}
-
 interface ReceivedFile {
   name: string
   type: string
@@ -88,34 +77,18 @@ export default function Clipboard() {
     setBusy('saving')
     try {
       const fresh = generateClipCode()
-      const { id, key } = await deriveClipMaterial(fresh)
-
       const envelope = JSON.stringify({
         text,
         file: file
           ? { name: file.name, type: file.type, data: await fileToBase64(file) }
           : null,
       })
-
-      const iv = new Uint8Array(12)
-      crypto.getRandomValues(iv)
-      const ciphertext = new Uint8Array(
-        await crypto.subtle.encrypt(
-          { name: 'AES-GCM', iv: iv as unknown as BufferSource },
-          key,
-          new TextEncoder().encode(envelope) as unknown as BufferSource
-        )
-      )
+      const sealed = await sealClip(fresh, envelope)
 
       const response = await fetch('/api/clip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id,
-          ciphertext: toBase64Url(ciphertext),
-          iv: toBase64Url(iv),
-          expiresIn,
-        }),
+        body: JSON.stringify({ ...sealed, expiresIn }),
       })
 
       if (!response.ok) {
@@ -142,7 +115,7 @@ export default function Clipboard() {
 
     setBusy('opening')
     try {
-      const { id, key } = await deriveClipMaterial(normalized)
+      const { id } = await deriveClipMaterial(normalized)
       const response = await fetch('/api/clip/open', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -165,12 +138,7 @@ export default function Clipboard() {
       }
 
       const data = await response.json()
-      const plain = await crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv: fromBase64Url(data.iv) as unknown as BufferSource },
-        key,
-        fromBase64Url(data.ciphertext) as unknown as BufferSource
-      )
-      const envelope = JSON.parse(new TextDecoder().decode(plain))
+      const envelope = JSON.parse(await openClip(normalized, data))
 
       setText(envelope.text ?? '')
       setReceived(envelope.file ?? null)

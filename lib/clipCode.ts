@@ -54,6 +54,13 @@ function bs(u: Uint8Array): BufferSource {
   return u as unknown as BufferSource
 }
 
+function fromBase64Url(s: string): Uint8Array {
+  const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/'))
+  const out = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i)
+  return out
+}
+
 function toBase64Url(bytes: Uint8Array): string {
   let bin = ''
   for (let i = 0; i < bytes.length; i += 1) bin += String.fromCharCode(bytes[i])
@@ -133,4 +140,50 @@ export async function deriveClipMaterial(code: string): Promise<ClipMaterial> {
   ])
 
   return { id: toBase64Url(idBytes), key }
+}
+
+const IV_BYTES = 12
+
+export interface SealedClip {
+  id: string
+  ciphertext: string
+  iv: string
+}
+
+// Seal and open live here rather than in the page, because the MCP package
+// creates clips too and the two must agree byte for byte. A clip written by an
+// AI client has to open in a browser that never saw that code being generated,
+// so any drift between two copies of this would surface as "that code did not
+// work" with nothing to point at.
+export async function sealClip(code: string, plaintext: string): Promise<SealedClip> {
+  const subtle = getSubtle()
+  const { id, key } = await deriveClipMaterial(code)
+
+  const iv = new Uint8Array(IV_BYTES)
+  globalThis.crypto.getRandomValues(iv)
+  const ciphertext = new Uint8Array(
+    await subtle.encrypt(
+      { name: 'AES-GCM', iv: bs(iv) },
+      key,
+      bs(new TextEncoder().encode(plaintext))
+    )
+  )
+
+  return { id, ciphertext: toBase64Url(ciphertext), iv: toBase64Url(iv) }
+}
+
+// Throws when the code is wrong, because AES-GCM rejects a key it was not
+// sealed with rather than returning something that looks like plaintext.
+export async function openClip(
+  code: string,
+  payload: { ciphertext: string; iv: string }
+): Promise<string> {
+  const subtle = getSubtle()
+  const { key } = await deriveClipMaterial(code)
+  const plain = await subtle.decrypt(
+    { name: 'AES-GCM', iv: bs(fromBase64Url(payload.iv)) },
+    key,
+    bs(fromBase64Url(payload.ciphertext))
+  )
+  return new TextDecoder().decode(plain)
 }

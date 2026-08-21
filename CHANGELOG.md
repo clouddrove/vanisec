@@ -75,6 +75,22 @@ Opt-in rather than automatic on MCP: the usual job there is handing a credential
 to someone who reads it in Slack an hour later, and a five minute code would be
 dead before they got to it.
 
+### MCP package 0.4.0
+
+Adds `vanisec_create_clip`, so an AI client can put text on the clipboard and
+hand back a code, rather than only being able to create password-protected
+links.
+
+The sealing moved into `lib/clipCode.ts` and is now shared by the website and
+the published package. Two copies would have drifted, and the drift would have
+surfaced to a user as "that code did not work" with nothing to point at.
+
+The tool shows the code, which is a real tradeoff rather than an oversight: a
+code nobody can read cannot be typed into a phone, and a shown code stays in the
+transcript. That is fine for a handoff happening now, and wrong for a credential
+that must never appear in a conversation, where `vanisec_generate_secret`
+remains the answer. Both the tool description and the server instructions say so.
+
 ### MCP package 0.3.0
 
 `@clouddrove/vanisec-mcp` goes to 0.3.0 for the `pairingCode` argument on both

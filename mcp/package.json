@@ -1,6 +1,6 @@
 {
   "name": "@clouddrove/vanisec-mcp",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "MCP server for creating Vanisec one-time secrets. Encrypts locally; the server only ever receives ciphertext.",
   "license": "MIT",
   "type": "module",
