@@ -1,3 +1,4 @@
+import { FAQS } from '@/lib/faqs'
 // Helper function to ensure URL has protocol
 function ensureProtocol(url: string): string {
   if (!url) return 'https://vanisec.clouddrove.com'
@@ -63,107 +64,21 @@ export default function StructuredData() {
     ],
   }
 
+  // Built from lib/faqs.ts rather than restated here. The two used to be
+  // written out separately and drifted: the visible page was corrected when the
+  // password stopped being optional, and this copy was not, so the answer shown
+  // in search results stayed wrong for far longer than the one on the page.
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is Vanisec?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Vanisec (also known as OTS or One-Time Secret) is a free, secure one-time secret sharing platform. You can share sensitive information like passwords, API keys, credentials, or confidential data through encrypted links that can only be viewed once and are automatically deleted.',
-        },
+    mainEntity: FAQS.map((faq) => ({
+      '@type': 'Question',
+      name: faq.schemaQuestion ?? faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.schemaAnswer ?? faq.answer,
       },
-      {
-        '@type': 'Question',
-        name: 'Is Vanisec free to use?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, Vanisec is completely free to use. There is no sign-up required, no credit card needed, and no hidden fees.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How secure is Vanisec?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Vanisec uses encryption to protect your secrets. Secrets are stored in Redis with automatic expiration, can only be viewed once, and are permanently deleted after viewing or expiration. You can also add password protection for an extra layer of security.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Do I need to create an account?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'No, Vanisec does not require any sign-up or account creation. You can start sharing secrets immediately.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What happens to my secret after it is viewed?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Once a secret is viewed, it is immediately and permanently deleted from our servers. It cannot be accessed again, even with the same link.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What if my secret expires before it is viewed?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'If the secret expires before anyone opens it, it is automatically and permanently deleted. The link stops working and the secret cannot be recovered.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Can a secret be viewed more than once?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'No. Each secret can only be viewed exactly one time. This is by design — it is what makes Vanisec useful for sharing sensitive information without risk of long-term exposure.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What expiration options are available?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'You can set secrets to expire after 1 hour, 6 hours, 24 hours, 72 hours, or 7 days. Secrets are deleted automatically when the timer runs out, regardless of whether they were viewed.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is the passphrase required?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'No, it is optional. But for especially sensitive information, we recommend using a passphrase and sharing it via a separate channel from the link itself.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Do you store my secrets?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Secrets are temporarily held in Redis until they are viewed or expire. We never write them to application logs, databases, or any persistent storage. Once deleted, they are gone permanently.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Can I use Vanisec commercially?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. Vanisec is free for both personal and commercial use with no restrictions.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is Vanisec open source?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. The full source code is available on GitHub. You can read it, contribute to it, or deploy your own instance if you prefer to self-host.',
-        },
-      },
-    ],
+    })),
   }
 
   return (
