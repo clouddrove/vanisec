@@ -40,17 +40,11 @@ the password, and it is why a clip opens exactly once and expires.
 
 Exposed as `POST /api/clip` and `POST /api/clip/open`.
 
-### Passwordless device handoff
-
-`/r` shows a code and waits. The receiving device generates an ephemeral P-256
-keypair and publishes only the public half, so whatever arrives was sealed to a
-key that never left that browser. The sender enters the code at `/c` and types.
-
-Stronger than the password path rather than weaker: guessing a code lets someone
-*send* to a waiting device, never *read* what someone else sent.
-
-`/c` now takes either kind of code and works out which it was given, asking the
-non-destructive `/api/beam/peek` before the one-shot `/api/pair/redeem`.
+A receiver-first variant was built first and removed before release. It had the
+receiving device publish an ephemeral public key under a code and wait, which is
+cryptographically neat but requires both devices online at once. The clipboard
+does the same job asynchronously, so keeping both meant three overlapping ways to
+move data and one more thing to explain.
 
 ### Pairing codes
 
