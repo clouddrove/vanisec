@@ -37,10 +37,10 @@ export default function Home() {
           <div className="text-center mb-12">
             <div className="inline-block mb-6 animate-float">
               <div className="relative">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-clouddrove-light via-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-glow transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                <div className="w-24 h-24 rounded-2xl bg-linear-to-br from-clouddrove-light via-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-glow transform rotate-3 hover:rotate-0 transition-transform duration-300">
                   <span className="text-white text-5xl font-bold">V</span>
                 </div>
-                <div className="absolute -inset-1 bg-gradient-to-br from-clouddrove-light to-clouddrove-dark rounded-2xl blur opacity-30 animate-pulse-slow"></div>
+                <div className="absolute -inset-1 bg-linear-to-br from-clouddrove-light to-clouddrove-dark rounded-2xl blur-sm opacity-30 animate-pulse-slow"></div>
               </div>
             </div>
             <p className="text-clouddrove-light text-2xl font-light tracking-wide mb-2">Vanisec</p>
@@ -48,9 +48,9 @@ export default function Home() {
               Free One-Time Secret Sharing — Share Once, Vanish Forever
             </h1>
             <div className="mt-4 flex items-center justify-center gap-2">
-              <div className="h-px w-16 bg-gradient-to-r from-transparent to-clouddrove-light"></div>
+              <div className="h-px w-16 bg-linear-to-r from-transparent to-clouddrove-light"></div>
               <div className="w-2 h-2 rounded-full bg-clouddrove-dark"></div>
-              <div className="h-px w-16 bg-gradient-to-l from-transparent to-clouddrove-light"></div>
+              <div className="h-px w-16 bg-linear-to-l from-transparent to-clouddrove-light"></div>
             </div>
           </div>
 

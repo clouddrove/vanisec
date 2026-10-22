@@ -33,7 +33,7 @@ export default function AboutPage() {
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">What We Offer</h2>
             <ul className="list-none space-y-4">
               <li className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-clouddrove-dark mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-clouddrove-dark mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -42,7 +42,7 @@ export default function AboutPage() {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-clouddrove-dark mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-clouddrove-dark mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -51,7 +51,7 @@ export default function AboutPage() {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-clouddrove-dark mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-clouddrove-dark mt-1 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -62,7 +62,7 @@ export default function AboutPage() {
             </ul>
           </section>
 
-          <section className="bg-gradient-to-br from-clouddrove-light/5 to-clouddrove-dark/5 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+          <section className="bg-linear-to-br from-clouddrove-light/5 to-clouddrove-dark/5 rounded-2xl p-8 border-2 border-clouddrove-light/30">
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-6">Why Open Source?</h2>
             <p className="text-clouddrove-light leading-relaxed mb-4">
               Security tools should be transparent. When your data is at stake, you shouldn&apos;t have to trust a black box. Vanisec is fully open source so anyone can audit the code, verify the implementation, and confirm that secrets are handled exactly as we describe.
@@ -114,14 +114,14 @@ export default function AboutPage() {
             </div>
           </section>
 
-          <section className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+          <section className="bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4">Ready to Get Started?</h2>
             <p className="text-clouddrove-light mb-6">
               No sign-up required. Create your first secure, self-destructing link in seconds.
             </p>
             <Link
               href="/"
-              className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="inline-block bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Create Your First Secret
             </Link>

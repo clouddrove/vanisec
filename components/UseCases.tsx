@@ -71,7 +71,7 @@ export default function UseCases() {
                   {useCase.benefits.map((benefit, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <svg
-                        className="w-6 h-6 text-clouddrove-dark mt-0.5 flex-shrink-0"
+                        className="w-6 h-6 text-clouddrove-dark mt-0.5 shrink-0"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >

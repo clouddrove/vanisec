@@ -78,7 +78,7 @@ export default function RedeemForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white/70 backdrop-blur-sm border-2 border-clouddrove-light/30 rounded-2xl p-6 md:p-8 shadow-lg space-y-5"
+      className="bg-white/70 backdrop-blur-xs border-2 border-clouddrove-light/30 rounded-2xl p-6 md:p-8 shadow-lg space-y-5"
     >
       <div>
         <label htmlFor="code" className="block text-sm font-semibold text-clouddrove-dark mb-2">
@@ -99,7 +99,7 @@ export default function RedeemForm() {
           // A pairing code mixes digits and letters, so inputMode="text" is
           // correct; "numeric" would give phones the wrong keyboard.
           inputMode="text"
-          className="w-full bg-white/60 border-2 border-clouddrove-light/30 rounded-xl px-4 py-4 text-center font-mono font-bold tracking-[0.2em] text-2xl md:text-3xl text-clouddrove-dark placeholder:text-clouddrove-light/40 placeholder:tracking-normal placeholder:text-lg focus:outline-none focus:border-clouddrove-light min-h-[64px]"
+          className="w-full bg-white/60 border-2 border-clouddrove-light/30 rounded-xl px-4 py-4 text-center font-mono font-bold tracking-[0.2em] text-2xl md:text-3xl text-clouddrove-dark placeholder:text-clouddrove-light/40 placeholder:tracking-normal placeholder:text-lg focus:outline-hidden focus:border-clouddrove-light min-h-[64px]"
         />
       </div>
 
@@ -112,7 +112,7 @@ export default function RedeemForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg min-h-[48px]"
+        className="w-full bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg min-h-[48px]"
       >
         {loading ? 'Checking...' : 'Open secret'}
       </button>

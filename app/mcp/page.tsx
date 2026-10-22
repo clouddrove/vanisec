@@ -774,7 +774,7 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
 
           <section>
             <h2 className={H2}>Hosted endpoint</h2>
-            <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <div className="bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <p className="text-clouddrove-light mb-4">
                 For clients that cannot run a local process, an MCP endpoint is available at{' '}
                 <code className="font-mono text-sm">POST https://vanisec.clouddrove.com/api/mcp</code>.
@@ -859,7 +859,7 @@ codex mcp add vanisec-remote --url https://vanisec.clouddrove.com/api/mcp`}
 
           <section>
             <h2 className={H2}>Why there is no retrieval tool</h2>
-            <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <div className="bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <p className="text-clouddrove-light">
                 There is no <code className="font-mono text-sm">vanisec_retrieve_secret</code>, and there will not
                 be one. A retrieved secret would land in the model&apos;s context and in the transcript, which would

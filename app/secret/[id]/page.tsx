@@ -119,7 +119,7 @@ export default function ViewSecret() {
           <div className="text-center mb-8">
             <div className="inline-block mb-6 animate-float">
               <div className="relative">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-glow transform rotate-3">
+                <div className="w-20 h-20 mx-auto bg-linear-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-glow transform rotate-3">
                   <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
@@ -144,18 +144,18 @@ export default function ViewSecret() {
             </div>
 
             {secret && (
-              <div className="bg-gradient-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-6 mb-6 backdrop-blur-sm">
-                <p className="text-clouddrove-dark whitespace-pre-wrap break-words text-lg leading-relaxed">
+              <div className="bg-linear-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-6 mb-6 backdrop-blur-xs">
+                <p className="text-clouddrove-dark whitespace-pre-wrap wrap-break-word text-lg leading-relaxed">
                   {secret}
                 </p>
               </div>
             )}
 
             {fileData && (
-              <div className="bg-gradient-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-6 mb-6 backdrop-blur-sm">
+              <div className="bg-linear-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-6 mb-6 backdrop-blur-xs">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3 min-w-0">
-                    <svg className="w-8 h-8 text-clouddrove-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="w-8 h-8 text-clouddrove-dark shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
                     <div className="min-w-0">
@@ -179,7 +179,7 @@ export default function ViewSecret() {
                       a.click()
                       URL.revokeObjectURL(url)
                     }}
-                    className="px-4 py-2 bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white rounded-lg font-semibold text-sm hover:from-clouddrove-light hover:to-clouddrove-dark transition-all min-h-[44px] shrink-0"
+                    className="px-4 py-2 bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white rounded-lg font-semibold text-sm hover:from-clouddrove-light hover:to-clouddrove-dark transition-all min-h-[44px] shrink-0"
                   >
                     Download
                   </button>
@@ -189,7 +189,7 @@ export default function ViewSecret() {
 
             <button
               onClick={() => router.push('/')}
-              className="w-full bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
+              className="w-full bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
             >
               Create Your Own Secret
             </button>
@@ -211,10 +211,10 @@ export default function ViewSecret() {
         <div className="text-center mb-8">
           <div className="inline-block mb-6 animate-float">
             <div className="relative">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-clouddrove-light via-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-glow transform rotate-3">
+              <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-clouddrove-light via-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-glow transform rotate-3">
                 <span className="text-white text-5xl font-bold">V</span>
               </div>
-              <div className="absolute -inset-1 bg-gradient-to-br from-clouddrove-light to-clouddrove-dark rounded-2xl blur opacity-30 animate-pulse-slow"></div>
+              <div className="absolute -inset-1 bg-linear-to-br from-clouddrove-light to-clouddrove-dark rounded-2xl blur-sm opacity-30 animate-pulse-slow"></div>
             </div>
           </div>
           <p className="text-clouddrove-light text-xl font-light tracking-wide mb-2">Vanisec</p>
@@ -228,7 +228,7 @@ export default function ViewSecret() {
             <form onSubmit={handlePasswordSubmit} className="space-y-6">
               <div className="text-center mb-6">
                 <div className="inline-block mb-4">
-                  <div className="w-16 h-16 mx-auto bg-gradient-to-br from-clouddrove-dark to-clouddrove-light rounded-full flex items-center justify-center shadow-lg">
+                  <div className="w-16 h-16 mx-auto bg-linear-to-br from-clouddrove-dark to-clouddrove-light rounded-full flex items-center justify-center shadow-lg">
                     <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
@@ -251,14 +251,14 @@ export default function ViewSecret() {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50 min-h-[48px]"
+                  className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-hidden focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-xs placeholder:text-clouddrove-light/50 min-h-[48px]"
                   placeholder="Enter the password"
                   required
                 />
               </div>
 
               {error && (
-                <div className="bg-red-50/80 border-2 border-red-200/50 text-red-700 px-5 py-4 rounded-xl backdrop-blur-sm">
+                <div className="bg-red-50/80 border-2 border-red-200/50 text-red-700 px-5 py-4 rounded-xl backdrop-blur-xs">
                   <div className="flex items-center gap-2">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -271,7 +271,7 @@ export default function ViewSecret() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
+                className="w-full bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -289,7 +289,7 @@ export default function ViewSecret() {
           ) : error ? (
             <div className="text-center space-y-6">
               <div className="mb-4 inline-block">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center shadow-lg">
+                <div className="w-20 h-20 mx-auto bg-linear-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center shadow-lg">
                   <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -303,7 +303,7 @@ export default function ViewSecret() {
               </p>
               <button
                 onClick={() => router.push('/')}
-                className="w-full bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
+                className="w-full bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
               >
                 Create Your Own Secret
               </button>

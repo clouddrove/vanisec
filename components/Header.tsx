@@ -28,12 +28,12 @@ export default function Header() {
   ]
 
   return (
-    <header className="bg-white border-b-2 border-clouddrove-light sticky top-0 z-50 backdrop-blur-sm bg-white/95">
+    <header className="bg-white border-b-2 border-clouddrove-light sticky top-0 z-50 backdrop-blur-xs bg-white/95">
       <nav className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity" aria-label="Vanisec home">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-lg" aria-hidden="true">
+            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-clouddrove-dark to-clouddrove-light flex items-center justify-center shadow-lg" aria-hidden="true">
               <span className="text-white text-xl font-bold">V</span>
             </div>
             <span className="text-clouddrove-dark font-bold text-xl">Vanisec</span>
@@ -56,7 +56,7 @@ export default function Header() {
             ))}
             <Link
               href="/contact"
-              className="bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"
+              className="bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"
             >
               Contact
             </Link>
@@ -114,7 +114,7 @@ export default function Header() {
               <Link
                 href="/contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white px-4 py-3 rounded-lg text-sm font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 text-center mt-2 min-h-[44px] flex items-center justify-center"
+                className="bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white px-4 py-3 rounded-lg text-sm font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 text-center mt-2 min-h-[44px] flex items-center justify-center"
               >
                 Contact
               </Link>

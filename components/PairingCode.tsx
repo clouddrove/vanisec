@@ -74,7 +74,7 @@ export default function PairingCode({ secretId }: Props) {
   }
 
   return (
-    <div className="bg-clouddrove-dark/5 border-2 border-clouddrove-light/30 rounded-xl p-5 text-center backdrop-blur-sm">
+    <div className="bg-clouddrove-dark/5 border-2 border-clouddrove-light/30 rounded-xl p-5 text-center backdrop-blur-xs">
       <p className="text-sm text-clouddrove-light mb-3">
         On the other device, open{' '}
         <span className="font-mono font-semibold text-clouddrove-dark">

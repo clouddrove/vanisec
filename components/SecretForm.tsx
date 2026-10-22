@@ -168,7 +168,7 @@ export default function SecretForm() {
                 value={secret}
                 onChange={(e) => setSecret(e.target.value)}
                 rows={4}
-                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all resize-none bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50 md:rows-6"
+                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-hidden focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all resize-none bg-white/50 backdrop-blur-xs placeholder:text-clouddrove-light/50 md:rows-6"
                 placeholder="Enter the secret you want to share securely..."
                 required
               />
@@ -197,7 +197,7 @@ export default function SecretForm() {
                     setError('')
                     setFile(selected)
                   }}
-                  className="w-full px-4 py-3 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm min-h-[48px] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-clouddrove-dark/10 file:text-clouddrove-dark hover:file:bg-clouddrove-dark/20 cursor-pointer"
+                  className="w-full px-4 py-3 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-hidden focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-xs min-h-[48px] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-clouddrove-dark/10 file:text-clouddrove-dark hover:file:bg-clouddrove-dark/20 cursor-pointer"
                   required
                 />
                 {file && (
@@ -234,7 +234,7 @@ export default function SecretForm() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm placeholder:text-clouddrove-light/50 min-h-[48px]"
+                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-hidden focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-xs placeholder:text-clouddrove-light/50 min-h-[48px]"
                 placeholder="Enter a password"
                 required
               />
@@ -248,7 +248,7 @@ export default function SecretForm() {
                 id="expiresIn"
                 value={expiresIn}
                 onChange={(e) => setExpiresIn(e.target.value)}
-                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-none focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-sm appearance-none cursor-pointer min-h-[48px]"
+                className="w-full px-4 py-4 md:px-5 border-2 border-clouddrove-light/30 rounded-xl focus:outline-hidden focus:border-clouddrove-dark focus:ring-2 focus:ring-clouddrove-dark/20 transition-all bg-white/50 backdrop-blur-xs appearance-none cursor-pointer min-h-[48px]"
               >
                 <option value="1">1 hour</option>
                 <option value="6">6 hours</option>
@@ -260,7 +260,7 @@ export default function SecretForm() {
           </div>
 
           {error && (
-            <div className="bg-red-50/80 border-2 border-red-200/50 text-red-700 px-5 py-4 rounded-xl backdrop-blur-sm animate-pulse">
+            <div className="bg-red-50/80 border-2 border-red-200/50 text-red-700 px-5 py-4 rounded-xl backdrop-blur-xs animate-pulse">
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -273,7 +273,7 @@ export default function SecretForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
+            className="w-full bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -293,7 +293,7 @@ export default function SecretForm() {
           <div className="text-center">
             <div className="mb-6 inline-block">
               <div className="relative">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg animate-float">
+                <div className="w-20 h-20 mx-auto bg-linear-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg animate-float">
                   <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
@@ -312,20 +312,20 @@ export default function SecretForm() {
             </p>
           </div>
 
-          <div className="bg-gradient-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-4 md:p-5 backdrop-blur-sm">
+          <div className="bg-linear-to-r from-clouddrove-light/10 to-clouddrove-dark/10 border-2 border-clouddrove-light/30 rounded-xl p-4 md:p-5 backdrop-blur-xs">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <input
                 type="text"
                 value={shareLink}
                 readOnly
-                className="flex-1 bg-white/50 backdrop-blur-sm border border-clouddrove-light/30 rounded-lg px-4 py-3 text-clouddrove-dark text-sm focus:outline-none font-mono min-h-[48px] min-w-0"
+                className="flex-1 bg-white/50 backdrop-blur-xs border border-clouddrove-light/30 rounded-lg px-4 py-3 text-clouddrove-dark text-sm focus:outline-hidden font-mono min-h-[48px] min-w-0"
               />
               <button
                 onClick={copyToClipboard}
                 className={`px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 min-h-[48px] shrink-0 ${
                   copied
                     ? 'bg-green-500 text-white'
-                    : 'bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white hover:from-clouddrove-light hover:to-clouddrove-dark'
+                    : 'bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white hover:from-clouddrove-light hover:to-clouddrove-dark'
                 }`}
               >
                 {copied ? (
@@ -344,9 +344,9 @@ export default function SecretForm() {
 
           {secretId && <PairingCode key={secretId} secretId={secretId} />}
 
-          <div className="bg-amber-50/80 border-2 border-amber-200/50 text-amber-800 px-5 py-4 rounded-xl backdrop-blur-sm">
+          <div className="bg-amber-50/80 border-2 border-amber-200/50 text-amber-800 px-5 py-4 rounded-xl backdrop-blur-xs">
             <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
               <div>
@@ -369,7 +369,7 @@ export default function SecretForm() {
               const fileInput = document.getElementById('file') as HTMLInputElement
               if (fileInput) fileInput.value = ''
             }}
-            className="w-full bg-gradient-to-r from-clouddrove-light to-clouddrove-dark text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-dark hover:to-clouddrove-light transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
+            className="w-full bg-linear-to-r from-clouddrove-light to-clouddrove-dark text-white py-4 px-6 rounded-xl font-semibold hover:from-clouddrove-dark hover:to-clouddrove-light transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
           >
             Create Another Secret
           </button>

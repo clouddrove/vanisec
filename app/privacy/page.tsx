@@ -58,7 +58,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">5. Third-Party Services</h2>
             <p className="text-clouddrove-light leading-relaxed">
-              Vanisec uses Redis for temporary secret storage. Secret content is not shared with any third parties. If Google Analytics is configured via the <code className="text-clouddrove-dark bg-clouddrove-light/10 px-1 rounded">NEXT_PUBLIC_GA_ID</code> environment variable, standard anonymous usage data (page views, referrers) may be collected by Google Analytics.
+              Vanisec uses Redis for temporary secret storage. Secret content is not shared with any third parties. If Google Analytics is configured via the <code className="text-clouddrove-dark bg-clouddrove-light/10 px-1 rounded-sm">NEXT_PUBLIC_GA_ID</code> environment variable, standard anonymous usage data (page views, referrers) may be collected by Google Analytics.
             </p>
           </section>
 

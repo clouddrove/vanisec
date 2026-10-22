@@ -200,7 +200,7 @@ export default function Clipboard() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white/70 backdrop-blur-sm border-2 border-clouddrove-light/30 rounded-2xl p-4 md:p-6 shadow-lg">
+      <div className="bg-white/70 backdrop-blur-xs border-2 border-clouddrove-light/30 rounded-2xl p-4 md:p-6 shadow-lg">
         <textarea
           value={text}
           onChange={(e) => {
@@ -209,7 +209,7 @@ export default function Clipboard() {
           }}
           placeholder="Text goes here"
           rows={10}
-          className="w-full bg-transparent text-clouddrove-dark placeholder:text-clouddrove-light/50 focus:outline-none resize-y"
+          className="w-full bg-transparent text-clouddrove-dark placeholder:text-clouddrove-light/50 focus:outline-hidden resize-y"
         />
 
         <div className="flex flex-wrap items-center gap-4 pt-3 border-t border-clouddrove-light/20 text-sm">
@@ -244,7 +244,7 @@ export default function Clipboard() {
       )}
 
       <div className="grid gap-4 md:grid-cols-2">
-        <div className="bg-white/70 backdrop-blur-sm border-2 border-clouddrove-light/30 rounded-2xl p-4 md:p-6 space-y-3">
+        <div className="bg-white/70 backdrop-blur-xs border-2 border-clouddrove-light/30 rounded-2xl p-4 md:p-6 space-y-3">
           <p className="text-sm font-semibold text-clouddrove-dark">Save and get a code</p>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -259,7 +259,7 @@ export default function Clipboard() {
           <button
             onClick={save}
             disabled={busy !== ''}
-            className="w-full bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-3 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 min-h-[48px]"
+            className="w-full bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-3 px-6 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 disabled:opacity-50 min-h-[48px]"
           >
             {busy === 'saving' ? 'Saving...' : 'Save'}
           </button>
@@ -305,7 +305,7 @@ export default function Clipboard() {
           )}
         </div>
 
-        <div className="bg-white/70 backdrop-blur-sm border-2 border-clouddrove-light/30 rounded-2xl p-4 md:p-6 space-y-3">
+        <div className="bg-white/70 backdrop-blur-xs border-2 border-clouddrove-light/30 rounded-2xl p-4 md:p-6 space-y-3">
           <p className="text-sm font-semibold text-clouddrove-dark">Have a code?</p>
 
           <input
@@ -320,7 +320,7 @@ export default function Clipboard() {
             autoCapitalize="characters"
             spellCheck={false}
             inputMode="numeric"
-            className="w-full bg-white/60 border-2 border-clouddrove-light/30 rounded-lg px-3 py-3 text-center font-mono font-bold tracking-[0.15em] text-lg text-clouddrove-dark placeholder:text-clouddrove-light/40 placeholder:tracking-normal placeholder:font-normal focus:outline-none focus:border-clouddrove-light min-h-[48px]"
+            className="w-full bg-white/60 border-2 border-clouddrove-light/30 rounded-lg px-3 py-3 text-center font-mono font-bold tracking-[0.15em] text-lg text-clouddrove-dark placeholder:text-clouddrove-light/40 placeholder:tracking-normal placeholder:font-normal focus:outline-hidden focus:border-clouddrove-light min-h-[48px]"
           />
 
           <button

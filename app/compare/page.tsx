@@ -51,7 +51,7 @@ export default function ComparePage() {
           ))}
         </div>
 
-        <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+        <div className="bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
           <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">Why Teams Choose Vanisec</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div>

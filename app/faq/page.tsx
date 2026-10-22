@@ -48,14 +48,14 @@ export default function FAQPage() {
           </div>
         </div>
 
-        <div className="mt-8 text-center bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+        <div className="mt-8 text-center bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
           <h2 className="text-2xl font-bold text-clouddrove-dark mb-4">Still have questions?</h2>
           <p className="text-clouddrove-light mb-6">
             Can&apos;t find what you&apos;re looking for? Open an issue on GitHub or reach out.
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="inline-block bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Contact Us
           </Link>
