@@ -672,7 +672,7 @@ export default function IntegrationsPage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/mcp"
-                  className="bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white px-5 py-3 rounded-lg text-sm font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"
+                  className="bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white px-5 py-3 rounded-lg text-sm font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300"
                 >
                   Install the MCP server
                 </Link>

@@ -116,7 +116,7 @@ export default function VsOneTimeSecretPage() {
 
           {/* When to Choose */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <div className="bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <h2 className="text-xl font-bold text-clouddrove-dark mb-4">Choose Vanisec if you want</h2>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2 text-clouddrove-light">
@@ -168,7 +168,7 @@ export default function VsOneTimeSecretPage() {
           <section className="text-center">
             <Link
               href="/"
-              className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="inline-block bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Try Vanisec Free
             </Link>

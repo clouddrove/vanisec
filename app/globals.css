@@ -1,54 +1,80 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap') layer(base);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  --clouddrove-light: #909090;
-  --clouddrove-dark: #232323;
+@theme {
+  --color-clouddrove-light: #909090;
+  --color-clouddrove-dark: #232323;
+
+  --font-sans: Poppins, sans-serif;
 }
 
-body {
-  font-family: 'Poppins', sans-serif;
-  color: var(--clouddrove-dark);
-  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 50%, #fafafa 100%);
-  min-height: 100vh;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-@layer utilities {
-  .gradient-text {
-    background: linear-gradient(135deg, #909090 0%, #232323 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+@utility gradient-text {
+  background: linear-gradient(135deg, #909090 0%, #232323 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility glass-effect {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@utility shadow-glow {
+  box-shadow:
+    0 0 20px rgba(35, 35, 35, 0.1),
+    0 0 40px rgba(35, 35, 35, 0.05);
+}
+
+@utility animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@utility animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@layer base {
+  /* Tailwind v4 dropped cursor: pointer on buttons; keep the v3 behaviour. */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
   }
-  
-  .glass-effect {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--color-clouddrove-dark);
+    background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 50%, #fafafa 100%);
+    min-height: 100vh;
   }
-  
-  .shadow-glow {
-    box-shadow: 0 0 20px rgba(35, 35, 35, 0.1), 0 0 40px rgba(35, 35, 35, 0.05);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
   }
-  
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-  
-  .animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  50% {
+    transform: translateY(-10px);
   }
 }
 

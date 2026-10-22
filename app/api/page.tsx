@@ -11,7 +11,7 @@ const CARD = 'bg-white rounded-2xl p-8 border-2 border-clouddrove-light/30'
 const PRE = 'bg-clouddrove-light/10 rounded-lg p-4 overflow-x-auto text-xs md:text-sm'
 const H2 = 'text-2xl md:text-3xl font-bold text-clouddrove-dark mb-4'
 const H3 = 'text-lg font-semibold text-clouddrove-dark mb-2'
-const VERB = 'inline-block bg-clouddrove-dark text-white px-3 py-1 rounded text-sm font-mono'
+const VERB = 'inline-block bg-clouddrove-dark text-white px-3 py-1 rounded-sm text-sm font-mono'
 
 export default function APIPage() {
   return (
@@ -26,7 +26,7 @@ export default function APIPage() {
 
         <div className="space-y-12">
           <section>
-            <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <div className="bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <h2 className="text-xl font-bold text-clouddrove-dark mb-3">Your client does the encryption</h2>
               <p className="text-clouddrove-light mb-3">
                 Vanisec is zero-knowledge. The server never receives your plaintext, your password, or your
@@ -489,7 +489,7 @@ console.log('read back:', await readSecret(url, 'hunter2'))
 
           <section>
             <h2 className={H2}>Rate limits</h2>
-            <div className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+            <div className="bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
               <p className="text-clouddrove-light mb-4">
                 All limits use fixed windows and return{' '}
                 <code className="font-mono text-sm">429</code> with a{' '}
@@ -525,7 +525,7 @@ console.log('read back:', await readSecret(url, 'hunter2'))
                 href="https://github.com/clouddrove/vanisec"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="inline-block bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 View on GitHub
               </a>

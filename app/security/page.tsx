@@ -49,7 +49,7 @@ export default function SecurityPage() {
             </div>
           </section>
 
-          <section className="bg-gradient-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
+          <section className="bg-linear-to-br from-clouddrove-light/10 to-clouddrove-dark/10 rounded-2xl p-8 border-2 border-clouddrove-light/30">
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-6">Compliance</h2>
             <p className="text-clouddrove-light mb-6">
               Vanisec is designed to help organizations meet data security and privacy compliance requirements:
@@ -86,7 +86,7 @@ export default function SecurityPage() {
             <h2 className="text-2xl md:text-3xl font-bold text-clouddrove-dark mb-6">Privacy & Data Handling</h2>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -95,7 +95,7 @@ export default function SecurityPage() {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -104,7 +104,7 @@ export default function SecurityPage() {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -113,7 +113,7 @@ export default function SecurityPage() {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-clouddrove-dark mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -145,7 +145,7 @@ export default function SecurityPage() {
           <section className="text-center">
             <Link
               href="/"
-              className="inline-block bg-gradient-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="inline-block bg-linear-to-r from-clouddrove-dark to-clouddrove-light text-white py-4 px-8 rounded-xl font-semibold hover:from-clouddrove-light hover:to-clouddrove-dark transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Share a Secret Securely
             </Link>

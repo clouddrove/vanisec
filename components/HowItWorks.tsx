@@ -30,11 +30,11 @@ export default function HowItWorks() {
           {steps.map((step, index) => (
             <div key={index} className="text-center">
               <div className="relative mb-8">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-clouddrove-dark to-clouddrove-light rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                <div className="w-20 h-20 mx-auto bg-linear-to-br from-clouddrove-dark to-clouddrove-light rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                   {step.number}
                 </div>
                 {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-clouddrove-light to-clouddrove-dark/20 transform translate-x-6"></div>
+                  <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-linear-to-r from-clouddrove-light to-clouddrove-dark/20 transform translate-x-6"></div>
                 )}
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-clouddrove-dark mb-4">{step.title}</h3>
